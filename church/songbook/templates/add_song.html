@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block app_content %}
+    <h1>{% translate "Add a New Song" %}</h1>
+    <form class="form-floating needs-validation" method="post" novalidate>
+        {% csrf_token %}
+        <div class="row mb-3">
+            {{ form.title.errors }}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+			</div>
+			<div class="col-10">
+            {{ form.title }}
+			</div>
+        </div>
+		<div class="row mb-3">
+            {{ form.singer.errors }}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ form.singer.id_for_label }}">{{ form.singer.label }}</label>
+			</div>
+			<div class="col-10">
+            {{ form.singer }}
+			</div>
+        </div>
+		<div class="row mb-3">
+            {{ form.info.errors }}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ form.info.id_for_label }}">{{ form.info.label }}</label>
+			</div>
+			<div class="col-10">
+            {{ form.info }}
+			</div>
+        </div>
+		<div class="row mb-3">
+            {{ form.key.errors }}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ form.key.id_for_label }}">{{ form.key.label }}</label>
+			</div>
+			<div class="col-1">
+            {{ form.key }}
+			</div>
+			<div class="col-2">
+            {{ form.minor }}<label for="{{ form.minor.id_for_label }}">{{ form.minor.label }}</label>
+			</div>
+        </div>
+		<div class="row mb-3">
+            {{ form.language.errors }}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ form.language.id_for_label }}">{{ form.language.label }}</label>
+			</div>
+			<div class="col-1">
+            {{ form.language }}
+			</div>
+        </div>
+		<div class="row mb-3">
+			<div class="col-2"></div>
+			<div class="col-10">
+				<a class="btn btn-secondary btn-sm" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+				  {% translate "Instructions" %}
+				</a>
+			</div>      
+		</div>
+        <div class="row mb-3">
+            {{ form.lyrics.errors }}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ form.lyrics.id_for_label }}">{{ form.lyrics.label }}</label>
+			</div>
+			<div class="col-10">
+            {{ form.lyrics }}
+			</div>
+        </div>
+        <div class="d-grid gap-2 col-2 mx-auto">
+			<input type="submit" class='btn btn-success' value='{% translate "Save" %}'/>
+			
+        </div>
+    </form>
+	
+<div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasLabel">{% translate "Instructions on text format" %}</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+	<div>
+      {% translate "Here are the key instructions on how to properly input lyrics with chords and headings for each song section." %}
+	  <ul>
+        <li>{% translate "Chords must be incased in square brackets: Eg.:" %} &#091; CHORD &#093;</li>
+		<li>{% translate "Chords with bass chord inside square brackets are split with slash '&#47;': Eg.:" %} &#091;Cm#&#47;G#&#093;</li>
+        <li>{% translate "This app identifies only Intro, Chorus, Verse #, Bridge, Instrumental encased in curly brackets." %}</li>
+        <li>{% translate "Chords must be located in front of a letter, where chord should be located." %}</li>
+      </ul>
+    </div>
+  </div>
+</div>	
+{% endblock %}

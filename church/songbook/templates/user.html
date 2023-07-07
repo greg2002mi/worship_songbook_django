@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Profile Page" %} {% endblock title %}
+{% block app_content %}
+{% load crispy_forms_tags %}
+    <div class="row my-3 p-3">
+        <img class="rounded-circle account-img" src="{{ user.profile.avatar.url }} " style="cursor: pointer;"/>
+    </div>
+	<div class="container py-5">
+	
+	<form method="POST">
+		{% csrf_token %}
+		{{ user_form.errors }}
+		{{ user_form | crispy }}
+		{{ profile_form | crispy }}
+		<button class="btn btn-primary" type="submit">{% translate "Save Changes" %}</button>
+		<button class="btn btn-dark" type="reset">{% translate "Reset" %}</button>
+	</form>
+</div>
+	
+	
+	<div class="row my-3 p-3">
+        <img class="rounded-circle account-img" src="{{ user.profile.avatar.url }} " style="cursor: pointer;"/>
+    </div>
+{% endblock %}

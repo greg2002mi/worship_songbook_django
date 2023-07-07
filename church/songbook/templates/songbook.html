@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <br>
+	<div class="row">
+		<div class="col">
+			<nav class="nav nav-pills justify-content-end">
+				<a class="nav-link active" aria-current="page" href="{% url 'add_song' %}">Add new song</a>
+				<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+			</nav>
+		</div>
+	</div>	
+	<br>
+	<div class="row">	
+		<div class="col-md-9 col-xs-12">
+			<table class="table table-hover">
+			<thead>
+			  <tr>
+				 <th class="d-none d-sd-block">No.</th>
+				 <th>Title</th>
+				 <th class="d-none d-sd-block">Artist/singer</th>
+				 <th>Key</th>
+				 <th class="d-none d-sd-block">Language</th>
+				 <th>Action</th>
+			  </tr>
+			</thead>
+			<tbody>
+			{% for song in songs %}
+				{% include '_song.html' %}
+			{% endfor %}
+			
+			</tbody>
+			</table>
+		{% include "misc/pagination.html" %}
+		</div>
+		<div class="col-md-3 col-xs-12">
+		<div class="row"><table class="table table-responsive-sm table-hover">
+			<thead>
+			  <tr>
+				 <th class="th-lg" scope="col">Tag list</th>
+			  </tr>
+			</thead>
+			<tbody>
+			
+				<tr valign="top">
+					<td><a href="#">     </a></td>
+				</tr>
+			
+			</tbody>
+			</table></div>
+	</div>
+{% endblock %}
+

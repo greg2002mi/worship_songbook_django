@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>
+	{% if event %}
+	On Stage: {{ event.list_title }} - {{ event.date_time }}
+	{% else %}
+	On Stage mode
+	{% endif %}
+	</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/stage.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/swiper-bundle.min.css') }}">
+  <script src="{{ url_for('static', filename='js/swiper-bundle.min.js') }}"></script>
+  	<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+  {{ moment.include_moment() }}
+
+  <style>
+
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+
+      justify-content: center;
+      align-items: center;
+    }
+
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+	
+	.swiper-pagination-bullet {
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      font-size: 12px;
+      color: #999999;
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .swiper-pagination-bullet-active {
+      color: #fff;
+      background: #007aff;
+    }
+  </style>
+</head>
+
+<body class="dark-bg">
+<div class="container-flush">
+
+<nav class="navbar fixed-top navbar-dark bg-dark navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <div class="navbar-nav">
+	<a class="nav-link" href="{{ url_for('.lists', listid=event.id) }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+  <path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+</svg></a>
+	</div>
+	<a class="navbar-brand strong" href="#">-ON STAGE-</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+	<div class="collapse navbar-collapse" id="navbarScroll">
+      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+        <li class="nav-item">
+          <a class="nav-link disabled">{{ _('Settings:') }}</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ _('L_size') }}
+          </a>
+          <ul class="dropdown-menu">
+			<li><hr class="dropdown-divider"></li>
+			<li><a class="dropdown-item" href="#" onclick="changeFontSize(10)">10px</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeFontSize(16)">16px {{ _('Normal') }}</a></li>
+            <li><a class="dropdown-item" href="#" onclick="changeFontSize(20)">20px</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeFontSize(24)">24px</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ _('C_size') }}
+          </a>
+          <ul class="dropdown-menu">
+			<li><hr class="dropdown-divider"></li>
+			<li><a class="dropdown-item" href="#" onclick="changeCFontSize(10)">10px</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeCFontSize(16)">16px {{ _('Normal') }}</a></li>
+            <li><a class="dropdown-item" href="#" onclick="changeCFontSize(20)">20px</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeCFontSize(24)">24px</a></li>
+          </ul>
+        </li>
+		<li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ _('Spacing') }}
+          </a>
+          <ul class="dropdown-menu">
+			<li><hr class="dropdown-divider"></li>
+			<li><a class="dropdown-item" href="#" onclick="changeMargin(-5)">{{ _('Extralow') }}</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeMargin(-2)">{{ _('Low') }}</a></li>
+            <li><a class="dropdown-item" href="#" onclick="changeMargin(0.5)">{{ _('Normal') }}</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeMargin(1)">{{ _('Tall') }}</a></li>
+          </ul>
+        </li>
+		<li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ _('Char_W') }}
+          </a>
+          <ul class="dropdown-menu">
+			<li><hr class="dropdown-divider"></li>
+			<li><a class="dropdown-item" href="#" onclick="changeCharacterWidth(-0.5)">{{ _('Slim') }}</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeCharacterWidth(0)">{{ _('Normal') }}</a></li>
+            <li><a class="dropdown-item" href="#" onclick="changeCharacterWidth(0.5)">{{ _('Wide') }}</a></li>
+          </ul>
+        </li>
+      </ul>
+	{{ event.list_title }} - {{ moment(event.date_time).format('LLL') }}
+  </div>
+</nav>
+  
+  
+  
+  
+ <div class="row"> 
+ <div class="col">
+  <!-- Swiper -->
+  <div class="swiper mySwiper">
+	<div class="swiper-wrapper">
+      <div class="swiper-slide">Slide 1</div>
+      {% for song in songlist %}
+		  <div class="swiper-slide">
+		  <br>
+		  <br>
+		  <br>
+		  <div class="col-12"><center><h4>Song {{ song.listorder }} </h4></center></div>
+		  {{lyrics[song.listorder - 1]|safe}}
+		  </div>
+	  {% endfor %}
+    </div>
+	
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+	<div class="swiper-pagination"></div>
+  </div>
+</div>  
+</div>  
+  
+</div>  
+
+  <!-- Initialize Swiper -->
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+	  pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+        renderBullet: function (index, className) {
+          return '<span class="' + className + '">' + (index + 1) + "</span>";
+        },
+      },
+    });
+	
+	function changeCharacterWidth(width) {
+	  const elements = document.getElementsByClassName("row g-0");
+	  
+	  for (let i = 0; i < elements.length; i++) {
+		elements[i].style.letterSpacing = width + "px";
+	  }
+	}
+	
+	function changeFontSize(size) {
+	  const elements = document.getElementsByClassName("lyric");
+	  for (let i = 0; i < elements.length; i++) {
+		elements[i].style.fontSize = size + "px";
+	  }
+	}
+	
+	function changeMargin(size) {
+	  const elements = document.getElementsByClassName("row g-0");
+	  const c_elements = document.getElementsByClassName("chordpro_segment");
+	  
+	  for (let i = 0; i < elements.length; i++) {
+		elements[i].style.marginBottom = size + "px";
+	  }
+	  
+	  for (let i = 0; i < c_elements.length; i++) {
+		c_elements[i].style.marginBottom = size + "px";
+	  }
+	}
+	
+	function changeCFontSize(size) {
+	  const elements = document.getElementsByClassName("Chord");
+	  for (let i = 0; i < elements.length; i++) {
+		elements[i].style.fontSize = size + "px";
+	  }
+	}
+	// Handle text color change
+	function bgBrightness(value) {
+	  var brightnessValue = (value - 50) / 50;
+	  var invertedValue = 1 - Math.abs(brightnessValue);
+	  var brightnessPercentage = invertedValue * 100;
+	  document.body.style.background = "hsl(0, 0%, " + brightnessPercentage + "%)";
+	};
+	
+  </script>
+
+</body>
+
+
+</html>

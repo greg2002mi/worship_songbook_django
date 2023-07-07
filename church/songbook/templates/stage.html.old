@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+	{% if event %}
+	On Stage: {{ event.list_title }} - {{ event.date_time }}
+	{% else %}
+	On Stage mode
+	{% endif %}
+	</title>
+  	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/stage.css') }}">
+
+	<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+
+    {{ moment.include_moment() }}
+	<style>
+	#text-size {
+	  width: 200px;
+	}
+
+	#text-color {
+	  width: 200px;
+	}
+
+	.controls {
+	  margin-bottom: 10px;
+	}
+
+	.Chord {
+	  color: white; /* Default chord color */
+	}
+
+	.lyric {
+	  color: white; /* Default text color */
+	}
+	</style>
+	<script>
+	function changeFontSize(size) {
+	  const elements = document.getElementsByClassName("lyric");
+	  for (let i = 0; i < elements.length; i++) {
+		elements[i].style.fontSize = size + "px";
+	  }
+	}
+	
+	function changeCFontSize(size) {
+	  const elements = document.getElementsByClassName("Chord");
+	  for (let i = 0; i < elements.length; i++) {
+		elements[i].style.fontSize = size + "px";
+	  }
+	}
+	// Handle text color change
+	function bgBrightness(value) {
+	  var brightnessValue = (value - 50) / 50;
+	  var invertedValue = 1 - Math.abs(brightnessValue);
+	  var brightnessPercentage = invertedValue * 100;
+	  document.body.style.background = "hsl(0, 0%, " + brightnessPercentage + "%)";
+	};
+	
+	
+	</script>
+</head>
+
+<body class="dark-bg">
+<div class="container-flush">
+<div class="collapse" id="navbarToggleExternalContent">
+  <div class="bg-dark p-4">
+	<div class="row">
+    <div class="col align-self-center">
+      <div class="controls">
+		  <div class="row justify-content-around">
+			<div class="col-5">
+				<label for="text-color">{{ _('Background brightness:') }}</label>
+				<input type="range" min="0" max="100" value="100" class="brightness-slider" onchange="bgBrightness(this.value)">
+			</div>
+			<div class="col-5">
+			  <label for="text-color">{{ _('Lyrics text size:') }}</label>
+			  <button class="btn btn-secondary btn-sm" onclick="changeFontSize(16)">16px</button>
+			  <button class="btn btn-secondary btn-sm" onclick="changeFontSize(20)">20px</button>
+			  <button class="btn btn-secondary btn-sm" onclick="changeFontSize(24)">24px</button>
+			  <br>
+			  <label for="text-color">{{ _('Chords text size:') }}</label>
+			  <button class="btn btn-secondary btn-sm" onclick="changeCFontSize(16)">16px</button>
+			  <button class="btn btn-secondary btn-sm" onclick="changeCFontSize(20)">20px</button>
+			  <button class="btn btn-secondary btn-sm" onclick="changeCFontSize(24)">24px</button>
+			</div>
+		</div>
+	  </div>
+    </div>
+  </div>
+  </div>
+</div>
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+	{{ event.list_title }} - {{ moment(event.date_time).format('LLL') }}
+  </div>
+</nav>
+
+<div class="row">
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+	<button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Start</button>
+    {% for song in songlist %}
+	<button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-{{song.listorder}}p" type="button" role="tab" aria-controls="nav-{{song.listorder}}p" aria-selected="false">Song-{{song.listorder}}</button>
+    {% endfor %}
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">{{ _("Let's prepare our hearts for this special time...") }}<br> {{ _('Leaving our pride, ego, doubt and evil behind...') }}<br></div>
+  {% for song in songlist %}
+  <div class="tab-pane fade" id="nav-{{song.listorder}}p" role="tabpanel" aria-labelledby="nav-{{song.listorder}}p-tab">
+  {{lyrics[song.listorder - 1]|safe}}
+  </div>
+
+  {% endfor %}
+</div>
+
+</div>
+</div>
+
+
+{% block scripts %}
+	
+	<script src="{{ url_for('static', filename='js/howler.js') }}"></script>
+    
+{% endblock %}
+
+</body>
+</html>
