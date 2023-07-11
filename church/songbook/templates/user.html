@@ -1,14 +1,26 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 {% block title %}{% translate "Profile Page" %} {% endblock title %}
+{% block head_js %}
+<link rel="stylesheet" href="{% static 'css/w3.css' %}"/>
+{% endblock %}
 {% block app_content %}
 {% load crispy_forms_tags %}
     <div class="row my-3 p-3">
-        <img class="rounded-circle account-img" src="{{ user.profile.avatar.url }} " style="cursor: pointer;"/>
+        <img class="rounded-circle account-img" src="{{ user.profile.avatar.url }} " style="cursor: pointer; width: 100px !important; cursor:zoom-in" height="100" width="100" onclick="document.getElementById('modal{{ user.id }}').style.display='block'"/>
     </div>
+	<div>
+	<form action="{% url 'avatar_upload' user_id=user.id %}" method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ avatar_form.errors }}
+		 <input type="file" name="avatar" id="avatar">
+		<button class="btn btn-primary" type="submit">{% translate "Upload" %}</button>
+	</form>
+	</div>
 	<div class="container py-5">
 	
-	<form method="POST">
+	<form action="{% url 'profile' %}" method="POST">
 		{% csrf_token %}
 		{{ user_form.errors }}
 		{{ user_form | crispy }}
@@ -19,7 +31,11 @@
 </div>
 	
 	
-	<div class="row my-3 p-3">
-        <img class="rounded-circle account-img" src="{{ user.profile.avatar.url }} " style="cursor: pointer;"/>
-    </div>
+	<div id="modal{{ user.id }}" class="w3-modal" onclick="this.style.display='none'">
+		<span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
+		<div class="w3-modal-content w3-animate-zoom">
+		  <img src="{{ user.profile.avatar.url }}" style="width:100%">
+		</div>
+	</div>
+	
 {% endblock %}

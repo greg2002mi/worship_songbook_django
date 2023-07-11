@@ -1,12 +1,12 @@
 {% load i18n %}
-<div class="container">
   <div class="row">
     <div class="col-10">
     <a class="btn btn-primary btn-sm" href="{% url 'manage_media' song_id=song.id %}" role="button">{% translate "Manage Media library" %}</a>
     
     <hr>
 	</div>
-	<div class="col-10"><h4><strong>{% translate "Images" %}</strong></h4><br>
+	<div class="col-10">
+	<h4><strong>{% translate "Images" %}</strong></h4><br>
 	<h5>{% translate "File Upload" %}</h5>
     <form action="{% url 'upload_images' song_id=song.id mtype=3 %}" class="dropzone">
 	{% csrf_token %}
@@ -133,7 +133,8 @@
     return minutes + ':' + seconds;
   }
 </script>
-    <div class="col-md-6 col-xs-12"><h4><strong>Video</strong></h4><br>
+    <div class="col-md-6 col-xs-12">
+	<h4><strong>Video</strong></h4><br>
 		<div class="embed-responsive embed-responsive-16by9">
 			{% for l in media %}
 			  {% if l.mtype == 1 %}
@@ -143,7 +144,7 @@
 			
 		</div>
 	</div>
-  </div>
+</div>  
 {% if images %}
 	{% for image in images %}
 	
@@ -156,7 +157,5 @@
 	
 	{% endfor %}
 {% endif %}
-</div>
-	
 	
 	

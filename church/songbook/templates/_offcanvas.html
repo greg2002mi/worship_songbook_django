@@ -1,15 +1,19 @@
 {% load i18n %}
+{% load custom_tags %}
+
 <form class="form-floating needs-validation" action="{% url 'tagging' song_id=song.id %}" method="POST">
 	{% csrf_token %}
 	{{ tags_form.errors }}
-	{% for name in tags %}
-		<div class="form-check form-switch">
-		{{ name }}
-		</div>
-	{% endfor %}
+	{% for tag in tags %}
+		
+			<div class="form-check form-switch">
+			  <input type="checkbox" class="form-check-input" name="name" value="{{ tag.id }}" {% if tag_states|get_item:tag.id %} checked{% endif %}>
+			  <label class="form-check-label">{{ tag.name }}</label>
+			</div>
 
+	{% endfor %}
 	<input type="submit" class='btn btn-success' value='{% translate "Tag" %}'/>
 </form> 
 
-<form class="form-floating needs-validation" action="{% url 'untagall' song_id=song.id %}" method="POST"><input type="submit" class='btn btn-success' value='{% translate "Untag All" %}'/></form>
+<form class="form-floating needs-validation" action="{% url 'untagall' song_id=song.id %}" method="POST">{% csrf_token %}<input type="submit" class='btn btn-success' value='{% translate "Untag All" %}'/></form>
 

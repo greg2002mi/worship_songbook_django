@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.utils.timezone import now
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from phonenumber_field.modelfields import PhoneNumberField
+from autoslug import AutoSlugField
 
 CHORDNOTE=[
     (0, 'Empty'),
@@ -43,13 +45,15 @@ STATUS = (
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(default='default.png', upload_to='profile_images')
+    avatar = models.ImageField(default='default.png', upload_to='profile_images/')
     about_me = models.TextField(max_length=140)
-    mobile_no = models.IntegerField(blank=True,null=True)
+    mobile_no = PhoneNumberField(blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
     
     def __str__(self):
         return self.user.username
+    
+    
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -62,7 +66,6 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Post(models.Model):
     title = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(max_length=200, unique=True)
     body = models.CharField(max_length=140)
     timestamp = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="post")
@@ -70,6 +73,7 @@ class Post(models.Model):
     updated_on = models.DateTimeField(auto_now= True)
     created_on = models.DateTimeField(auto_now_add=True, blank=True)
     status = models.IntegerField(choices=STATUS, default=0)
+    slug = AutoSlugField(populate_from='title', blank=True, null=True, unique_with=['created_on'])
     
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
@@ -89,15 +93,14 @@ class Mlinks(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=70)
-    slug = models.CharField(max_length=250)
-    created_on = models.DateTimeField(auto_now_add=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+    slug = AutoSlugField(populate_from='name', unique_with=['created_on'])
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 class Song(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.CharField(max_length=250)
     singer = models.CharField(max_length=140)
     info = models.TextField(max_length=140)
     key = models.IntegerField(choices=CHORDNOTE)
@@ -110,7 +113,7 @@ class Song(models.Model):
     translated = models.ManyToManyField('Song', blank=True, related_name='translation')
     media = models.ManyToManyField(Mlinks, related_name='song', blank=True)
     status = models.IntegerField(choices=STATUS, default=0)
-    
+    slug = AutoSlugField(populate_from='title', unique_with=['timestamp'])
     
     def __str__(self):
         return self.title
@@ -129,7 +132,6 @@ class Image(models.Model):
 
 class Lists(models.Model):
     title = models.CharField(max_length=100, default='Sunday service')
-    slug = models.CharField(max_length=250)
     created = models.DateTimeField(auto_now_add=True)
     date_time = models.DateTimeField()
     date_end = models.DateTimeField(null=True, blank=True)
@@ -138,10 +140,10 @@ class Lists(models.Model):
     passage = models.TextField() # passage on first page of stage mode
     status = models.IntegerField(default=0)
     assigned = models.ManyToManyField(User, related_name='created')
+    slug = AutoSlugField(populate_from='title', unique_with=['created'])
 
 class ListItem(models.Model):
     title = models.CharField(max_length=140)
-    slug = models.CharField(max_length=250)
     created = models.DateTimeField(auto_now_add=True)
     desired_key = models.IntegerField(choices=CHORDNOTE)
     listorder = models.IntegerField()
@@ -149,5 +151,6 @@ class ListItem(models.Model):
     lists = models.ForeignKey(Lists, on_delete=models.CASCADE, related_name='items')
     assigned = models.ManyToManyField(User, related_name='assigned')
     song = models.ManyToManyField(Song, related_name='inlist') 
+    slug = AutoSlugField(populate_from='title', unique_with=['created'])
 
     

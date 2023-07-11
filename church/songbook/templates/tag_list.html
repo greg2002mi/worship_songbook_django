@@ -1,18 +1,20 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block content %}
+{% block app_content %}
     <br>
 	<div class="row">
 		<div class="col">
 			<form class="row needs-validation" action method="post" novalidate>
-			{% csrf_token %}
-			{{ form.name.errors }}
-			<div class="col-sm-2 col-form-label">
-			<label for="{{ form.name.id_for_label }}"></div>
-			<div class="col-10">
-            {{ form.name }}
-			</div>
-			<input type="submit" class='btn btn-success' value='{% translate "Add" %}'/>
+				{% csrf_token %}
+				{{ form.name.errors }}
+				<div class="col-sm-2 col-form-label">
+					<label for="{{ form.name.id_for_label }}">
+				</div>
+				<div class="col-10">
+					{{ form.name }}
+				</div>
+				<input type="submit" class='btn btn-success' value='{% translate "Add tag" %}'/>
 			</form>
 		
 		</div>

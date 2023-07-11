@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load custom_tags %}
+{% load i18n %}
 
 {% block app_content %}
     <br>
@@ -20,15 +22,49 @@
 				 <th>Title</th>
 				 <th class="d-none d-sd-block">Artist/singer</th>
 				 <th>Key</th>
+				 {% if user|has_group:"Minister" %}
+				 <th>Status</th>
+				 {% endif %}
 				 <th class="d-none d-sd-block">Language</th>
 				 <th>Action</th>
 			  </tr>
 			</thead>
 			<tbody>
-			{% for song in songs %}
-				{% include '_song.html' %}
-			{% endfor %}
-			
+			{% if user|has_group:"Minister" %}
+				{% for song in songs_all %}
+					<tr valign="top">
+						<td class="d-none d-sd-block">{{ song.id }}</td>
+						<td><a href="{% url 'view_song' song_id=song.id key=song.key %}">{{ song.title }}</a></td>
+						<td class="d-none d-sd-block">{{ song.singer }}</td>
+						<td>
+						{% if song.key %}
+							{% for index, key in keyset %} 
+								{% if index == song.key %}
+									{{ key }}
+								{% endif %}	
+							{% endfor %}
+							{% if song.minor %}
+								m
+							{% endif %}
+						{% endif %}
+						</td>
+						<td>
+							{% if song.status == 1 %}
+								{% translate "Published" %}
+							{% elif song.status == 0 %}
+								{% translate "Draft" %}
+							{% endif %}
+						</td>
+						<td class="d-none d-sd-block"></td>
+						<td>
+						</td>
+					</tr>
+				{% endfor %}
+			{% else %}	 
+				{% for song in songs %}
+					{% include '_song.html' %}
+				{% endfor %}
+			{% endif %}
 			</tbody>
 			</table>
 		{% include "misc/pagination.html" %}
@@ -41,11 +77,11 @@
 			  </tr>
 			</thead>
 			<tbody>
-			
+			{% for t in tags %}
 				<tr valign="top">
-					<td><a href="#">     </a></td>
+					<td><a href="{% url 'tag_songlist' tag_id=t.id %}">{{ t.name }}</a></td>
 				</tr>
-			
+			{% endfor %}
 			</tbody>
 			</table></div>
 	</div>

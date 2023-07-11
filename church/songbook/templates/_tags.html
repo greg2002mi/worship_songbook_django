@@ -1,26 +1,29 @@
+{% load i18n %}
+{% load custom_tags %}
 <div class="row">	
 		<div class="col">
 			<table class="table table-responsive-sm table-hover">
 			<thead>
 			  <tr>
-				 <th class="th-sm" scope="col">{{ _('No.') }}</th>
-				 <th class="th-lg" scope="col">{{ _('Tags') }}</th>
-				 <th class="th-sm" scope="col">{{ _('Functions') }}</th>
+				 <th class="th-sm" scope="col">{% translate "No." %}</th>
+				 <th class="th-lg" scope="col">{% translate "Tags" %}</th>
+				 <th class="th-sm" scope="col">{% translate "Functions" %}</th>
 			  </tr>
 			</thead>
 			<tbody>
 			{% for t in tags %}
 				<tr valign="top">
 					<td>{{ t.id }}</td>
-					<td><a href="{{ url_for('.tag_songlist', tagid=t.id) }}">{{ t.name }}</a></td>
+					<td><a href="{% url 'tag_songlist' tag_id=t.id %}">{{ t.name }}</a></td>
 					<td>
-					{% if current_user.is_anonymous %}
-					To delete login required
-					{% else %}
-					<form action="{{ url_for('.remove_tag', tagid=t.id) }}" method="post">
-						{{ form.hidden_tag() }}
-						{{ form.submit(value='Delete') }}
+					{% if user|has_group:"Minister" %}
+					<form action="{% url 'delete_tag' tag_id=t.id %}" method="post">
+						{% csrf_token %}
+						{{ deletetag_form.name.errors }}
+						<input type="submit" class='btn btn-danger' value='{% translate "Delete" %}'/>
 					</form>
+					{% else %}
+					<a class="btn btn-outline-secondary" href="#" role="button">Delete</a>
 					{% endif %}
 					</td>
 				</tr>

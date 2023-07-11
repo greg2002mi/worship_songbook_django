@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-
+{% load custom_tags %}
+{% load i18n %}
 {% block head_js %}
 <script>
 	function goBack() {
@@ -9,6 +10,7 @@
 {% endblock %}
 
 {% block app_content %}
+{% load crispy_forms_tags %}
 <hr class="bg-danger border-2 border-top border-secondary">
 <div class="row">
 	<div class="col-auto"><a onclick="goBack()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left" viewBox="0 0 16 16">
@@ -16,8 +18,7 @@
   <path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
 </svg></a></div>
 	<div class="col-5">
-	<h4>{{ _('Category:') }} {{ tag.name }}</h4></div>
-</div>
+	<h4>{% translate "Category:" %} {{ tag.name }}</h4></div>
 </div>
 <hr class="bg-danger border-2 border-top border-secondary">
 <div class="row">	
@@ -25,56 +26,44 @@
 			<table class="table table-hover">
 			<thead>
 			  <tr>
-				 <th>{{ _('No.') }}</th>
-				 <th>{{ _('Title') }}</th>
-				 <th>{{ _('Artist/singer') }}</th>
-				 <th>{{ _('Functions') }}</th>
+				 <th>{% translate "No." %}</th>
+				 <th>{% translate "Title" %}</th>
+				 <th>{% translate "Artist/singer" %}</th>
+				 <th>{% translate "Functions" %}</th>
 			  </tr>
 			</thead>
 			<tbody>
 			{% for song in songs %}			
 				<tr valign="top">
 					<td style="width: 7.5%">{{ song.id }}</td>
-					<td style="width: 40%"><a href="{{ url_for('.view_song', id=song.id) }}">{{ song.title }}</a></td>
+					<td style="width: 40%"><a href="{% url 'view_song' song_id=song.id key=song.key %}">{{ song.title }}</a></td>
 					<td style="width: 25%">{{ song.singer }}</td>
 					<td style="width: 17.5%">
 					<div class="row">
-					<div class="col-7">
-					<form action="{{ url_for('.add_to_cart', songid=song.id) }}" method="post">
-						{{ addform.hidden_tag() }}
-						{{ addform.submit(class_='btn btn-success btn-sm', value=_('Add to song folder')) }}
-					</form>
+						<div class="col-7">
+							<form action="{% url 'add_to_cart' song_id=song.id %}" method="post">
+								{% csrf_token %}
+								<button class="btn btn-primary" type="submit">{% translate "Add to folder" %}</button>
+							</form>
+						</div>
+						<div class="col-5">
+							{% if user|has_group:"Minister" %}
+							<form action="{% url 'untag' tag_id=tag.id song_id=song.id %}" method="post">
+								{% csrf_token %}
+								<button class="btn btn-danger" type="submit">{% translate "Remove" %}</button>
+							</form>
+							{% else %}
+								<a class="btn btn-outline-secondary" href="#" role="button">{% translate "Remove" %}</a>
+							{% endif %}
+						</div>
 					</div>
-					{% if current_user.is_anonymous %}
-					To remove login required
-					{% else %}
-					<div class="col-5">
-					<form action="{{ url_for('.untag', tagid=tag.id, songid=song.id) }}" method="post">
-						{{ form.hidden_tag() }}
-						{{ form.submit(class_='btn btn-secondary btn-sm', value=_('Remove')) }}
-					</form>
-					</div>
-					</div>
-					{% endif %}
+					
 					</td>
 				</tr>
 			{% endfor %}
 			</tbody>
 			</table>
-		<nav aria-label="...">
-			<ul class="pager">
-				<li class="previous{% if not prev_url %} disabled{% endif %}">
-					<a href="{{ prev_url or '#' }}">
-						<span aria-hidden="true">&larr;</span> {{ _('Previous') }}
-					</a>
-				</li>
-				<li class="next{% if not next_url %} disabled{% endif %}">
-					<a href="{{ next_url or '#' }}">
-						{{ _('Next') }} <span aria-hidden="true">&rarr;</span>
-					</a>
-				</li>
-			</ul>
-		</nav>
+		{% include "misc/pagination.html" %}
 		</div>
 	</div>
 

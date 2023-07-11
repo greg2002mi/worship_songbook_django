@@ -43,7 +43,7 @@
 						<li class="nav-item">
 							<a class="nav-link" href="#">{% translate "Explore" %}</a></li>
 						<li class="nav-item"><a class="nav-link" href="{% url 'songbook' %}">{% translate "Songbook" %}</a></li>
-						<li class="nav-item"><a class="nav-link" href="#">{% translate "Genre&Tags" %}</a></li>
+						<li class="nav-item"><a class="nav-link" href="{% url 'tag_list' %}">{% translate "Genre&Tags" %}</a></li>
 						<li class="nav-item"><a class="nav-link" href="#">{% translate "Calendar" %}</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
@@ -81,7 +81,18 @@
 		</nav>
 	</div>
 	<div class="container-xxl">
-    {% block app_content %}{% endblock %}
+    {% if messages %}
+		<ul class="messages">
+			{% for message in messages %}
+			<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+				{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+				{{ message }}
+			</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+	
+	{% block app_content %}{% endblock %}
 	</div>
 	<footer class="py-3 bg-grey">
             <p class="m-0 text-dark text-center ">Copyright &copy; pc_carpenter</p>

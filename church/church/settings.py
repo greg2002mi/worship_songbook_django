@@ -60,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+
 ]
 
 ROOT_URLCONF = 'church.urls'
@@ -143,7 +144,7 @@ LANGUAGES = (
     
 )
 
-PHONENUMBER_DEFAULT_REGION = 'KR'
+# PHONENUMBER_DEFAULT_REGION = 'KR'
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),

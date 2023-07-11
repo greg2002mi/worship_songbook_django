@@ -7,11 +7,12 @@ from django.views import generic
 from django.core.paginator import Paginator
 from django.urls import reverse
 from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, LANG, CHORDNOTE
+from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
-from .forms import AddSongForm, Transpose, AddTagForm, TagsForm, SongsForm, EmptyForm, EditSongForm, NewUForm, UpdateUForm, UpdateProfileForm
+from .forms import AddSongForm, Transpose, AddTagForm, TagsForm, SongsForm, EmptyForm, EditSongForm, NewUForm, UpdateUForm, UpdateProfileForm, UploadAvatarForm, AddSongTagForm
 from .core import Chordpro_html
 from django import forms
-import os
+import os, uuid
 from django.contrib import messages
 from uuid import uuid4
 from django.contrib.auth import authenticate, login, logout
@@ -95,7 +96,9 @@ def register_page(request):
 
 @login_required
 def profile(request):
+    avatar_form = UploadAvatarForm()
     if request.method == 'POST':
+        
         user_form = UpdateUForm(request.POST, instance=request.user)
         profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
 
@@ -103,11 +106,38 @@ def profile(request):
             user_form.save()
             profile_form.save()
             messages.success(request, 'Your profile is updated successfully')
-            return redirect(to='users-profile')
+            return redirect('profile')
     else:
         user_form = UpdateUForm(instance=request.user)
         profile_form = UpdateProfileForm(instance=request.user.profile)
-    return render(request, 'user.html', {'user_form': user_form, 'profile_form': profile_form})
+        
+    context = {
+        'title': _('Songbook'),
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'avatar_form': avatar_form,
+    }
+    
+    return render(request, 'user.html', context)
+
+# function to upload avatar, and delete previous if exists.
+def avatar_upload(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    if request.method == 'POST':
+        my_file = request.FILES.get('avatar')
+        if my_file:
+            if user.profile.avatar:
+                old_avatar_path = user.profile.avatar.path
+                if os.path.isfile(old_avatar_path):
+                    os.remove(old_avatar_path)
+        newname = '{}{}'.format(uuid.uuid4().hex, os.path.splitext(my_file.name)[1])
+        my_file.name = newname # change name of image
+        profile = user.profile
+        profile.avatar=my_file
+        profile.save()
+        return redirect('profile')
+    messages.error(request, _("Error, failed to POST."))
+    return redirect('profile')
 
 class PostList(generic.ListView):
     queryset = Post.objects.filter(status=1).order_by('-created_on')
@@ -121,6 +151,7 @@ class PostDetail(generic.DetailView):
 def songbook(request):
     
     songs = Song.objects.filter(status=1).order_by('title')
+    songs_all = Song.objects.order_by('title')
     form = AddSongForm()
     tags = Tag.objects.all()
     # page = request.GET.get('page', 1)
@@ -138,10 +169,10 @@ def songbook(request):
     # next_url = reverse('songbook') + '?page=' + str(songs.next_page_number()) if songs.has_next() else None
     # prev_url = reverse('songbook') + '?page=' + str(songs.previous_page_number()) if songs.has_previous() else None
     
-    
     context = {
         'title': _('Songbook'),
         'songs': songs,
+        'songs_all': songs_all,
         # 'next_url': next_url,
         # 'prev_url': prev_url,
         'keyset': CHORDNOTE,
@@ -176,10 +207,10 @@ def publish(request, song_id):
 def view_song(request, song_id, key):
     song = get_object_or_404(Song, pk=song_id)
     tags = Tag.objects.all()
+    tag_states = {tag.id: tag in song.tags.all() for tag in Tag.objects.all()}
     images = Image.objects.filter(song=song_id).all()
     media = song.media.all()
     tagged_list = ()
-    tag_states = {}
     # if song.tags:
     #     tagged_list = ([tagged.name for tagged in song.tags])
     # ori_key = ''
@@ -210,6 +241,7 @@ def view_song(request, song_id, key):
     #     if song_obj not in t_songlist:
     #         t_songlist.append(song_obj)
     delete_form = EmptyForm()
+    key_dict = {'key': key}
     tags_form = TagsForm()
     # populate choices for tags_form from db
     # choices = [(t.id, t.name) for t in tags]
@@ -233,55 +265,67 @@ def view_song(request, song_id, key):
     else:
         
         if request.method == 'POST':
+            tags_form = TagsForm(request.POST)
             form = Transpose(request.POST)
             if form.is_valid():
                 # Handle the submit of transpose chord action
                 key = form.cleaned_data['key']
                 return redirect('view_song', song_id=song.id, key=key)
+            # if tags_form.is_valid():
+            #     selected_tags = tags_form.cleaned_data['name']
+            #     song.tags.clear()  # Clear existing tags
+            #     for tag_id in selected_tags:
+            #         tag = Tag.objects.get(id=tag_id)
+            #         song.tags.add(tag)
+            #     song.save()
+            #     # Flash message and redirect
+            #     return redirect('view_song', song_id=song.id, key=song.key)
         elif request.method == 'GET':
-            key_dict = {'key': key}
-            for tag in tags:
-                tag_states[tag.id] = tag in song.tags
-                
-            context = {
-                'title': _('View Song'),
-                'song': song,
-                'keyset': CHORDNOTE,
-                'lang': LANG,
-                'tags': tags,
-                'html': html, 
-                'transl_form': transl_form, 
-                'remove_transl_form': remove_transl_form, 
-                'delete_form': delete_form, 
-                'tagged_list': tagged_list, 
-                'tag_states': tag_states, 
-                'tags_form': tags_form, 
-                'only_lyrics': only_lyrics, 
-                'form': Transpose(initial=key_dict), 
-                'ori_key': ori_key, 
-                # 't_songlist': t_songlist,  
-                'untagall_form': untagall_form, 
-                'media': media,
-                'images': images,
-                'files': files,
-                
-            }
-    
-    return render(request, 'view_song.html', context)
+            
+            initial_data = {'name': [tag.id for tag in song.tags.all()]}
+            tags_form = TagsForm(initial=initial_data)    
+            
+        context = {
+            'title': _('View Song'),
+            'song': song,
+            'keyset': CHORDNOTE,
+            'lang': LANG,
+            'tags': tags,
+            'html': html, 
+            'transl_form': transl_form, 
+            'remove_transl_form': remove_transl_form, 
+            'delete_form': delete_form, 
+            'tagged_list': tagged_list, 
+            'tag_states': tag_states, 
+            'tags_form': tags_form, 
+            'only_lyrics': only_lyrics, 
+            'form': Transpose(initial=key_dict), 
+            'ori_key': ori_key, 
+            # 't_songlist': t_songlist,  
+            'untagall_form': untagall_form, 
+            'media': media,
+            'images': images,
+            'files': files,
+            
+        }
+        return render(request, 'view_song.html', context)
 
 def delete_song(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
+    song.delete()
     # delete song from database
+    messages.success(request, _('Song has been permanently deleted.'))
     return redirect('songbook')
 
 def edit_song(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     if request.method == 'POST':
-        form = EditSongForm(request.POST)
+        # to edit add instance of that song, otherwise a new entry will be saved instead
+        form = EditSongForm(request.POST, instance=song)
         if form.is_valid():
             form.save()
             messages.success(request, _('Song has been updated successfully.'))
-            return redirect('view_song', song_id=song_id)
+            return redirect('view_song', song_id=song_id, key=song.key)
     else:
         context = {
             'form': EditSongForm(instance=song),
@@ -291,7 +335,11 @@ def edit_song(request, song_id):
         return render(request, 'edit_song.html', context)
 
 def upload_audio(request, song_id, mtype):
+    song = get_object_or_404(Song, pk=song_id)
+
     pass
+
+ 
 
 def file_upload(request, song_id, mtype):
     song = get_object_or_404(Song, pk=song_id)
@@ -337,8 +385,115 @@ def add_transl(request, song_id):
 def remove_transl(request, selsong_id, cursong_id):
     pass
 
-def tagging(request, song_id):
-    pass
+def tag_list(request):
+    tags = Tag.objects.all()
+    form = AddTagForm()
+    deletetag_form = EmptyForm()
+    if request.method == 'POST':
+        form = AddTagForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('Tag is saved successfully.'))
+            return redirect('tag_list')
+    context = {
+        'title': _('Tag list'), 
+        'tags': tags, 
+        'form': form, 
+        'deletetag_form': deletetag_form,
+        }
+    return render(request, 'tag_list.html', context)
 
+def tag_songlist(request, tag_id):
+    tag = get_object_or_404(Tag, pk=tag_id)
+    songs = tag.song.order_by('title')
+    paginator = Paginator(songs, PAGE_SIZE)
+    page_number = request.GET.get("page")
+    addform = AddSongTagForm(tag=tag)
+    
+    try:
+        page_obj = paginator.get_page(page_number)
+        
+    except PageNotAnInteger:
+        page_obj = paginator.get_page(1)
+    except EmptyPage:
+        page_obj = paginator.get_page(paginator.num_pages)
+    # if request.method == 'POST':
+    #     addform = AddSongTagForm(request.POST)
+    #     if addform.is_valid():
+    #         song = addform.cleaned_data.get('id')
+    #         print(song)
+    context = {
+        'title': _('Songbook'),
+        'songs': songs,
+        'keyset': CHORDNOTE,
+        'lang': LANG,
+        'addform': addform,
+        'tag': tag,
+        'page_obj': page_obj,
+    }
+    
+        
+    return render(request, 'tag_songlist.html', context)
+    
+def delete_tag(request, tag_id):
+    tag = get_object_or_404(Tag, pk=tag_id)
+    if request.method == 'POST':
+        tag.delete()
+        messages.success(request, _('Tag is successfully deleted.'))
+        return redirect('tag_list')
+    else:
+        messages.error(request, _('Error, failed to delete tag.'))
+        return redirect('tag_list')
+
+
+    
+def tagging(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+    tag_states = {tag.id: tag in song.tags.all() for tag in Tag.objects.all()}
+    
+    if request.method == "POST":
+        tags_form = TagsForm(request.POST)
+        if tags_form.is_valid():
+            tagged = tags_form.cleaned_data['name']
+            tagged_list = song.tags.all()
+            if not tagged_list:
+                for dt in tagged_list:
+                    song.tags.remove(dt)
+            
+            #first check if unchecked
+            else:
+                for tg in tagged_list:
+                    if tg.id not in tagged:
+                        song.tags.remove(tg)
+            
+            # add new tags
+            for t in tagged:
+                nt = get_object_or_404(Tag, pk=t)
+                song.tags.add(t)
+            return redirect('view_song', song_id=song.id, key=song.key) 
+        else:
+            messages.error(request, _('Error, failed to validate.'))
+            return redirect('view_song', song_id=song.id, key=song.key) 
+    else:
+        messages.error(request, _('Error, failed to add tag to this song.'))
+        return redirect('view_song', song_id=song.id, key=song.key)    
+    
+def untag(request, tag_id, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+    tag = get_object_or_404(Tag, pk=tag_id)
+    song.tags.remove(tag)   
+    messages.success(request, _('{} tag is no longer related to this song.'.format(tag.name)))
+    return redirect('tag_songlist', tag_id=tag_id)
+                    
+                    
 def untagall(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+    for t in song.tags.all():
+        song.tags.remove(t)
+    song.save()
+    messages.success(request, _('Current song now has no tags.'))
+    return redirect('view_song', song_id=song.id, key=song.key)
+# cart
+
+def add_to_cart(request, song_id):
     pass

@@ -6,10 +6,13 @@ from django.contrib.auth.models import User
 from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, Profile
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'status','created_on')
+    list_display = ('title', 'status','created_on')
     list_filter = ("status",)
-    search_fields = ['title', 'content']
-    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ['title', 'body']
+    # raw_id_fields = ('user',)
+    # date_hierarchy = 'created_on'
+    # ordering = ('status', 'created_on')
+
 
 class SongAdmin(admin.ModelAdmin):
     list_display = ( 'id','title', 'singer', 'key', 'minor', 'get_publisher', 'status','timestamp')
@@ -23,6 +26,11 @@ class ImageAdmin(admin.ModelAdmin):
     list_display = ( 'filename','image', 'song')
     list_filter = ("song",)
     search_fields = ['filename', 'song']
+    
+class TagAdmin(admin.ModelAdmin):
+    list_display = ( 'name', 'slug', 'created_on')
+    list_filter = ("name",)
+    search_fields = ['name',]
 
 class UserProfileInline(admin.StackedInline):
     model = Profile
@@ -39,7 +47,7 @@ admin.site.register(User, UserAdmin)
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Mlinks)
-admin.site.register(Tag)
+admin.site.register(Tag, TagAdmin)
 admin.site.register(Song, SongAdmin)
 admin.site.register(Lists)
 admin.site.register(ListItem)

@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load custom_tags %}
 <div class="row">	
 	<div class="col">
 		<h3>{% translate "Add translation to" %} {{ song.title }} {% translate "from the list of existing song titles" %}</h3>
@@ -8,19 +9,21 @@
 			<div class="row mb-3">
 				{{ transl_form.title.errors }}
 				<div class="col-sm-2 col-form-label">
-				<label for="{{ transl_form.title.id_for_label }}"></div>
+					<label for="{{ transl_form.title.id_for_label }}">
+				</div>
 				<div class="col-10">
-				{{ transl_form.title }}
+					{{ transl_form.title }}
 				</div>      
 			</div>
 			<div class="d-grid gap-2 col-2 mx-auto">
-			<input type="submit" class='btn btn-success' value='{% translate "Link" %}'/>
+				<input type="submit" class='btn btn-success' value='{% translate "Link" %}'/>
 			</div>
 		</form>
 		{% else %}
 		<br>
 		<div class="p-3 border bg-light">
-		<center>Currently there are no songs to pick from</center></div>
+			<center>Currently there are no songs to pick from</center>
+		</div>
 		<br>
 		{% endif %}
 	</div>
@@ -39,22 +42,24 @@
 		{% for tr in t_songlist %}
 			<tr valign="top">
 				<td><a href="{% url 'view_song' song_id=tr.id %}">{{ tr.title }}</a></td>
-				<td>{% if tr.language %}
-				{% for index, l in lang %} 
-					{% if index == tr.language %}
-						{{ l }}
-					{% endif %}	
-				{% endfor %}
-			{% endif %}</td>
 				<td>
-				{% if current_user.is_anonymous %}
-				{% translate "To unlink login required" %}
-				{% else %}
-				<form action="{% url 'remove_transl' selsong_id=tr.id cursong_id=song.id %}" method="post">
-					{% csrf_token %}
-					<input type="submit" class='btn btn-success' value='{% translate "Unlink" %}'/>
-				</form>
-				{% endif %}
+					{% if tr.language %}
+						{% for index, l in lang %} 
+							{% if index == tr.language %}
+								{{ l }}
+							{% endif %}	
+						{% endfor %}
+					{% endif %}
+				</td>
+				<td>
+					{% if user|has_group:"Minister" %}
+						<form action="{% url 'remove_transl' selsong_id=tr.id cursong_id=song.id %}" method="post">
+							{% csrf_token %}
+							<input type="submit" class='btn btn-success' value='{% translate "Unlink" %}'/>
+						</form>
+					{% else %}
+						{% translate "To unlink permissions required" %}
+					{% endif %}
 				</td>
 			</tr>
 		{% endfor %}

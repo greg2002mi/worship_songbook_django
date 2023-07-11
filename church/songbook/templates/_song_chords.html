@@ -1,35 +1,35 @@
 {% load i18n %}
 		<div class="row g-0">
 			<div class="col-auto">
-				
-			<form class="row g-2" action method="post">
-			
-			{% csrf_token %}
-			{% if form.key.errors %}
-				{{ form.key.errors }}
-			{% endif %}
-			<div class="col-sm-2 col-form-label">
-			<label for="{{ form.key.id_for_label }}"></div>
-			<div class="col-10">
-            {{ form.key }}<input type="submit" class='btn btn-success' value='{% translate "Transpose" %}'/>
-			</div>			
-			</form>
+				<form class="row g-2" action method="post">
+					{% csrf_token %}
+					{% if form.key.errors %}
+						{{ form.key.errors }}
+					{% endif %}
+					<div class="col-sm-2 col-form-label">
+						<label for="{{ form.key.id_for_label }}"/>
+					</div>
+					<div class="col-10">
+						{{ form.key }}<input type="submit" class='btn btn-success' value='{% translate "Transpose" %}'/>
+					</div>			
+				</form>
 			</div>
 		</div>
 		<br>
 		<div class="row g-0">
 			<div class="col-auto">
-				{% translate "Original key:" %} {{ ori_key }}</div>
+				{% translate "Original key:" %} {{ ori_key }}
+			</div>
 		</div>
 		<div class="row g-0">		
 			<div class="col-auto">
 				Tags: 
 				{% if tagged_list is not none %}
-				{% for t in tagged_list %}
-				<span class="badge bg-secondary">{{ t }}</span>
-				{% endfor %}
+					{% for t in tagged_list %}
+						<span class="badge bg-secondary">{{ t }}</span>
+					{% endfor %}
 				{% else %}
-				{% translate "None" %}
+					{% translate "None" %}
 				{% endif %}
 			</div>
 		</div>	
@@ -37,7 +37,7 @@
 			
 		<div class="row">
 			<div class="col-md-8 col-xs-12">
-			{{ html|safe }}
+				{{ html|safe }}
 			</div>
 			<div class="col-md-4 col-xs-12 d-none d-sm-block">
 				<div class="card" style="width: 18rem;">
