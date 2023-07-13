@@ -6,18 +6,21 @@ Paginator)
 from django.views import generic
 from django.core.paginator import Paginator
 from django.urls import reverse
-from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, LANG, CHORDNOTE
+from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, LANG, CHORDNOTE, Audio
 from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
-from .forms import AddSongForm, Transpose, AddTagForm, TagsForm, SongsForm, EmptyForm, EditSongForm, NewUForm, UpdateUForm, UpdateProfileForm, UploadAvatarForm, AddSongTagForm
+from .forms import AddSongForm, Transpose, AddTagForm, TagsForm, SongsForm, EmptyForm, EditSongForm, NewUForm, UpdateUForm, UpdateProfileForm, UploadAvatarForm, AddSongTagForm, AddMediaForm, AddEventForm
 from .core import Chordpro_html
 from django import forms
-import os, uuid
+import os, uuid, json
 from django.contrib import messages
 from uuid import uuid4
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Q
+from datetime import datetime
+from django.utils import timezone
 
 PAGE_SIZE = getattr(settings, "PAGE_SIZE", 50)
 
@@ -187,9 +190,11 @@ def add_song(request):
     if request.method == 'POST':
         form = AddSongForm(request.POST)
         if form.is_valid():
-            saved_form = form.save()
-            song_id = saved_form.pk
-            key = saved_form.key
+            song = form.save(commit=False)
+            song.publisher = request.user
+            song.save()
+            song_id = song.pk
+            key = song.key
             messages.success(request, _("Song successfully add as a draft."))
             return redirect('view_song', song_id=song_id, key=key)  # Redirect to the songbook page after successful submission
     else:
@@ -208,7 +213,7 @@ def view_song(request, song_id, key):
     song = get_object_or_404(Song, pk=song_id)
     tags = Tag.objects.all()
     tag_states = {tag.id: tag in song.tags.all() for tag in Tag.objects.all()}
-    images = Image.objects.filter(song=song_id).all()
+    images = song.image.all()
     media = song.media.all()
     tagged_list = ()
     # if song.tags:
@@ -220,7 +225,7 @@ def view_song(request, song_id, key):
     media_root = settings.MEDIA_ROOT
     # directory = os.path.join(media_root, 'photos')
     files = os.listdir(media_root)
-    
+    audio = song.audio.all()
     form = Transpose()
     transl_form = SongsForm()
     remove_transl_form = EmptyForm()
@@ -234,14 +239,14 @@ def view_song(request, song_id, key):
     # tr_list = [(s.id, s.title) for s in other_songs]
     # transl_form.tr_song_id.choices = tr_list
     # list of translated songs
-    # t1_songlist = song.translated.order_by(Song.title).all()
-    # t2_songlist = song.translation.order_by(Song.title).all()
-    # t_songlist = list(t1_songlist)
-    # for song_obj in t2_songlist:
-    #     if song_obj not in t_songlist:
-    #         t_songlist.append(song_obj)
-    delete_form = EmptyForm()
-    key_dict = {'key': key}
+    t1_songlist = song.translated.order_by('title').all()
+    t2_songlist = song.translation.order_by('title').all()
+    t_songlist = list(t1_songlist)
+    for song_obj in t2_songlist:
+        if song_obj not in t_songlist:
+            t_songlist.append(song_obj)
+    # delete_form = EmptyForm()
+    
     tags_form = TagsForm()
     # populate choices for tags_form from db
     # choices = [(t.id, t.name) for t in tags]
@@ -252,6 +257,7 @@ def view_song(request, song_id, key):
     else: 
         transpose = int(key)
     # to send original key as string
+    key_dict = {'key': transpose}
     ori_key = CHORDNOTE[ori_key_int][1]
     if transpose != ori_key_int:
         ori_key = ori_key + _(" | transposed to ") + CHORDNOTE[transpose][1]
@@ -293,18 +299,18 @@ def view_song(request, song_id, key):
             'tags': tags,
             'html': html, 
             'transl_form': transl_form, 
-            'remove_transl_form': remove_transl_form, 
-            'delete_form': delete_form, 
+            'remove_transl_form': remove_transl_form,  
             'tagged_list': tagged_list, 
             'tag_states': tag_states, 
             'tags_form': tags_form, 
             'only_lyrics': only_lyrics, 
             'form': Transpose(initial=key_dict), 
             'ori_key': ori_key, 
-            # 't_songlist': t_songlist,  
+            't_songlist': t_songlist,  
             'untagall_form': untagall_form, 
             'media': media,
             'images': images,
+            'audio': audio,
             'files': files,
             
         }
@@ -334,12 +340,31 @@ def edit_song(request, song_id):
             }
         return render(request, 'edit_song.html', context)
 
-def upload_audio(request, song_id, mtype):
+def upload_audio(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
+    if request.method == 'POST':
+        my_file = request.FILES.get('file')
+        media = song.audio.all()
+        num = len(media) + 1
+        newname = "{}.{}_{}.mp3".format(song.id, song.title, str(num))
+        original_filename = my_file.name
+        my_file.name = newname # change name of image
+        audio = Audio.objects.create(audio_file=my_file, title=original_filename, song=song, filename=newname)
+        audio.save()
+        song.audio.add(audio)
+        return redirect('manage_media', song_id=song.id)
+    return '', 204
 
-    pass
-
- 
+def upload_video(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+    if request.method == 'POST':
+        form = AddMediaForm(request.POST)
+        if form.is_valid():
+            video = form.save(commit=False)
+            video.save()
+            song.media.add(video)
+            messages.success(request, _('Video link has been successfully added.'))
+            return redirect('manage_media', song_id=song.id)
 
 def file_upload(request, song_id, mtype):
     song = get_object_or_404(Song, pk=song_id)
@@ -348,8 +373,9 @@ def file_upload(request, song_id, mtype):
         media = song.image.all()
         num = len(media) + 1
         newname = "{}.image_{}.jpg".format(song.id, str(num))
+        original_filename = my_file.name
         my_file.name = newname # change name of image
-        Image.objects.create(image=my_file, song=song, filename=newname)
+        Image.objects.create(image=my_file, title=original_filename, song=song, filename=newname)
         context = {
             'song_id': song_id, 
             'song': song,
@@ -374,16 +400,84 @@ def delete_file(request, song_id, mlink_id):
     pass
 
 def manage_media(request, song_id):
-    pass
+    song = get_object_or_404(Song, pk=song_id)
+    if song.image:
+        images = song.image.all()
+    else:
+        images = []
+    if song.audio:
+        music = song.audio.all()
+    else:
+        music = []
+    if song.media:
+        media = song.media.all()
+    else:
+        media = []
+    form = AddMediaForm()
+    context = {
+        'song': song, 
+        'form': form,
+        'images': images,
+        'key': song.key,
+        'music': music,
+        'media': media,
+        }
+    return render(request, 'manage_media.html', context)
+
+def delete_image(request, song_id, image_id):
+    song = get_object_or_404(Song, pk=song_id)
+    image = get_object_or_404(Image, pk=image_id)
+    if request.method == 'POST':
+        # song.image.remove(image)
+        image.delete()
+        messages.success(request, _('Image has been successfully deleted.'))
+        return redirect('manage_media', song_id=song.id)
+
+def delete_audio(request, song_id, audio_id):
+    song = get_object_or_404(Song, pk=song_id)
+    audio = get_object_or_404(Audio, pk=audio_id)
+    if request.method == 'POST':
+        # song.audio.remove(audio)
+        audio.delete()
+        messages.success(request, _('Audio file has been successfully deleted.'))
+        return redirect('manage_media', song_id=song.id)
+    
+def delete_video(request, song_id, mlink_id):
+    song = get_object_or_404(Song, pk=song_id)
+    video = get_object_or_404(Mlinks, pk=mlink_id)
+    if request.method == 'POST':
+        song.media.remove(video)
+        video.delete()
+        messages.success(request, _('Audio file has been successfully deleted.'))
+        return redirect('manage_media', song_id=song.id)
 
 def upload_i(request, filename):
     pass
 
 def add_transl(request, song_id):
-    pass
+    current_song = get_object_or_404(Song, pk=song_id)
+    if request.method == 'POST':
+        transl_form = SongsForm(request.POST)
+        if transl_form.is_valid():
+            oth_song_id = transl_form.cleaned_data['title']
+            other_song = get_object_or_404(Song, pk=oth_song_id)
+            current_song.translated.add(other_song)
+            messages.success(request, _('Translation has been successfully linked.'))
+            return redirect('view_song', song_id=current_song.id, key=current_song.key)
 
 def remove_transl(request, selsong_id, cursong_id):
-    pass
+    current_song = get_object_or_404(Song, pk=cursong_id)
+    selected_song = get_object_or_404(Song, pk=selsong_id)
+    if request.method == 'POST':
+        if selected_song in current_song.translated.all():
+            current_song.translated.remove(selected_song)
+        elif current_song in selected_song.translated.all():
+            selected_song.translated.remove(current_song)
+            messages.success(request, _('Translation has been successfully unlinked.'))
+            return redirect('view_song', song_id=current_song.id, key=current_song.key)
+        else:
+            messages.error(request, _('Error occured. Please reload page and try again.'))
+            return redirect('view_song', song_id=current_song.id, key=current_song.key)
 
 def tag_list(request):
     tags = Tag.objects.all()
@@ -417,6 +511,7 @@ def tag_songlist(request, tag_id):
         page_obj = paginator.get_page(1)
     except EmptyPage:
         page_obj = paginator.get_page(paginator.num_pages)
+    # make searchable drop down select
     # if request.method == 'POST':
     #     addform = AddSongTagForm(request.POST)
     #     if addform.is_valid():
@@ -449,7 +544,7 @@ def delete_tag(request, tag_id):
     
 def tagging(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
-    tag_states = {tag.id: tag in song.tags.all() for tag in Tag.objects.all()}
+    # tag_states = {tag.id: tag in song.tags.all() for tag in Tag.objects.all()}
     
     if request.method == "POST":
         tags_form = TagsForm(request.POST)
@@ -468,7 +563,6 @@ def tagging(request, song_id):
             
             # add new tags
             for t in tagged:
-                nt = get_object_or_404(Tag, pk=t)
                 song.tags.add(t)
             return redirect('view_song', song_id=song.id, key=song.key) 
         else:
@@ -496,4 +590,62 @@ def untagall(request, song_id):
 # cart
 
 def add_to_cart(request, song_id):
+    pass
+
+
+# calendar
+def calendar(request):
+    # form = EmptyForm() # to delete events
+    events = Lists.objects.order_by("created").all()
+    for e in events:
+        date = timezone.now()
+        if e.date_end and e.date_end < date:  # ISSUE: Nonetype and datetime are not comparable
+            e.status = 2
+            e.save(update_fields=['status'])
+    active_events = Lists.objects.filter(~Q(status=2))
+    # check if date is passed
+        
+    context = {
+        'title': _('Songbook'),
+        'active_events': active_events,
+        'lang': LANG,
+    }
+    return render(request, 'calendar.html', context)
+
+def events(request):    
+    events = []
+    lists = Lists.objects.all()
+    for list_item in lists:
+        event = {
+            'id': list_item.id,
+            'title': list_item.title,
+            'start': list_item.date_time.isoformat() if list_item.date_time else None,
+            'end': list_item.date_end.isoformat() if list_item.date_end else None,
+            'url': '/lists/{}'.format(list_item.id),  # Link to the detail page
+            'editable': True  # Set to False if you want to disable event editing
+        }
+        events.append(event)
+    # return jsonify(events)
+    return json.dumps(events)
+
+def add_event(request):
+    form = AddEventForm()
+    if request.method == "POST":
+        form = AddEventForm(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.user = request.user
+            event.save()
+            messages.success(request, _('Success! Event is set.'))
+            return redirect('calendar')
+        else:
+            messages.error(request, _('Error! Form failed to validate.'))
+            return redirect(add_event)
+    context = {
+        'title': _('Add event'),
+        'form': form,
+        }
+    return render(request, 'add_event.html', context)
+
+def lists(request, list_id):
     pass

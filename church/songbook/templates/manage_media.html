@@ -6,48 +6,43 @@
 {% block app_content %}
 
 	<div class="row">
-		<div class="col-auto"><a class="nav-link" href="{% url 'view_song' song_id=song.id %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+		<div class="col-auto"><a class="nav-link" href="{% url 'view_song' song_id=song.id key=song.key %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
   <path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
 </svg></a></div>
 		<div class="col-md-4 col-xs-12"><h4><strong>{% translate "Add Audio" %}</strong></h4><br>
-			<form method="post" action="{% url 'upload_audio' song_id=song.id mtype=2 %}" enctype="multipart/form-data">
-			  <p><input type="file" name="file"></p>
-			  <p><input class="btn btn-outline-dark btn-sm" type="submit" value="Submit"/></p>
+			<form method="post" action="{% url 'upload_audio' song_id=song.id %}" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div class="mb-3">
+				  <label for="formFileSm" class="form-label">Upload audio file:</label>
+				  <input class="form-control form-control-sm" id="formFileSm" type="file" name="file">
+				<input class="btn btn-outline-dark btn-sm" type="submit" value="Upload"/>
+				</div>
 			</form>
 		</div>
 		<div class="col-md-6 col-xs-12">
 			<h4><strong>Add Video</strong></h4>
 			<br>
-			<form class="form-floating needs-validation" method="post" novalidate>
+			<form class="form-floating needs-validation" method="post" action="{% url 'upload_video' song_id=song.id %}" novalidate>
 				{% csrf_token %}
 				<div class="row mb-3">
-					{{ video_form.name.label(class_='col-sm-3 col-form-label" %}
+					{{ form.filename.errors }}
+					<label class_='col-sm-2 col-form-label' for="{{ form.filename.id_for_label }}">{{ form.filename.label }}</label>
 					<div class="col-10">
-						{{ video_form.name(class='form-control', style='min-width: 100%" %}<br>
-						{% for error in video_form.name.errors %}
-						<span style="color: red;">[{{ error }}]</span>
-						{% endfor %}
+						{{ form.filename }}
 					</div>
 				</div>
 				<div class="row mb-3">
-					{{ video_form.murl.label(class_='col-sm-2 col-form-label" %}
+					{{ form.murl.errors }}
+					<label class_='col-sm-2 col-form-label' for="{{ form.murl.id_for_label }}">{{ form.murl.label }}</label>
 					<div class="col-10">
-						{{ video_form.murl(class='form-control', style='min-width: 100%', style='height: 100px" %}
-						{% for error in video_form.murl.errors %}
-						<span style="color: red;">[{{ error }}]</span>
-						{% endfor %}
+						{{ form.murl }}
 					</div>      
 				</div>
 				<div class="d-grid gap-2 col-2 mx-auto">
 					<input type="submit" class='btn btn-success' value='{% translate "Upload" %}'/>
 				</div>
 			</form>
-		
-		
-		
-		
-		
 		</div>
 		<div class="col-md-10 col-xs-12"><h4><strong>{% translate 'Media list' %}</strong></h4><br>
 			<div class="row">
@@ -58,16 +53,42 @@
 							 <th>{% translate "No." %}</th>
 							 <th>{% translate "Title" %}</th>
 							 <th>{% translate "type" %}</th>
+							 <th>{% translate "Created on" %}</th>
 							 <th>{% translate "Actions" %}</th>
 						  </tr>
 						</thead>
 						<tbody>
+						{% for i in images %}
+							<tr valign="top">
+								<td>{{ i.id }}</td>
+								<td>{{ i.filename }}</td>
+								<td>Images</td>
+								<td>{{ i.date }}</td>
+								<td><form action="{% url 'delete_image' song_id=song.id image_id=i.id %}" method="post">
+									{% csrf_token %}
+									<input type="submit" class='btn btn-success' value='{% translate "Delete" %}'/>
+								</form></td>
+							</tr>
+						{% endfor %}
+						{% for a in music %}
+							<tr valign="top">
+								<td>{{ a.id }}</td>
+								<td>{{ a.title }}</td>
+								<td>Audio</td>
+								<td>{{ a.date }}</td>
+								<td><form action="{% url 'delete_audio' song_id=song.id audio_id=a.id %}" method="post">
+									{% csrf_token %}
+									<input type="submit" class='btn btn-success' value='{% translate "Delete" %}'/>
+								</form></td>
+							</tr>
+						{% endfor %}
 						{% for m in media %}
 							<tr valign="top">
 								<td>{{ m.id }}</td>
 								<td>{{ m.filename }}</td>
-								<td>{{ types[m.mtype] }}</td>
-								<td><form action="{% url 'delete_file' song_id=song.id mlink_id=m.id %}" method="post">
+								<td>Video</td>
+								<td>{{ m.date }}</td>
+								<td><form action="{% url 'delete_video' song_id=song.id mlink_id=m.id %}" method="post">
 									{% csrf_token %}
 									<input type="submit" class='btn btn-success' value='{% translate "Delete" %}'/>
 								</form></td>

@@ -1,5 +1,6 @@
 from django import forms
-from .models import Song, Tag, Mlinks, CHORDNOTE, Profile, Post
+from django.db.models import F
+from .models import Song, Tag, Mlinks, CHORDNOTE, Post, Audio, Image, Lists, Profile
 from django.utils.translation import gettext as _
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -7,6 +8,7 @@ from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 import os
 from django.conf import settings
+from django_flatpickr.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
 
 
 class UpdateUForm(forms.ModelForm):
@@ -34,7 +36,7 @@ class UpdateProfileForm(forms.ModelForm):
         }
 
 class UploadAvatarForm(forms.ModelForm):
-    
+
     class Meta:
         model = Profile
         fields = ['avatar',]
@@ -154,6 +156,8 @@ class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=50)
     file = forms.FileField()
 
+# class TransSongForm(forms.Form):
+#     tr_song_id = forms.ModelChoiceField(queryset=Song.objects.exclude(language=F('song__language')).exclude(translation__id=F('id')), label='Translated Song')
 
 class TagsForm(forms.Form):
     name = forms.MultipleChoiceField(label='Tags', choices=[(tag.id, tag.name) for tag in Tag.objects.all()], widget=forms.CheckboxSelectMultiple(attrs={'name': 'tags'}))
@@ -173,6 +177,15 @@ class TagsForm(forms.Form):
     
     
 class AddMediaForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        self.fields['filename'].widget.attrs['style'] = 'min-width: 100%'
+        self.fields['filename'].widget.attrs['placeholder'] = _('Title of a video or type Youtube')
+        self.fields['murl'].widget.attrs['style'] = 'min-width: 100%'
+        self.fields['murl'].widget.attrs['placeholder'] = _('Paste embed url link, taken from desired youtube clip')
+        
     class Meta:
         model = Mlinks
         fields = ['filename', 'murl']
@@ -180,6 +193,23 @@ class AddMediaForm(forms.ModelForm):
             'filename': _('File name'),
             'murl': _('URL'),
         }
+
+# class AddAudioForm(forms.ModelForm):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         for visible in self.visible_fields():
+#             visible.field.widget.attrs['class'] = 'form-control'
+#         self.fields['title'].widget.attrs['style'] = 'min-width: 100%'
+#         self.fields['title'].widget.attrs['placeholder'] = _('Title of audio')
+        
+#     class Meta:
+#         model = Audio
+#         fields = ['title']
+#         labels = {
+#             'title': _('Title'),
+
+#         }
+
         
 class SongsForm(forms.Form):
     class Meta:
@@ -196,3 +226,35 @@ class SongsForm(forms.Form):
     
 class EmptyForm(forms.Form):
     pass
+
+class AddEventForm(forms.ModelForm):    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        self.fields['title'].widget.attrs['style'] = 'min-width: 100%'
+        self.fields['title'].widget.attrs['placeholder'] = _('Sunday service, Morning Prayer, Prayer and Worship service etc.')
+        self.fields['mlink'].widget.attrs['style'] = 'min-width: 100%'
+        self.fields['mlink'].widget.attrs['rows'] = '3'
+        self.fields['mlink'].widget.attrs['placeholder'] = _('Link from Youtube. Embed links only')
+        self.fields['date_time'].widget.attrs['class'] = 'datetimepicker'
+        self.fields['date_end'].widget.attrs['class'] = 'datetimepicker'
+        self.fields['passage'].widget.attrs['style'] = 'min-width: 100%'
+        self.fields['passage'].widget.attrs['placeholder'] = _('Slogans, Theme of service, Bible verse, etc.')
+        self.fields['passage'].widget.attrs['rows'] = '15'
+        
+    class Meta:
+        model = Lists
+        fields = ['title', 'date_time', 'date_end', 'mlink', 'passage', 'status']
+        labels = {
+            'title': _('Title'),
+            'date_time': _('Start date'),
+            'date_end': _('till'),
+            'mlink': _('Media Link'),
+            'passage': _('Bible passage'),
+            'status': _('Status'),
+        }
+        widgets = {
+            "date_end": DateTimePickerInput(),
+            "date_time": DateTimePickerInput(),
+        }

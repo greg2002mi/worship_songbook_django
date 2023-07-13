@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
+import os
 
 # Register your models here.
-from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, Profile
+from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, Audio, Profile
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'status','created_on')
@@ -13,6 +14,26 @@ class PostAdmin(admin.ModelAdmin):
     # date_hierarchy = 'created_on'
     # ordering = ('status', 'created_on')
 
+class AudioFileAdmin(admin.ModelAdmin):
+    list_display = ( 'filename','date', 'song', 'audio_file_player')
+    actions = ['custom_delete_selected']
+    
+    def custom_delete_selected(self, request, queryset):
+        #custom delete code
+        n = queryset.count()
+        for i in queryset:
+            if i.audio_file:
+                if os.path.exists(i.audio_file.path):
+                    os.remove(i.audio_file.path)
+            i.delete()
+        self.message_user(request, ("Successfully deleted %d audio files.") % n)
+    
+    custom_delete_selected.short_description = "Delete selected items"
+
+    def get_actions(self, request):
+        actions = super(AudioFileAdmin, self).get_actions(request)
+        del actions['delete_selected']
+        return actions
 
 class SongAdmin(admin.ModelAdmin):
     list_display = ( 'id','title', 'singer', 'key', 'minor', 'get_publisher', 'status','timestamp')
@@ -28,9 +49,10 @@ class ImageAdmin(admin.ModelAdmin):
     search_fields = ['filename', 'song']
     
 class TagAdmin(admin.ModelAdmin):
-    list_display = ( 'name', 'slug', 'created_on')
+    list_display = ( 'name', 'created_on')
     list_filter = ("name",)
     search_fields = ['name',]
+
 
 class UserProfileInline(admin.StackedInline):
     model = Profile
@@ -44,7 +66,7 @@ class UserAdmin(BaseUserAdmin):
 admin.site.unregister(User)
 # Register the custom UserAdmin
 admin.site.register(User, UserAdmin)
-
+admin.site.register(Audio, AudioFileAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Mlinks)
 admin.site.register(Tag, TagAdmin)

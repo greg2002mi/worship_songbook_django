@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block head_js %}
+  <script src="{% static 'js/popper.min.js' %}" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{% static 'css/flatpickr.min.css' %}">
+  <script src="{% static 'js/flatpickr.js' %}"></script>
+  <script src="{% static 'js/django-flatpickr.js' %}"></script>
+  <script>
+  // Initialize the date and time picker for the date_time and date_end fields
+  flatpickr('.datetimepicker', {
+            enableTime: true,
+            dateFormat: 'Y-m-d H:i'
+        });
+
+</script>
+{% endblock %}
+
+
+{% block app_content %}
+    <h1>{% translate "Add Event (Create list for worship service)" %}</h1>
+    <form class="form-floating needs-validation" method="post" novalidate>
+        {% csrf_token %}
+        <div class="row mb-3">
+            {{form.title.errors}}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+			</div>
+			<div class="col-10">
+            {{ form.title }}
+			</div>
+        </div>
+		<div class="row mb-3">
+            {{form.date_time.errors}}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ form.date_time.id_for_label }}">{{ form.date_time.label }}</label>
+			</div>
+			<div class="col-3">
+            {{ form.date_time }}
+			</div>
+			{{form.date_end.errors}}
+			<div class="col-sm-1">
+			<label for="{{ form.date_end.id_for_label }}"><p class="text-center">{{ form.date_end.label }}</p></label>
+			</div>
+			<div class="col-3">
+            {{ form.date_end }}
+			</div>
+        </div>
+		<div class="row mb-3">
+            
+        </div>
+		<div class="row mb-3">
+            {{form.mlink.errors}}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ form.mlink.id_for_label }}">{{ form.mlink.label }}</label>
+			</div>
+			<div class="col-10">
+            {{ form.mlink }}
+			</div>
+        </div>
+		<div class="row mb-3">
+            {{form.passage.errors}}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ form.passage.id_for_label }}">{{ form.passage.label }}</label>
+			</div>
+			<div class="col-10">
+            {{ form.passage }}
+			</div>
+        </div>
+		<div class="row mb-3">
+            {{form.status.errors}}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+			</div>
+			<div class="col-10">
+            {{ form.status }}
+			</div>
+        </div>
+		<div class="d-grid gap-2 col-2 mx-auto">
+			<input type="submit" class='btn btn-success' value='{% translate "Add" %}'/>
+		</div>
+    </form>
+{% endblock %}

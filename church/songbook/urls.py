@@ -17,7 +17,10 @@ urlpatterns = [
     path("<int:song_id>/edit_song", views.edit_song, name="edit_song"),
     path("<int:song_id>/delete_song", views.delete_song, name="delete_song"),
     path("<int:song_id>/upload_audio", views.upload_audio, name="upload_audio"),
-    path("delete_file/<int:song_id>/<int:mlink_id>", views.delete_file, name="delete_file"),
+    path("<int:song_id>/upload_video", views.upload_video, name="upload_video"),
+    path("<int:image_id>/<int:song_id>/delete_image", views.delete_image, name="delete_image"),
+    path("<int:audio_id>/<int:song_id>/delete_audio", views.delete_audio, name="delete_audio"),
+    path("<int:mlink_id>/<int:song_id>/delete_video", views.delete_video, name="delete_video"),
     path("<int:song_id>/manage_media", views.manage_media, name="manage_media"),
     path("<int:song_id>/upload_i", views.upload_i, name="upload_i"),
     path("<int:song_id>/add_transl", views.add_transl, name="add_transl"),
@@ -32,7 +35,10 @@ urlpatterns = [
     path("<int:mtype>/<int:song_id>/upload_images", views.file_upload, name="upload_images"),
     path("<int:user_id>/avatar_upload", views.avatar_upload, name="avatar_upload"),
     path("<int:song_id>/add_to_cart", views.add_to_cart, name="add_to_cart"),
-    
+    path("events", views.events, name="events"),
+    path("calendar", views.calendar, name="calendar"),
+    path("add_event", views.add_event, name="add_event"),
+    path("lists/<int:list_id>", views.lists, name="lists"),
     ]
 
 # Serving the media files in development mode

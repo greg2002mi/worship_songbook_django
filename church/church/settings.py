@@ -42,13 +42,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'songbook',
-    # 'songbook.apps.SongbookConfig',
+    # 'songbook',
+    'songbook.apps.SongbookConfig',
     'songbook.templatetags',
     'crispy_forms',
     'crispy_bootstrap4',
     'bootstrap4',
     'phonenumber_field',
+    'audiofield',
+    'celery',
+    "django_flatpickr",
 ]
 
 MIDDLEWARE = [
@@ -60,7 +63,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-
+    'audiofield.middleware.threadlocals.ThreadLocals',
+    
 ]
 
 ROOT_URLCONF = 'church.urls'
@@ -110,6 +114,15 @@ DATABASES = {
     }
 }
 
+# Celery
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND_DB = ''.join(['postgresql+psycopg2://', os.getenv("DB_USER"), ":", os.getenv("DB_PASSWORD"), "@localhost/", os.getenv("DB_NAME")]) 
+CELERY_CACHE_BACKEND = 'django-cache' 
+## Broker settings.
+CELERY_BROKER_URL = 'redis://localhost:6379' 
+CELERY_ACCEPT_CONTENT = ['application/json'] 
+CELERY_TASK_SERIALIZER = 'json' 
+CELERY_RESULT_SERIALIZER = 'json' 
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -168,6 +181,17 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
+# Frontend widget values
+# 0-Keep original, 1-Mono, 2-Stereo
+CHANNEL_TYPE_VALUE = 0
+
+# 0-Keep original, 8000-8000Hz, 16000-16000Hz, 22050-22050Hz,
+# 44100-44100Hz, 48000-48000Hz, 96000-96000Hz
+FREQ_TYPE_VALUE = 8000
+
+# 0-Keep original, 1-Convert to MP3, 2-Convert to WAV, 3-Convert to OGG
+CONVERT_TYPE_VALUE = 0
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'songbook/media')
 MEDIA_URL = "/songbook/media/"

@@ -3,7 +3,6 @@
 <div class="row">	
 	<div class="col">
 		<h3>{% translate "Add translation to" %} {{ song.title }} {% translate "from the list of existing song titles" %}</h3>
-		{% if tr_song_id %}
 		<form class="form-floating needs-validation" action="{% url 'add_transl' song_id=song.id %}" method="post" novalidate>
 			{% csrf_token %}
 			<div class="row mb-3">
@@ -19,13 +18,6 @@
 				<input type="submit" class='btn btn-success' value='{% translate "Link" %}'/>
 			</div>
 		</form>
-		{% else %}
-		<br>
-		<div class="p-3 border bg-light">
-			<center>Currently there are no songs to pick from</center>
-		</div>
-		<br>
-		{% endif %}
 	</div>
 </div>
 <div class="row">	
