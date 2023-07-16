@@ -160,8 +160,8 @@ class UploadFileForm(forms.Form):
 #     tr_song_id = forms.ModelChoiceField(queryset=Song.objects.exclude(language=F('song__language')).exclude(translation__id=F('id')), label='Translated Song')
 
 class TagsForm(forms.Form):
-    name = forms.MultipleChoiceField(label='Tags', choices=[(tag.id, tag.name) for tag in Tag.objects.all()], widget=forms.CheckboxSelectMultiple(attrs={'name': 'tags'}))
-
+    name = forms.MultipleChoiceField(label='Tags', widget=forms.CheckboxSelectMultiple(attrs={'name': 'tags'}))
+    # name = forms.MultipleChoiceField(label='Tags', choices=[(tag.id, tag.name) for tag in Tag.objects.all()], widget=forms.CheckboxSelectMultiple(attrs={'name': 'tags'}))
     
 # class TagsForm(forms.ModelForm):
 #     class Meta:

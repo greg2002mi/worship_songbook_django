@@ -247,7 +247,7 @@ def view_song(request, song_id, key):
             t_songlist.append(song_obj)
     # delete_form = EmptyForm()
     
-    tags_form = TagsForm()
+    tags_form = TagsForm(choices=[(tag.id, tag.name) for tag in Tag.objects.all()])
     # populate choices for tags_form from db
     # choices = [(t.id, t.name) for t in tags]
     # tags_form.name.choices = choices
@@ -316,6 +316,7 @@ def view_song(request, song_id, key):
         }
         return render(request, 'view_song.html', context)
 
+
 def delete_song(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     song.delete()
@@ -323,6 +324,7 @@ def delete_song(request, song_id):
     messages.success(request, _('Song has been permanently deleted.'))
     return redirect('songbook')
 
+@login_required
 def edit_song(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     if request.method == 'POST':
@@ -616,18 +618,27 @@ def events(request):
     events = []
     lists = Lists.objects.all()
     for list_item in lists:
-        event = {
+        events.append({
             'id': list_item.id,
             'title': list_item.title,
-            'start': list_item.date_time.isoformat() if list_item.date_time else None,
-            'end': list_item.date_end.isoformat() if list_item.date_end else None,
+            'start': list_item.date_time.strftime("%Y/%m/%d, %H:%M:%S"),
+            'end': list_item.date_end.strftime("%Y/%m/%d, %H:%M:%S"),
             'url': '/lists/{}'.format(list_item.id),  # Link to the detail page
             'editable': True  # Set to False if you want to disable event editing
-        }
-        events.append(event)
+        })
+        # event = {
+        #     'id': list_item.id,
+        #     'title': list_item.title,
+        #     'start': list_item.date_time.isoformat() if list_item.date_time else None,  #datetime.datetime.strptime(str(i.start_date.date()), "%Y-%m-%d").strftime("%Y-%m-%d")
+        #     'end': list_item.date_end.isoformat() if list_item.date_end else None,
+        #     'url': '/lists/{}'.format(list_item.id),  # Link to the detail page
+        #     'editable': True  # Set to False if you want to disable event editing
+        # }
+        # events.append(event)
     # return jsonify(events)
-    return json.dumps(events)
+    return JsonResponse(events, safe=False)
 
+@login_required
 def add_event(request):
     form = AddEventForm()
     if request.method == "POST":
@@ -647,5 +658,105 @@ def add_event(request):
         }
     return render(request, 'add_event.html', context)
 
-def lists(request, list_id):
+def edit_event(request, listid):
+    event = get_object_or_404(Lists, pk=listid)
+    if request.method == 'POST':
+        # to edit add instance of that song, otherwise a new entry will be saved instead
+        form = AddEventForm(request.POST, instance=event)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('Event has been updated successfully.'))
+            return redirect('lists', list_id=listid)
+    else:
+        context = {
+            'form': AddEventForm(instance=event),
+            'event': event
+            }
+        return render(request, 'edit_event.html', context)
+
+def delete_event(request, eventid, jump):
+    event = get_object_or_404(Lists, pk=eventid)
+    if request.method == 'POST':
+        event.delete()
+        messages.success(request, _('Event is removed successfully.'))
+        # jump to redirect based on where it has been deleted
+        return redirect('calendar')
+
+def unsign_from_listitem(request, itemid, username):
     pass
+
+def list_delete_item(request, item, listid):
+    pass
+
+def jall_events(request):                                                                                                 
+    all_events = Lists.objects.all()                                                                                    
+    out = []                                                                                                             
+    for event in all_events:                                                                                             
+        out.append({                                                                                                     
+            'id': event.id,
+            'title': event.title,
+            'start': event.date_time.strftime("%Y/%m/%d, %H:%M:%S"),
+            'end': event.date_end.strftime("%Y/%m/%d, %H:%M:%S"),
+            'url': '/lists/{}'.format(event.id),  # Link to the detail page
+            'editable': True                                                            
+        })                                                                                                               
+                                                                                                                     
+    return JsonResponse(out, safe=False)  
+
+def jadd_event(request):
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
+    title = request.GET.get("title", None)
+    event = Lists(title=str(title), date_time=start, date_end=end)
+    event.save()
+    data = {}
+    return JsonResponse(data)
+
+
+def jupdate(request):
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
+    title = request.GET.get("title", None)
+    id = request.GET.get("id", None)
+    event = Lists.objects.get(pk=id)
+    event.date_time = start
+    event.date_end = end
+    event.title = title
+    event.save()
+    data = {}
+    return JsonResponse(data)
+
+
+def jremove(request):
+    id = request.GET.get("id", None)
+    event = Lists.objects.get(pk=id)
+    event.delete()
+    data = {}
+    return JsonResponse(data)
+
+def lists(request, list_id):
+    event = get_object_or_404(Lists, pk=list_id)
+    de_form = EmptyForm()
+    unroleform = EmptyForm()
+    deleteform = EmptyForm()
+    songlist = {}
+    context = {
+        'title': _('Event Details'),
+        'event': event,
+        'songlist': songlist,
+        'keyset': CHORDNOTE,
+        'de_form': de_form,
+        'unroleform': unroleform,
+        'deleteform': deleteform,
+        }
+    return render(request, 'event_detail.html', context)
+
+def onstage(request, viewtype):
+    if viewtype == 1:
+        pass
+    if viewtype == 2:
+        pass
+    if viewtype == 3:
+        pass
+    context = {}
+    return render(request, 'onstage.html', context)

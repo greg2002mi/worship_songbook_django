@@ -98,8 +98,6 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
     
-    
-
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -213,6 +211,9 @@ class Lists(models.Model):
     status = models.IntegerField(default=0, choices=EV_STATUS) # 0 not draft, 1 is final, 2 is passed 
     assigned = models.ManyToManyField(User, related_name='created')
     slug = AutoSlugField(populate_from='title', unique_with=['created']) 
+
+def __str__(self):
+        return self.title
 
 class ListItem(models.Model):
     title = models.CharField(max_length=140)

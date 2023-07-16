@@ -36,7 +36,19 @@ urlpatterns = [
     path("<int:user_id>/avatar_upload", views.avatar_upload, name="avatar_upload"),
     path("<int:song_id>/add_to_cart", views.add_to_cart, name="add_to_cart"),
     path("events", views.events, name="events"),
+    
     path("calendar", views.calendar, name="calendar"),
+    
+    path('jadd_event', views.jadd_event, name='add_event'),
+    path('jupdate', views.jupdate, name='update'),
+    path('jremove', views.jremove, name='remove'),
+    
+    path('edit_event/<int:listid>', views.edit_event, name='edit_event'),
+    path('delete_event/<int:eventid>/<str:jump>', views.delete_event, name='delete_event'),
+    path('unsign_from_listitem/<int:itemid>/<int:username>', views.unsign_from_listitem, name='unsign_from_listitem'),
+    path('list_delete_item/<int:item>/<int:listid>', views.list_delete_item, name='list_delete_item'),
+    path('jall_events', views.jall_events, name='all_events'),
+    
     path("add_event", views.add_event, name="add_event"),
     path("lists/<int:list_id>", views.lists, name="lists"),
     ]

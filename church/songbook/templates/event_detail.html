@@ -1,8 +1,10 @@
 {% extends "base.html" %}
+{% load i18n %}
+{% load static %}
 
 {% block head_js %}
-<script src="{{ url_for('static', filename='/js/jquery-3.6.0.min.js') }}"></script>
-<script src="{{ url_for('static', filename='/js/jquery-ui.min.js') }}"></script>
+<script src="{% static '/js/jquery-3.6.0.min.js' %}"></script>
+<script src="{%static '/js/jquery-ui.min.js' %}"></script>
 <style>
 	ul {
 	  list-style-type: none;
@@ -102,25 +104,25 @@
 
 	<div class="row">
 		<div class="col-md-8 col-xs-12">
-			<h4>{{ _('Event title:') }} {{ event.list_title }}</h4>
-			<h5>{{ _('Set date:') }} {{ moment(event.date_time).format('LLL') }}</h5>
-			<h5>{{ _('Created date:') }} {{ moment(event.created).format('LLL') }}</h5>
-			<h6>{{ _('Created by:') }} {{ user.username }}</h6>
-			<h6>{{ _('Links:') }} {{ event.mlink }}</h6>
+			<h4>{% translate "Event title:" %} {{ event.list_title }}</h4>
+			<h5>{% translate "Set date:" %} {{ event.date_time|date:"Y M d D H i " }}</h5>
+			<h5>{% translate "Created date:" %} {{ event.created|date:"Y M d D H i " }}</h5>
+			<h6>{% translate "Created by:" %} {{ user.username }}</h6>
+			<h6>{% translate "Links:" %} {{ event.mlink }}</h6>
 		</div>	
 		<div class="col-md-4 col-xs-12">
 			<nav class="nav nav-pills justify-content-end">
-				<a class="nav-link active" aria-current="page" href="{{ url_for('.edit_event', listid=event.id) }}">{{ _('Edit') }}</a>&nbsp;&nbsp;
-				<form action="{{ url_for('delete_event', eventid=event.id, jump='calendar') }}" method="post">
+				<a class="nav-link active" aria-current="page" href="{% url 'edit_event' listid=event.id %}">{% translate "Edit" %}</a>&nbsp;&nbsp;
+				<form action="{% url'delete_event' eventid=event.id jump='calendar' %}" method="post">
 								{{ de_form.hidden_tag() }}
 								{{ de_form.submit(class_='btn btn-secondary', value=_('Delete')) }}
 				</form>
 			</nav>
 			<br>
 			<nav class="nav nav-pills justify-content-end">
-			<a class="nav-link active" aria-current="page" href="{{ url_for('.onstage', eventid=event.id, viewtype=1) }}" target="_blank">{{ _('Stage mode') }}</a>&nbsp;&nbsp;
-			<a class="nav-link active" aria-current="page" href="{{ url_for('.onstage', eventid=event.id, viewtype=2) }}" target="_blank">{{ _('Vocal') }}</a>&nbsp;&nbsp;
-			<a class="nav-link active" aria-current="page" href="{{ url_for('.onstage', eventid=event.id, viewtype=3) }}" target="_blank">{{ _('Music sheets') }}</a>
+			<a class="nav-link active" aria-current="page" href="{% url 'onstage' eventid=event.id viewtype=1 %}" target="_blank">{% translate "Stage mode" %}</a>&nbsp;&nbsp;
+			<a class="nav-link active" aria-current="page" href="{% url 'onstage' eventid=event.id viewtype=2 %}" target="_blank">{% translate "Vocal" %}</a>&nbsp;&nbsp;
+			<a class="nav-link active" aria-current="page" href="{% url 'onstage' eventid=event.id viewtype=3 %}" target="_blank">{% translate "Music sheets" %}</a>
 			</nav>
 		</div>
 	</div>	
@@ -137,14 +139,14 @@
 			<ul>
 			<li>
 				<div class="row border-bottom border-3 bg-light text-dark" style="width: 1200px;">
-						<div class="col-auto d-none d-sd-block"><strong>{{ _('No.') }}</strong></div>
-						<div class="col-3"><strong>{{ _('Title') }}</strong></div>
-						<div class="col-auto"><strong>&nbsp;&nbsp;&nbsp;{{ _('Key') }}&nbsp;&nbsp;&nbsp;</strong></div>
-						<div class="col-auto"><strong>{{ _('order') }}</strong></div>
-						<div class="col-3"><strong>{{ _('Comments') }}</strong></div>
-						<div class="col-1"><strong>{{ _('Assigned') }}</strong></div>
-						<div class="col-1"><strong>{{ _('Assigned User') }}</strong></div>
-						<div class="col-1"><strong>{{ _('Actions') }}</strong></div>
+						<div class="col-auto d-none d-sd-block"><strong>{% translate "No." %}</strong></div>
+						<div class="col-3"><strong>{% translate "Title" %}</strong></div>
+						<div class="col-auto"><strong>&nbsp;&nbsp;&nbsp;{% translate "Key" %}&nbsp;&nbsp;&nbsp;</strong></div>
+						<div class="col-auto"><strong>{% translate "order" %}</strong></div>
+						<div class="col-3"><strong>{% translate "Comments" %}</strong></div>
+						<div class="col-1"><strong>{% translate "Assigned" %}</strong></div>
+						<div class="col-1"><strong>{% translate "Assigned User" %}</strong></div>
+						<div class="col-1"><strong>{% translate "Actions" %}</strong></div>
 					</div></li></ul>
 			<ul id="sortable">
 			{% for s in songlist %}
@@ -153,7 +155,7 @@
 						<div class="col-auto d-none d-sd-block">{{ s.id }}</div>
 						<div class="col-3">
 						{% for song in s.song %}
-						<a href="{{ url_for('.view_song', id=song.id) }}">{{ song.title }}</a>
+						<a href="{% url 'view_song' id=song.id %}">{{ song.title }}</a>
 						{% endfor %}
 						</div>
 						<div class="col-1">
@@ -168,7 +170,7 @@
 						</div>
 						<div class="col-1">{% if s.role %}
 						{% for auser in s.role %}
-						<form class="d-inline" action="{{ url_for('.unsign_from_listitem', itemid=s.id, username=auser.username) }}" method="POST">
+						<form class="d-inline" action="{% url 'unsign_from_listitem' itemid=s.id username=auser.username %}" method="POST">
 							{{ unroleform.csrf_token }}
 							<button type="submit" class="btn btn-link p-0">
 								<span class="badge bg-secondary" style="font-size: 7px;">
@@ -180,13 +182,13 @@
 						{% endif %}</div>
 						<div class="col-1">
 						<select class="form-select form-select-sm" id="user_{{ s.id }}" onchange="assignUser('{{ s.id }}')">
-						  <option value="">{{ _('None')}}</option>
+						  <option value="">{% translate "None" %}</option>
 						  {% for user in users %}
 							<option value="{{ user.id }}" {% if user.id == s.assigned_user_id %}selected{% endif %}>{{ user.username }}</option>
 						  {% endfor %}
 						</select></div>
 						<div class="col-1">
-							<form class="needs-validation" action="{{ url_for('.list_delete_item', item=s.id, listid=event.id) }}" method="post">
+							<form class="needs-validation" action="{% url 'list_delete_item' item=s.id listid=event.id %}" method="post">
 								{{ deleteform.hidden_tag() }}
 								{{ deleteform.submit(class_='btn btn-primary btn-sm', value=_('Delete')) }}
 							</form>

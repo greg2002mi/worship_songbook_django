@@ -4,6 +4,10 @@ https://pypi.org/project/django-audiofield/
 apt-get -y install libsox-fmt-mp3 libsox-fmt-all mpg321 dir2ogg ffmpeg
 
 !!!!issues with celery. required celery 4.4.3
+
+first start on server:
+
+IMPORTANT!! make sure folder migrations with empty __init__.py exists before making migrations
 manually change 
 venv\lib\site-packages\audiofield\fields.py", line 18, in <module>
     from django.utils.translation import ugettext_lazy as _
@@ -11,7 +15,131 @@ to
 	from django.utils.translation import gettext_lazy as _
 	
 
-1 makemigrations
-2 migrate
-3 createsuperuser
-4 make group Minister
+1 makemigrations (python manage.py makemigrations)
+2 migrate (python manage.py migrate)
+before creating superuser make sure to disable profile creation with user. isssue superuser does not create profile table.
+3 createsuperuser (python manage.py createsuperuser)
+then enable automatic profile creation with user in models.py
+4 make group Minister  - 
+
+
+
+
+
+
+
+
+
+<script src="{% static 'dist/index.global.js' %}"></script>
+fullcalendar old script:
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      editable: true,
+      selectable: true,
+      dayMaxEvents: true, // allow "more" link when too many events
+      events: '/events',
+	  themeSystem: 'bootstrap5',
+	  eventClick: function(info) {
+        
+    }
+    });
+
+    calendar.render();
+  });
+  
+  new script:
+  $(document).ready(function () {
+            var calendar = $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                events: '/jall_events',
+                selectable: true,
+                selectHelper: true,
+                editable: true,
+                eventLimit: true,
+                select: function (start, end, allDay) {
+                    var title = prompt("Enter Event Title");
+                    if (title) {
+                        var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
+                        var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
+                        $.ajax({
+                            type: "GET",
+                            url: '/jadd_event',
+                            data: {'title': title, 'start': start, 'end': end},
+                            dataType: "json",
+                            success: function (data) {
+                                calendar.fullCalendar('refetchEvents');
+                                alert("Added Successfully");
+                            },
+                            error: function (data) {
+                                alert('There is a problem!!!');
+                            }
+                        });
+                    }
+                },
+                eventResize: function (event) {
+                    var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+                    var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+                    var title = event.title;
+                    var id = event.id;
+                    $.ajax({
+                        type: "GET",
+                        url: '/jupdate',
+                        data: {'title': title, 'start': start, 'end': end, 'id': id},
+                        dataType: "json",
+                        success: function (data) {
+                            calendar.fullCalendar('refetchEvents');
+                            alert('Event Update');
+                        },
+                        error: function (data) {
+                            alert('There is a problem!!!');
+                        }
+                    });
+                },
+
+                eventDrop: function (event) {
+                    var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+                    var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+                    var title = event.title;
+                    var id = event.id;
+                    $.ajax({
+                        type: "GET",
+                        url: '/jupdate',
+                        data: {'title': title, 'start': start, 'end': end, 'id': id},
+                        dataType: "json",
+                        success: function (data) {
+                            calendar.fullCalendar('refetchEvents');
+                            alert('Event Update');
+                        },
+                        error: function (data) {
+                            alert('There is a problem!!!');
+                        }
+                    });
+                },
+
+                eventClick: function (event) {
+                    if (confirm("You are about to open an event.")) {
+                        var id = event.id;
+                        $.ajax({
+                            type: "GET",
+                            url: '/jremove',
+                            data: {'id': id},
+                            dataType: "json",
+                            success: function (data) {
+                                calendar.fullCalendar('refetchEvents');
+                                alert('Event Opened');
+                            },
+                            error: function (data) {
+                                alert('There is a problem!!!');
+                            }
+                        });
+                    }
+                },
+
+            });
+        });
