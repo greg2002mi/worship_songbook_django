@@ -1,9 +1,14 @@
 {% extends "base.html" %}
+{% load custom_tags %}
+{% load i18n %}
+
 
 {% block head_js %}
-  <script src="{{ url_for('static', filename='/js/popper.min.js') }}" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+{% load static %}
+  <script src="{% static 'js/popper.min.js' %}" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{% static 'css/flatpickr.min.css' %}">
+  <script src="{% static 'js/flatpickr.js' %}"></script>
+  <script src="{% static 'js/django-flatpickr.js' %}"></script>
   <script>
   // Initialize the date and time picker for the date_time and date_end fields
   flatpickr('.datetimepicker', {
@@ -19,66 +24,86 @@
     <div class="row">
 	<div class="col-md-6 col-xs-12">
 	<br>
-	<h3>{{ _('Create new Event') }}</h3>
-	<form class="form-floating needs-validation" action="{{ url_for('add2event') }}" method="post" novalidate>
-        {{ addform.hidden_tag() }}
-        <div class="row mb-3">
-            {{ addform.list_title.label(class_='col-sm-2 col-form-label') }}
-			<div class="col-10">
-            {{ addform.list_title(class='form-control', style='min-width: 100%') }}<br>
-            {% for error in addform.list_title.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-			</div>
-        </div>
+	<h3>{% translate "Create new Event" %}</h3>
+	<form class="form-floating needs-validation" action="{% url 'add2event' %}" method="post" novalidate>
+        {% csrf_token %}
+		
 		<div class="row mb-3">
-			{{ addform.date_time.label(class_='col-sm-2 col-form-label') }}
+            {{addform.title.errors}}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ addform.title.id_for_label }}">{{ addform.title.label }}</label>
+			</div>
 			<div class="col-10">
-            {{ addform.date_time(class='datetimepicker', style='min-width: 100%') }}<br>
-            {% for error in addform.date_time.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
+            {{ addform.title }}
 			</div>
         </div>
         <div class="row mb-3">
-			{{ addform.date_end.label(class_='col-sm-2 col-form-label') }}
-			<div class="col-10">
-            {{ addform.date_end(class='datetimepicker', style='min-width: 100%') }}
-            {% for error in addform.date_end.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-			</div>      
-		</div>
+            {{addform.date_time.errors}}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ addform.date_time.id_for_label }}">{{ addform.date_time.label }}</label>
+			</div>
+			<div class="col-3">
+            {{ addform.date_time }}
+			</div>
+			{{addform.date_end.errors}}
+			<div class="col-sm-1">
+			<label for="{{ addform.date_end.id_for_label }}"><p class="text-center">{{ addform.date_end.label }}</p></label>
+			</div>
+			<div class="col-3">
+            {{ addform.date_end }}
+			</div>
+        </div>
 		<div class="row mb-3">
-            {{ addform.mlink.label(class_='col-sm-2 col-form-label') }}
+            
+        </div>
+		<div class="row mb-3">
+            {{addform.mlink.errors}}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ addform.mlink.id_for_label }}">{{ addform.mlink.label }}</label>
+			</div>
 			<div class="col-10">
-            {{ addform.mlink(class="form-control") }}
-            {% for error in addform.mlink.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-			</div>      
-		</div>
+            {{ addform.mlink }}
+			</div>
+        </div>
+		<div class="row mb-3">
+            {{addform.passage.errors}}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ addform.passage.id_for_label }}">{{ addform.passage.label }}</label>
+			</div>
+			<div class="col-10">
+            {{ addform.passage }}
+			</div>
+        </div>
+		<div class="row mb-3">
+            {{addform.status.errors}}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ addform.status.id_for_label }}">{{ addform.status.label }}</label>
+			</div>
+			<div class="col-10">
+            {{ addform.status }}
+			</div>
+        </div>
 		<div class="d-grid gap-2 col-2 mx-auto">
-		{{ addform.submit(class="btn btn-success") }}
+			<input type="submit" class='btn btn-success' value='{% translate "Submit" %}'/>
 		</div>
     </form>
 	</div>
-		<div class="col-md-6 col-xs-12">
-		<br>
-		<h3>{{ _('or Add to Existing Event') }}</h3>
-			<form class="form-floating needs-validation" "form-floating needs-validation" action="{{ url_for('add2xevent') }}" method="post" novalidate>
-				{{ assignform.hidden_tag() }}
-				<div class="row mb-3">
-					{{ assignform.event.label(class_='col-sm-2 col-form-label') }}
-					<div class="col-10">
-					{{ assignform.event(class='form-control', style='min-width: 100%') }}<br>
-					{% for error in assignform.event.errors %}
-					<span style="color: red;">[{{ error }}]</span>
-					{% endfor %}
+			<div class="col-md-6 col-xs-12">
+			<br>
+			<h3>{% translate "or Add to Existing Event" %}</h3>
+			<form class="form-floating needs-validation" "form-floating needs-validation" action="{% url 'add2xevent' %}" method="post" novalidate>
+				{% csrf_token %}
+					<div class="row mb-3">
+						{{ assignform.title.errors }}
+						<div class="col-sm-2 col-form-label">
+							<label for="{{ assignform.title.id_for_label }}">{{ assignform.title.label_tag }}</label>
+						</div>
+						<div class="col-10">
+							{{ assignform.title }}
+						</div>      
 					</div>
-				</div>
 				<div class="d-grid gap-2 col-2 mx-auto">
-				{{ assignform.submit(class="btn btn-success") }}
+					<input type="submit" class='btn btn-success' value='{% translate "Submit" %}'/>
 				</div>
 			</form>
 			</div>

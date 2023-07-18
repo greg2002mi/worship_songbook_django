@@ -163,6 +163,10 @@ class TagsForm(forms.Form):
     name = forms.MultipleChoiceField(label='Tags', widget=forms.CheckboxSelectMultiple(attrs={'name': 'tags'}))
     # name = forms.MultipleChoiceField(label='Tags', choices=[(tag.id, tag.name) for tag in Tag.objects.all()], widget=forms.CheckboxSelectMultiple(attrs={'name': 'tags'}))
     
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.pop('choices', None)  # Retrieve the 'choices' argument, if provided
+        super(TagsForm, self).__init__(*args, **kwargs)
+    
 # class TagsForm(forms.ModelForm):
 #     class Meta:
 #         model = Tag
@@ -258,3 +262,33 @@ class AddEventForm(forms.ModelForm):
             "date_end": DateTimePickerInput(),
             "date_time": DateTimePickerInput(),
         }
+
+# class Assign2Event(forms.Form):
+#     class Meta:
+#         fields = ('title',)
+        
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         # Make the query here
+#         MYQUERY = Lists.objects.values_list('id', 'title')
+#         self.fields['title'] = forms.ChoiceField(choices=(*MYQUERY,))
+
+class Assign2Event(forms.Form):
+    title = forms.ChoiceField()
+    
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make the query here
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        my_query = Lists.objects.values_list('id', 'title', 'date_time')
+        choices = [('', '---------')]  # Add an empty choice for the default selection
+
+        for item_id, title, date_time in my_query:
+            # Format the date_time value to display in the dropdown
+            formatted_date_time = date_time.strftime('%Y-%m-%d %H:%M')
+            choice_label = f"{formatted_date_time} - {title}"
+            choices.append((item_id, choice_label))
+
+        self.fields['title'].choices = choices

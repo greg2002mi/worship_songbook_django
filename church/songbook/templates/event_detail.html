@@ -4,7 +4,8 @@
 
 {% block head_js %}
 <script src="{% static '/js/jquery-3.6.0.min.js' %}"></script>
-<script src="{%static '/js/jquery-ui.min.js' %}"></script>
+<script src="{% static '/js/jquery-ui.min.js' %}"></script>
+{% csrf_token %}
 <style>
 	ul {
 	  list-style-type: none;
@@ -26,19 +27,21 @@
     }
   </style>
   <script>
-    $(function() {
+    var state = 1;
+	$(function() {
       $("#sortable").sortable({
         update: function(event, ui) {
           var order = [];
           $("#sortable li").each(function(index) {
             order.push($(this).data("item-id"));
           });
-          // Send the updated order to the backend using AJAX
-          $.ajax({
-            url: "/list_update-list-order",
+		  
+		  $.ajax({
+            url: "{% url 'cart_update_list_order' %}",
             type: "POST",
-            data: { order: order },
-            success: function(response) {
+            data: { order: order, state: state },
+            headers: { "X-CSRFToken": "{{ csrf_token }}" },
+			success: function(response) {
               console.log(response);
             },
             error: function(xhr, status, error) {
@@ -52,10 +55,12 @@
 	
 	function changeDesiredKey(itemId, newDesiredKey) {
 	  // Send the updated desired key to the backend using AJAX
+
 	  $.ajax({
-		url: "/list_update-desired-key",
+		url: "{% url 'cart_update_desired_key' %}",
 		type: "POST",
-		data: { item_id: itemId, desired_key: newDesiredKey },
+		data: { item_id: itemId, desired_key: newDesiredKey, state: state },
+		headers: { "X-CSRFToken": "{{ csrf_token }}" },
 		success: function(response) {
 		  console.log(response);
 		},
@@ -68,10 +73,12 @@
 	  if (event.key === 'Enter') {
 		var notes = $("#notes_" + itemId).val();
 		// Send the updated notes to the backend using AJAX
+
 		$.ajax({
-		  url: "/list_update-notes",
+		  url: "{% url 'cart_update_notes' %}",
 		  type: "POST",
-		  data: { item_id: itemId, notes: notes },
+		  data: { item_id: itemId, notes: notes, state: state },
+		  headers: { "X-CSRFToken": "{{ csrf_token }}" },
 		  success: function(response) {
 			console.log(response);
 		  },
@@ -84,10 +91,12 @@
 	function assignUser(itemId) {
 	  var userId = $("#user_" + itemId).val();
 	  // Send the updated assigned user to the backend using AJAX
+
 	  $.ajax({
-		url: "/list_assign-user",
+		url: "{% url 'cart_assign_user' %}",
 		type: "POST",
-		data: { item_id: itemId, user_id: userId },
+		data: { item_id: itemId, user_id: userId, state: state },
+		headers: { "X-CSRFToken": "{{ csrf_token }}" },
 		success: function(response) {
 		  console.log(response);
 		},
@@ -104,18 +113,18 @@
 
 	<div class="row">
 		<div class="col-md-8 col-xs-12">
-			<h4>{% translate "Event title:" %} {{ event.list_title }}</h4>
-			<h5>{% translate "Set date:" %} {{ event.date_time|date:"Y M d D H i " }}</h5>
-			<h5>{% translate "Created date:" %} {{ event.created|date:"Y M d D H i " }}</h5>
+			<h4>{% translate "Event title:" %} {{ event.title }}</h4>
+			<h5>{% translate "Set date:" %} {{ event.date_time|date:"Y-M-d, D, H:i " }}</h5>
+			<h5>{% translate "Created date:" %} {{ event.created|date:"Y-M-d, D, H:i " }}</h5>
 			<h6>{% translate "Created by:" %} {{ user.username }}</h6>
 			<h6>{% translate "Links:" %} {{ event.mlink }}</h6>
 		</div>	
 		<div class="col-md-4 col-xs-12">
 			<nav class="nav nav-pills justify-content-end">
 				<a class="nav-link active" aria-current="page" href="{% url 'edit_event' listid=event.id %}">{% translate "Edit" %}</a>&nbsp;&nbsp;
-				<form action="{% url'delete_event' eventid=event.id jump='calendar' %}" method="post">
-								{{ de_form.hidden_tag() }}
-								{{ de_form.submit(class_='btn btn-secondary', value=_('Delete')) }}
+				<form action="{% url 'delete_event' eventid=event.id jump='calendar' %}" method="post">
+								{% csrf_token %}
+								<input type="submit" class='btn btn-secondary' value='{% translate "Delete" %}'/>
 				</form>
 			</nav>
 			<br>
@@ -154,24 +163,24 @@
 					<div class="row bg-light text-dark " style="width: 1200px;">
 						<div class="col-auto d-none d-sd-block">{{ s.id }}</div>
 						<div class="col-3">
-						{% for song in s.song %}
-						<a href="{% url 'view_song' id=song.id %}">{{ song.title }}</a>
+						{% for song in s.song.all %}
+						<a href="{% url 'view_song' song_id=song.id key=song.key %}">{{ s.title }}</a>
 						{% endfor %}
 						</div>
 						<div class="col-1">
 							<select class="form-select form-select-sm" onchange="changeDesiredKey('{{ s.id }}', this.value)">
-							  {% for key in keyset %}
-							  <option value="{{ loop.index0 }}" {% if s.desired_key == loop.index0 %}selected{% endif %}>{{ key }}</option>
+							  {% for key, value in keyset %}
+							  <option value="{{ key }}" {% if s.desired_key == forloop.counter0 %}selected{% endif %}>{{ value }}</option>
 							  {% endfor %}
 							</select>
 						</div>
 						<div class="col-auto">&nbsp;&nbsp;&nbsp;{{ s.listorder }}&nbsp;&nbsp;&nbsp;</div>
 						<div class="col-3"><input type="text" class="form-control form-control-sm" placeholder="Specific notes" id="notes_{{ s.id }}" value="{{ s.notes }}" onkeypress="updateNotes('{{ s.id }}', event)">
 						</div>
-						<div class="col-1">{% if s.role %}
-						{% for auser in s.role %}
-						<form class="d-inline" action="{% url 'unsign_from_listitem' itemid=s.id username=auser.username %}" method="POST">
-							{{ unroleform.csrf_token }}
+						<div class="col-1">{% if s.assigned %}
+						{% for auser in s.assigned.all %}
+						<form class="d-inline" action="{% url 'unsign_from_listitem' item_id=s.id username=auser.username state=1 %}" method="POST">
+							{% csrf_token %}
 							<button type="submit" class="btn btn-link p-0">
 								<span class="badge bg-secondary" style="font-size: 7px;">
 									{{ auser.username }}
@@ -189,8 +198,8 @@
 						</select></div>
 						<div class="col-1">
 							<form class="needs-validation" action="{% url 'list_delete_item' item=s.id listid=event.id %}" method="post">
-								{{ deleteform.hidden_tag() }}
-								{{ deleteform.submit(class_='btn btn-primary btn-sm', value=_('Delete')) }}
+								{% csrf_token %}
+								<input type="submit" class='btn btn-success btn-sm' value='{% translate "Delete" %}'/>
 							</form>
 						</div>
 					</div>

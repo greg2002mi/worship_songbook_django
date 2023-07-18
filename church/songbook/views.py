@@ -7,9 +7,9 @@ from django.views import generic
 from django.core.paginator import Paginator
 from django.urls import reverse
 from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, LANG, CHORDNOTE, Audio
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.utils.translation import gettext as _
-from .forms import AddSongForm, Transpose, AddTagForm, TagsForm, SongsForm, EmptyForm, EditSongForm, NewUForm, UpdateUForm, UpdateProfileForm, UploadAvatarForm, AddSongTagForm, AddMediaForm, AddEventForm
+from .forms import AddSongForm, Transpose, AddTagForm, TagsForm, SongsForm, EmptyForm, EditSongForm, Assign2Event, NewUForm, UpdateUForm, UpdateProfileForm, UploadAvatarForm, AddSongTagForm, AddMediaForm, AddEventForm
 from .core import Chordpro_html
 from django import forms
 import os, uuid, json
@@ -183,6 +183,8 @@ def songbook(request):
         'form': form,
         'tags': tags,
         'page_obj': page_obj,
+        'c': 2, # here c means return to 2 - return to songbook. 
+        'keyword': 'None' # change later
     }
     return render(request, 'songbook.html', context)
  
@@ -193,10 +195,8 @@ def add_song(request):
             song = form.save(commit=False)
             song.publisher = request.user
             song.save()
-            song_id = song.pk
-            key = song.key
-            messages.success(request, _("Song successfully add as a draft."))
-            return redirect('view_song', song_id=song_id, key=key)  # Redirect to the songbook page after successful submission
+            messages.success(request, _("Song successfully created as a draft."))
+            return redirect('view_song', song_id=song.pk, key=song.key)  # Redirect to the songbook page after successful submission
     else:
         form = AddSongForm()
     
@@ -591,8 +591,186 @@ def untagall(request, song_id):
     return redirect('view_song', song_id=song.id, key=song.key)
 # cart
 
-def add_to_cart(request, song_id):
-    pass
+def cart(request):
+    current_user = request.user
+    group = Group.objects.get(name="Minister")
+    users = group.user_set.all()
+    songlist = current_user.cart.all().order_by('listorder')
+    context = {
+        'title': _('Add event'),
+        'songlist': songlist,
+        'keyset': CHORDNOTE,
+        'users': users,
+        }
+    return render(request, 'cart.html', context)
+
+def delete_item(request, item):
+    current_user = request.user 
+    for i in current_user.cart.all():
+        if i.id == item:
+            current_user.cart.remove(i)
+    return redirect('cart')        
+
+def empty_cart(request):
+    current_user = request.user
+    current_user.cart.clear()
+    return redirect('songbook')
+
+def assign2event(request):
+    addform = AddEventForm()
+    assignform = Assign2Event()
+    context = {
+        'title': _('Assign to event'),
+        'addform': addform,
+        'assignform': assignform,
+        }       
+    return render(request, 'assign2event.html', context) 
+
+def add2event(request):
+    current_user = request.user
+    if request.method == "POST":
+        addform = AddEventForm(request.POST)
+        if addform.is_valid():
+            event = addform.save(commit=False)
+            event.user = current_user
+            event.save()
+            for item in current_user.cart.all():
+                event.items.add(item)
+            current_user.cart.clear()
+            messages.success(request, _('Success! Event is set and list added.'))
+            return redirect('calendar')
+        else:
+            messages.error(request, _('Error! Form failed to validate.'))
+            return redirect('assign2event')
+
+def add2xevent(request):
+    current_user = request.user
+    if request.method == "POST":
+        assignform = Assign2Event(request.POST)
+        if assignform.is_valid():
+
+            event_id = assignform.cleaned_data['title']
+            event = get_object_or_404(Lists, pk=event_id)
+            event_has = event.items.count()
+            for item in current_user.cart.all():
+                if event_has > 0:
+                    initial = item.listorder
+                    item.listorder = initial + event_has
+                    item.save()
+                event.items.add(item)
+            current_user.cart.clear()
+            messages.success(request, _('Success! Cart list added to event {}-{}.'.format(event.date_time, event.title)))
+            return redirect('calendar')
+        else:
+            messages.error(request, _('Error! Form failed to validate.'))
+            return redirect('assign2event')    
+
+def add_to_cart(request, songid, c, keyword):
+    song = get_object_or_404(Song, pk=songid)
+    current_user = request.user
+    cart = current_user.cart.all().order_by('listorder')
+    
+    if cart:
+        lastitem = cart.last()
+        if lastitem:
+            lastitem_num = lastitem.listorder
+        else:
+            lastitem_num = 0
+    else:
+        lastitem_num = 0
+    cartitem = ListItem(title=song.title, desired_key=song.key, listorder=lastitem_num+1)
+    cartitem.save()
+    
+    cartitem.song.add(song)
+    current_user.cart.add(cartitem)
+    
+    # need to finish
+    if c == 1:
+        return redirect('songbook')
+    if c == 2:
+        return redirect('songbook') # search
+    else:
+        return redirect('songbook') # explore
+
+@login_required
+def unsign_from_cartitem(request, item_id, username, state):
+    listitem = ListItem.objects.get(pk=item_id)
+    user = get_object_or_404(User, username=username)
+    if user:
+        listitem.assigned.remove(user)
+    if state == 1:
+        lists = listitem.lists.first()
+        return redirect('lists', list_id = lists.id)
+    if state == 2:
+        return redirect('cart')
+
+@login_required
+def cart_update_list_order(request):
+    if request.method == 'POST':
+        order = request.POST.getlist('order[]')
+        state = request.POST.get('state')
+        for index, item_id in enumerate(order, start=1):
+            listitem = get_object_or_404(ListItem, pk=item_id)
+            listitem.listorder = index
+            listitem.save()
+        # return JsonResponse({'message': 'List order updated successfully.'})
+        if state == 1:
+            lists = listitem.lists.first()
+            return redirect('lists', list_id = lists.id)
+        if state == 2:
+            return redirect('cart')
+
+@login_required
+def cart_update_desired_key(request):
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        desired_key = int(request.POST.get('desired_key'))
+        state = request.POST.get('state')
+        list_item = get_object_or_404(ListItem, pk=item_id)
+        list_item.desired_key = desired_key
+        list_item.save()
+        # return JsonResponse({'message': 'Desired key updated successfully.'})
+        if state == 1:
+            lists = list_item.lists.first()
+            return redirect('lists', list_id = lists.id)
+        if state == 2:
+            return redirect('cart')
+
+@login_required
+def cart_update_notes(request):
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        notes = request.POST.get('notes')
+        state = request.POST.get('state')
+        list_item = get_object_or_404(ListItem, pk=item_id)
+        list_item.notes = notes
+        list_item.save()
+        # return JsonResponse({'message': 'Notes updated successfully.'})
+        if state == 1:
+            lists = list_item.lists.first()
+            return redirect('lists', list_id = lists.id)
+        if state == 2:
+            return redirect('cart')
+
+@login_required
+def cart_assign_user(request):
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        user_id = request.POST.get('user_id')
+        state = request.POST.get('state')
+        listitem = get_object_or_404(ListItem, pk=item_id)
+        user = get_object_or_404(User, pk=user_id)
+        if user:
+            listitem.assigned.add(user)
+            listitem.save()
+        if state == 1:
+            lists = listitem.lists.first()
+            return redirect('lists', list_id = lists.id)
+        if state == 2:
+            return redirect('cart')
+
+
+
 
 
 # calendar
@@ -680,13 +858,23 @@ def delete_event(request, eventid, jump):
         event.delete()
         messages.success(request, _('Event is removed successfully.'))
         # jump to redirect based on where it has been deleted
-        return redirect('calendar')
+        if jump == 1:
+            return redirect('calendar')
 
-def unsign_from_listitem(request, itemid, username):
-    pass
+def unsign_from_listitem(request, item_id, username, state):
+    user = get_object_or_404(User, username=username)
+    item = get_object_or_404(ListItem, pk=item_id)
+    item.assigned.remove(user)
+    listid = item.lists.first()
+    return redirect('lists', list_id=listid.id)
+    
 
 def list_delete_item(request, item, listid):
-    pass
+    event = get_object_or_404(Lists, pk=listid)
+    for i in event.items.all():
+        if i.id == item:
+            event.items.remove(i)
+    return redirect('lists', list_id=listid)
 
 def jall_events(request):                                                                                                 
     all_events = Lists.objects.all()                                                                                    
@@ -739,24 +927,163 @@ def lists(request, list_id):
     de_form = EmptyForm()
     unroleform = EmptyForm()
     deleteform = EmptyForm()
-    songlist = {}
+    songlist = event.items.all()
+    group = Group.objects.get(name="Minister")
+    users = group.user_set.all()
     context = {
         'title': _('Event Details'),
         'event': event,
         'songlist': songlist,
         'keyset': CHORDNOTE,
+        'users': users,
         'de_form': de_form,
         'unroleform': unroleform,
         'deleteform': deleteform,
         }
     return render(request, 'event_detail.html', context)
 
-def onstage(request, viewtype):
-    if viewtype == 1:
-        pass
-    if viewtype == 2:
-        pass
-    if viewtype == 3:
-        pass
-    context = {}
+# on stage mode. in general three modes. lyrics with chords, lyrics, or images
+def onstage(request, eventid, viewtype):
+    event = get_object_or_404(Lists, pk=eventid)
+
+    unsorted = sorted(event.items, key=lambda x: x.listorder)
+    songlist = [item for item in unsorted]
+    transpose = 0
+    stage_mode = {}
+    chords = []
+    lyrics = []
+    # images = []
+    index_list = []
+    image_state = [] # list of True false states if song has image
+    music_sh = []
+    if not unsorted:
+        messages.error(request, _('Error, there are no items in this event.'))
+        return redirect('lists', list_id=eventid)
+    if not viewtype:
+        messages.error(request, _('Error, view condition is not defined.'))
+        return redirect('lists', list_id=eventid)
+    # create two lists of lyrics with chords and without
+    for i in unsorted:
+        transpose = i.desired_key
+        for s in i.song:
+            ori_key_int = s.key
+            # if song does not have chords lyrics without chords must be added.
+            if s.key:
+                split1 = split_text(s.lyrics, viewtype, ori_key_int, transpose) 
+            else:
+                split1 = split_text(s.lyrics, 2, 0, 0)    
+            split2 = split_text(s.lyrics, 2, 0, 0)
+        
+            lyrics.append(split2)
+            chords.append(split1)
+            cntrl = s.image.count()
+            
+            if cntrl < 1:
+                image_state.append(False)
+            else:
+                image_state.append(True)
+            
+    
+    # create index_list and list of links of images
+               
+    # make a list of murls of pictures in a list
+    for index, i in enumerate(unsorted):
+        index_list.append(index)
+        for ss in i.song:
+            # create list of lists of images
+            if image_state[index]:
+                music_patch = []
+                for i in ss.image.all():
+                    music_patch.append(i)    
+                music_sh.append(music_patch)
+            # if no image available append chords with lyrics
+            elif not image_state[index]:
+                ori_key_int = ss.key
+                transpose = i.desired_key
+                split = split_text(ss.lyrics, 1, ori_key_int, transpose)
+                music_sh.append(split) 
+    
+    # chords - ok
+    # lyrics - ok
+    # index_list - ok
+    # image_state - ok
+    # music_sh - ok
+    
+    # if viewtype == 1: # songs with chords
+        
+    # if viewtype == 2: # only lyrics
+    #     pass
+    # if viewtype == 3: # pics 
+    #     pass
+    stage_mode["id"]=index_list
+    stage_mode["state"]=image_state
+    stage_mode["chords"]=chords
+    stage_mode["lyrics"]=lyrics
+    stage_mode["images"]=music_sh
+    
+    # print(stage_mode)
+    # mlinks_check = []
+    # music_sh = []
+    # my_dict = {}
+    
+    # if viewtype < 3:
+    #     for i in unsorted:
+    #         transpose = i.desired_key
+    #         # make sure viewtype has been passed
+
+    #         for s in i.song:
+    #             ori_key_int = s.key
+    #             if transpose:
+    #                 split = split_text(s.lyrics, viewtype, ori_key_int, transpose)
+    #             else:    
+    #                 split = split_text(s.lyrics, 2, 0, 0)
+    #         lyrics.append(split)
+    #         # if viewtype is 3, then gather as many 
+    # if viewtype == 3:
+    #     # making a list of booleans if song.media has pictures or not
+    #     index_list = []
+    #     for i in unsorted:
+    #         for s in i.song:
+    #             if not s.media:
+    #                 mlinks_check.append(False)
+    #             else:
+    #                 cntrl = 0
+    #                 for m in s.media:
+    #                     if m.mtype == 3:
+    #                         cntrl=cntrl+1
+    #                 if cntrl > 1:
+    #                     mlinks_check.append(True)
+    #                 else:
+    #                     mlinks_check.append(False)
+    #             break
+                    
+    #     # make a list of murls of pictures in a list
+    #     for index, i in enumerate(unsorted):
+                       
+    #         index_list.append(index)
+    #         for ss in i.song:
+    #             if mlinks_check[index]:
+    #                 ex = []
+    #                 for ll in ss.media:
+    #                     if ll.mtype ==3:
+    #                         murl = ll.murl
+    #                         ex.append(murl) 
+    #                 music_sh.append(ex)
+    #             elif mlinks_check[index] == False:
+    #                 ori_key_int = ss.key
+    #                 transpose = i.desired_key
+    #                 split = split_text(ss.lyrics, 1, ori_key_int, transpose)
+    #                 music_sh.append(split)         
+    #     # make a dict
+    #     my_dict["id"]= index_list
+    #     my_dict["image"] = mlinks_check
+    #     my_dict["values"] = music_sh 
+    context = {
+        'title': _('On Stage'),
+        'songlist':songlist, 
+        'event': event,
+        'lyrics': lyrics,
+        'viewtype':viewtype, 
+        'stage_mode': stage_mode,
+        }
     return render(request, 'onstage.html', context)

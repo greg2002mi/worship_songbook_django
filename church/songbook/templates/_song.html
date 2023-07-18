@@ -16,5 +16,15 @@
 			</td>
 			<td class="d-none d-sd-block"></td>
 			<td>
+			{% if keyword %}
+			<form action="{% url 'add_to_cart' songid=song.id c=c keyword=keyword %}" method="post">
+						{% csrf_token %}
+						<input type="submit" class='btn btn-success btn-sm' value='{% translate "Add to song folder" %}'/>
+					</form>
+			{% else %}
+			<form action="{% url 'add_to_cart' songid=song.id c=c keyword='None' %}" method="post">
+						{% csrf_token %}
+						<input type="submit" class='btn btn-success btn-sm' value='{% translate "Add to song folder" %}'/>
+					</form>{% endif %}
 			</td>
         </tr>

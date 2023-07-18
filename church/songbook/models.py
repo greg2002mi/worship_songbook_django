@@ -210,6 +210,7 @@ class Lists(models.Model):
     passage = models.TextField(null=True, blank=True) # passage on first page of stage mode
     status = models.IntegerField(default=0, choices=EV_STATUS) # 0 not draft, 1 is final, 2 is passed 
     assigned = models.ManyToManyField(User, related_name='created')
+    items = models.ManyToManyField('ListItem', related_name='lists')
     slug = AutoSlugField(populate_from='title', unique_with=['created']) 
 
 def __str__(self):
@@ -220,11 +221,9 @@ class ListItem(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     desired_key = models.IntegerField(choices=CHORDNOTE)
     listorder = models.IntegerField()
-    notes = models.TextField()
-    lists = models.ForeignKey(Lists, on_delete=models.CASCADE, related_name='items')
+    notes = models.TextField(null=True, blank=True)
     assigned = models.ManyToManyField(User, related_name='assigned')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="cart")
     song = models.ManyToManyField(Song, related_name='inlist') 
     slug = AutoSlugField(populate_from='title', unique_with=['created'])
-
-class OrderList(models.Model):
-    title = models.CharField(max_length=140)   
+   

@@ -52,6 +52,11 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ( 'name', 'created_on')
     list_filter = ("name",)
     search_fields = ['name',]
+    
+class ListItemsAdmin(admin.ModelAdmin):
+    list_display = ( 'title', 'created', 'desired_key', 'listorder', 'notes')
+    list_filter = ("title",)
+    search_fields = ['title',]
 
 
 class UserProfileInline(admin.StackedInline):
@@ -72,5 +77,5 @@ admin.site.register(Mlinks)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Song, SongAdmin)
 admin.site.register(Lists)
-admin.site.register(ListItem)
+admin.site.register(ListItem, ListItemsAdmin)
 admin.site.register(Image)

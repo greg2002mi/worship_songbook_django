@@ -34,7 +34,7 @@ urlpatterns = [
     path("publish/<int:song_id>/", views.publish, name="publish"),
     path("<int:mtype>/<int:song_id>/upload_images", views.file_upload, name="upload_images"),
     path("<int:user_id>/avatar_upload", views.avatar_upload, name="avatar_upload"),
-    path("<int:song_id>/add_to_cart", views.add_to_cart, name="add_to_cart"),
+    path("add_to_cart/<int:songid>/<int:c>/<str:keyword>", views.add_to_cart, name="add_to_cart"),
     path("events", views.events, name="events"),
     
     path("calendar", views.calendar, name="calendar"),
@@ -44,13 +44,27 @@ urlpatterns = [
     path('jremove', views.jremove, name='remove'),
     
     path('edit_event/<int:listid>', views.edit_event, name='edit_event'),
-    path('delete_event/<int:eventid>/<str:jump>', views.delete_event, name='delete_event'),
-    path('unsign_from_listitem/<int:itemid>/<int:username>', views.unsign_from_listitem, name='unsign_from_listitem'),
+    path('delete_event/<int:eventid>/<int:jump>', views.delete_event, name='delete_event'),
+    path('unsign_from_listitem/<int:item_id>/<str:username>/<int:state>', views.unsign_from_listitem, name='unsign_from_listitem'),
     path('list_delete_item/<int:item>/<int:listid>', views.list_delete_item, name='list_delete_item'),
     path('jall_events', views.jall_events, name='all_events'),
+    path('delete_item/<int:item>', views.delete_item, name='delete_item'),
+    path('add2event', views.add2event, name='add2event'),
+    path('add2xevent', views.add2xevent, name='add2xevent'),
     
+    path("assign2event", views.assign2event, name="assign2event"),
     path("add_event", views.add_event, name="add_event"),
     path("lists/<int:list_id>", views.lists, name="lists"),
+    
+    path('onstage/<int:eventid>/<int:viewtype>', views.onstage, name='onstage'),
+    
+    path('cart', views.cart, name='cart'),
+    path('empty_cart', views.empty_cart, name='empty_cart'),
+    path('unsign_from_cartitem/<int:item_id>/<str:username>/<int:state>', views.unsign_from_cartitem, name='unsign_from_cartitem'),
+    path('cart_update_list_order', views.cart_update_list_order, name='cart_update_list_order'),
+    path('cart_update_desired_key', views.cart_update_desired_key, name='cart_update_desired_key'),
+    path('cart_update_notes', views.cart_update_notes, name='cart_update_notes'),
+    path('cart_assign_user', views.cart_assign_user, name='cart_assign_user'),
     ]
 
 # Serving the media files in development mode

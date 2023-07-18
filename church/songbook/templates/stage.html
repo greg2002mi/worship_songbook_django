@@ -3,6 +3,8 @@
 
 <head>
   <meta charset="utf-8" />
+  {% load i18n %}
+  {% load static %}
   <title>
 	{% if event %}
 	On Stage: {{ event.list_title }} - {{ event.date_time }}
@@ -11,16 +13,13 @@
 	{% endif %}
 	</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/stage.css') }}">
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/swiper-bundle.min.css') }}">
-	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-	<script src="{{ url_for('static', filename='js/swiper-bundle.min.js') }}"></script>
-  	<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
-	
-  {{ moment.include_moment() }}
-	
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/stage.css' %}">
+	<link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+	<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+	<script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+  	<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
   <style>
 
 
@@ -69,7 +68,7 @@
 <nav class="navbar fixed-top navbar-dark bg-dark navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <div class="navbar-nav">
-	<a class="nav-link" href="{{ url_for('.lists', listid=event.id) }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left" viewBox="0 0 16 16">
+	<a class="nav-link" href="{% url 'lists' listid=event.id %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-left" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
   <path fill-rule="evenodd" d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
 </svg></a>
@@ -150,19 +149,21 @@
 		<br>
 		<br>
 		<br>
-		<center><h3>{{ event.list_title }} - {{ moment(event.date_time).format('LLL') }}</h3></center>
+		<center><h3>{{ event.title }} - {{ event.date_time|date:"Y-M-d, D, H:i " }}</h3></center>
 		<br>
 		<br>
 		<br>
 		<br>
+		{% if event.passage %}
+			{{ event.passage|safe }}
+		{% else %}
 		<center><h4><em>Blessed are the pure in heart, for they shall see God.</em></h4></center>
 		<center><h4><a href="https://www.biblegateway.com/passage/?search=Matthew+5%3A8&version=NIV">Matthew 5:8 (NIV)</a></h4></center>
-		
-	  
+		{% endif %}
 	  
 	  
 	  </div>
-      {% if viewtype < 3 %}
+      {% if viewtype < 4 %}
 		{% for song in songlist %}
 		  <div class="swiper-slide">
 		  <br>
