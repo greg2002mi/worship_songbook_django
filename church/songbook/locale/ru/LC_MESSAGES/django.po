@@ -1,0 +1,998 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-20 13:13+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+#: .\songbook\forms.py:34
+msgid "Submit an issue"
+msgstr ""
+
+#: .\songbook\forms.py:35
+msgid "Your name"
+msgstr ""
+
+#: .\songbook\forms.py:36 .\songbook\forms.py:49 .\songbook\forms.py:61
+#: .\songbook\forms.py:164 .\songbook\forms.py:199 .\songbook\forms.py:308
+#: .\songbook\templates\cart.html:134 .\songbook\templates\contact_us.html:61
+#: .\songbook\templates\event_detail.html:152
+#: .\songbook\templates\manage_media.html:54
+#: .\songbook\templates\search.html:17
+#: .\songbook\templates\tag_songlist.html:30
+msgid "Title"
+msgstr ""
+
+#: .\songbook\forms.py:37
+msgid "Issue"
+msgstr ""
+
+#: .\songbook\forms.py:38
+msgid "Your contacts"
+msgstr ""
+
+#: .\songbook\forms.py:50 .\songbook\forms.py:62
+#: .\songbook\templates\index.html:43
+msgid "Post"
+msgstr ""
+
+#: .\songbook\forms.py:63 .\songbook\forms.py:206 .\songbook\forms.py:313
+#: .\songbook\templates\contact_us.html:63
+msgid "Status"
+msgstr ""
+
+#: .\songbook\forms.py:87
+msgid "About_me"
+msgstr ""
+
+#: .\songbook\forms.py:88
+msgid "Mobile"
+msgstr ""
+
+#: .\songbook\forms.py:89
+msgid "My birthday"
+msgstr ""
+
+#: .\songbook\forms.py:98
+msgid "My avatar"
+msgstr ""
+
+#: .\songbook\forms.py:121
+msgid "Name a new genre or tag if not in the list"
+msgstr ""
+
+#: .\songbook\forms.py:127
+msgid "Tag name"
+msgstr ""
+
+#: .\songbook\forms.py:155 .\songbook\forms.py:190
+msgid "Write singer or music group here"
+msgstr ""
+
+#: .\songbook\forms.py:156 .\songbook\forms.py:191
+msgid "Any useful information, such as tempo, original key, etc."
+msgstr ""
+
+#: .\songbook\forms.py:157 .\songbook\forms.py:192
+msgid "Write song lyrics here in chordpro format"
+msgstr ""
+
+#: .\songbook\forms.py:165 .\songbook\forms.py:200
+msgid "Singer"
+msgstr ""
+
+#: .\songbook\forms.py:166 .\songbook\forms.py:201
+msgid "Information"
+msgstr ""
+
+#: .\songbook\forms.py:167 .\songbook\forms.py:202
+#: .\songbook\templates\cart.html:135
+#: .\songbook\templates\event_detail.html:153
+#: .\songbook\templates\search.html:19
+msgid "Key"
+msgstr ""
+
+#: .\songbook\forms.py:168 .\songbook\forms.py:203
+msgid "minor"
+msgstr ""
+
+#: .\songbook\forms.py:169 .\songbook\forms.py:204
+#: .\songbook\templates\view_song.html:39
+msgid "Lyrics"
+msgstr ""
+
+#: .\songbook\forms.py:170 .\songbook\forms.py:205
+#: .\songbook\templates\_translations.html:29
+#: .\songbook\templates\search.html:20
+msgid "Language"
+msgstr ""
+
+#: .\songbook\forms.py:175 .\songbook\templates\_song_chords.html:13
+msgid "Transpose"
+msgstr ""
+
+#: .\songbook\forms.py:243
+msgid "Title of a video or type Youtube"
+msgstr ""
+
+#: .\songbook\forms.py:245
+msgid "Paste embed url link, taken from desired youtube clip"
+msgstr ""
+
+#: .\songbook\forms.py:251
+msgid "File name"
+msgstr ""
+
+#: .\songbook\forms.py:252
+msgid "URL"
+msgstr ""
+
+#: .\songbook\forms.py:294
+msgid "Sunday service, Morning Prayer, Prayer and Worship service etc."
+msgstr ""
+
+#: .\songbook\forms.py:297
+msgid "Link from Youtube. Embed links only"
+msgstr ""
+
+#: .\songbook\forms.py:301
+msgid "Slogans, Theme of service, Bible verse, etc."
+msgstr ""
+
+#: .\songbook\forms.py:309
+msgid "Start date"
+msgstr ""
+
+#: .\songbook\forms.py:310
+msgid "till"
+msgstr ""
+
+#: .\songbook\forms.py:311
+msgid "Media Link"
+msgstr ""
+
+#: .\songbook\forms.py:312
+msgid "Bible passage"
+msgstr ""
+
+#: .\songbook\templates\404.html:4
+msgid "Not Found"
+msgstr ""
+
+#: .\songbook\templates\404.html:5 .\songbook\templates\500.html:6
+msgid "Back"
+msgstr ""
+
+#: .\songbook\templates\500.html:4
+msgid "An unexpected error has occurred"
+msgstr ""
+
+#: .\songbook\templates\500.html:5
+msgid "The administrator has been notified. Sorry for the inconvenience!"
+msgstr ""
+
+#: .\songbook\templates\_offcanvas.html:15
+msgid "Tag"
+msgstr ""
+
+#: .\songbook\templates\_offcanvas.html:18
+msgid "Untag All"
+msgstr ""
+
+#: .\songbook\templates\_post.html:11
+msgid "said"
+msgstr ""
+
+#: .\songbook\templates\_post.html:17
+msgid "Translate"
+msgstr ""
+
+#: .\songbook\templates\_song.html:22 .\songbook\templates\_song.html:27
+#: .\songbook\templates\songbook.html:64 .\songbook\templates\songbook.html:69
+msgid "Add to song folder"
+msgstr ""
+
+#: .\songbook\templates\_song_chords.html:21
+msgid "Original key:"
+msgstr ""
+
+#: .\songbook\templates\_song_chords.html:32 .\songbook\templates\cart.html:176
+#: .\songbook\templates\event_detail.html:194
+msgid "None"
+msgstr ""
+
+#: .\songbook\templates\_song_chords.html:45
+msgid "Description"
+msgstr ""
+
+#: .\songbook\templates\_song_chords.html:46
+msgid "Functionality and features"
+msgstr ""
+
+#: .\songbook\templates\_song_chords.html:47
+msgid "Underneath of title and singer/author there are several tabs:"
+msgstr ""
+
+#: .\songbook\templates\_song_chords.html:49
+msgid ""
+"Lyrics with chords - is a current page with main features, which will be "
+"described below."
+msgstr ""
+
+#: .\songbook\templates\_song_chords.html:50
+msgid "Lyrics - page without any chords."
+msgstr ""
+
+#: .\songbook\templates\_song_chords.html:51
+msgid ""
+"Media - media section, where there will be links and players. Gives you a "
+"chance to listen, learn and prepare for service."
+msgstr ""
+
+#: .\songbook\templates\_song_chords.html:52
+msgid ""
+"Translations - page to bind translation versions of current song to the "
+"database."
+msgstr ""
+
+#: .\songbook\templates\_song_links.html:4
+msgid "Manage Media library"
+msgstr ""
+
+#: .\songbook\templates\_song_links.html:9
+msgid "Images"
+msgstr ""
+
+#: .\songbook\templates\_song_links.html:10
+#: .\songbook\templates\upload_avatar.html:9
+msgid "File Upload"
+msgstr ""
+
+#: .\songbook\templates\_song_links.html:21
+msgid "Audio"
+msgstr ""
+
+#: .\songbook\templates\_tags.html:8 .\songbook\templates\cart.html:133
+#: .\songbook\templates\event_detail.html:151
+#: .\songbook\templates\manage_media.html:53
+#: .\songbook\templates\search.html:16
+#: .\songbook\templates\tag_songlist.html:29
+msgid "No."
+msgstr ""
+
+#: .\songbook\templates\_tags.html:9
+msgid "Tags"
+msgstr ""
+
+#: .\songbook\templates\_tags.html:10 .\songbook\templates\tag_songlist.html:32
+msgid "Functions"
+msgstr ""
+
+#: .\songbook\templates\_tags.html:23 .\songbook\templates\cart.html:184
+#: .\songbook\templates\event_detail.html:127
+#: .\songbook\templates\event_detail.html:202
+#: .\songbook\templates\manage_media.html:69
+#: .\songbook\templates\manage_media.html:81
+#: .\songbook\templates\manage_media.html:93
+#: .\songbook\templates\view_song.html:58
+#: .\songbook\templates\view_song.html:73
+#: .\songbook\templates\view_song.html:124
+msgid "Delete"
+msgstr ""
+
+#: .\songbook\templates\_translations.html:5
+msgid "Add translation to"
+msgstr ""
+
+#: .\songbook\templates\_translations.html:5
+msgid "from the list of existing song titles"
+msgstr ""
+
+#: .\songbook\templates\_translations.html:18
+msgid "Link"
+msgstr ""
+
+#: .\songbook\templates\_translations.html:28
+msgid "Songs"
+msgstr ""
+
+#: .\songbook\templates\_translations.html:30
+#: .\songbook\templates\cart.html:140
+#: .\songbook\templates\event_detail.html:158
+#: .\songbook\templates\manage_media.html:57
+msgid "Actions"
+msgstr ""
+
+#: .\songbook\templates\_translations.html:50
+msgid "Unlink"
+msgstr ""
+
+#: .\songbook\templates\_translations.html:53
+msgid "To unlink permissions required"
+msgstr ""
+
+#: .\songbook\templates\add_event.html:22
+#: .\songbook\templates\make_list.html:18
+msgid "Add Event (Create list for worship service)"
+msgstr ""
+
+#: .\songbook\templates\add_event.html:81
+#: .\songbook\templates\edit_event.html:81
+msgid "Add"
+msgstr ""
+
+#: .\songbook\templates\add_song.html:5
+msgid "Add a New Song"
+msgstr ""
+
+#: .\songbook\templates\add_song.html:60 .\songbook\templates\edit_song.html:60
+msgid "Instructions"
+msgstr ""
+
+#: .\songbook\templates\add_song.html:74 .\songbook\templates\edit_post.html:40
+#: .\songbook\templates\edit_song.html:82
+msgid "Save"
+msgstr ""
+
+#: .\songbook\templates\add_song.html:81 .\songbook\templates\edit_song.html:88
+msgid "Instructions on text format"
+msgstr ""
+
+#: .\songbook\templates\add_song.html:86 .\songbook\templates\edit_song.html:93
+msgid ""
+"Here are the key instructions on how to properly input lyrics with chords "
+"and headings for each song section."
+msgstr ""
+
+#: .\songbook\templates\add_song.html:88 .\songbook\templates\edit_song.html:95
+msgid "Chords must be incased in square brackets: Eg.:"
+msgstr ""
+
+#: .\songbook\templates\add_song.html:89 .\songbook\templates\edit_song.html:96
+msgid ""
+"Chords with bass chord inside square brackets are split with slash '&#47;': "
+"Eg.:"
+msgstr ""
+
+#: .\songbook\templates\add_song.html:90 .\songbook\templates\edit_song.html:97
+msgid ""
+"This app identifies only Intro, Chorus, Verse #, Bridge, Instrumental "
+"encased in curly brackets."
+msgstr ""
+
+#: .\songbook\templates\add_song.html:91 .\songbook\templates\edit_song.html:98
+msgid ""
+"Chords must be located in front of a letter, where chord should be located."
+msgstr ""
+
+#: .\songbook\templates\assign2event.html:27
+msgid "Create new Event"
+msgstr ""
+
+#: .\songbook\templates\assign2event.html:87
+#: .\songbook\templates\assign2event.html:106
+#: .\songbook\templates\contact_us.html:51
+msgid "Submit"
+msgstr ""
+
+#: .\songbook\templates\assign2event.html:93
+msgid "or Add to Existing Event"
+msgstr ""
+
+#: .\songbook\templates\base.html:64
+msgid "Home"
+msgstr ""
+
+#: .\songbook\templates\base.html:67 .\songbook\views.py:226
+msgid "Explore"
+msgstr ""
+
+#: .\songbook\templates\base.html:68 .\songbook\views.py:257
+#: .\songbook\views.py:615 .\songbook\views.py:892
+msgid "Songbook"
+msgstr ""
+
+#: .\songbook\templates\base.html:69
+msgid "Genre&Tags"
+msgstr ""
+
+#: .\songbook\templates\base.html:70
+msgid "Calendar"
+msgstr ""
+
+#: .\songbook\templates\base.html:101
+msgid "Selected songs"
+msgstr ""
+
+#: .\songbook\templates\base.html:104
+msgid "Logout"
+msgstr ""
+
+#: .\songbook\templates\base.html:105 .\songbook\templates\base.html:108
+#: .\songbook\views.py:122
+msgid "Profile"
+msgstr ""
+
+#: .\songbook\templates\base.html:107 .\songbook\templates\login.html:13
+msgid "Login"
+msgstr ""
+
+#: .\songbook\templates\base.html:113
+msgid "Search"
+msgstr ""
+
+#: .\songbook\templates\calendar.html:113 .\songbook\templates\planner.html:6
+msgid "Church service"
+msgstr ""
+
+#: .\songbook\templates\calendar.html:116 .\songbook\views.py:697
+#: .\songbook\views.py:937
+msgid "Add event"
+msgstr ""
+
+#: .\songbook\templates\calendar.html:117
+msgid "Disabled"
+msgstr ""
+
+#: .\songbook\templates\cart.html:116
+msgid "Add to service"
+msgstr ""
+
+#: .\songbook\templates\cart.html:120 .\songbook\templates\cart.html:123
+msgid "Empty"
+msgstr ""
+
+#: .\songbook\templates\cart.html:136
+#: .\songbook\templates\event_detail.html:154
+msgid "order"
+msgstr ""
+
+#: .\songbook\templates\cart.html:137
+#: .\songbook\templates\event_detail.html:155
+msgid "Comments"
+msgstr ""
+
+#: .\songbook\templates\cart.html:138
+#: .\songbook\templates\event_detail.html:156
+msgid "Assigned"
+msgstr ""
+
+#: .\songbook\templates\cart.html:139
+#: .\songbook\templates\event_detail.html:157
+msgid "Assigned User"
+msgstr ""
+
+#: .\songbook\templates\confirm_post.html:22
+msgid "Tip"
+msgstr ""
+
+#: .\songbook\templates\confirm_post.html:24
+msgid ""
+"Currently you are in draft stage of your post prior to posting. It's a good "
+"chance to check for any errors or make any updates to your post. Upon "
+"confirming your post will be published."
+msgstr ""
+
+#: .\songbook\templates\confirm_post.html:50
+#: .\songbook\templates\view_song.html:67
+msgid "Publish"
+msgstr ""
+
+#: .\songbook\templates\contact_us.html:6
+msgid "Submit your issue regarding this web portal"
+msgstr ""
+
+#: .\songbook\templates\contact_us.html:62
+msgid "submitted on:"
+msgstr ""
+
+#: .\songbook\templates\edit_event.html:22
+msgid "Edit Event"
+msgstr ""
+
+#: .\songbook\templates\edit_post.html:6
+msgid "Edit your post"
+msgstr ""
+
+#: .\songbook\templates\edit_profile.html:5
+msgid "Edit Profile"
+msgstr ""
+
+#: .\songbook\templates\edit_profile.html:6
+msgid "Upload avatar"
+msgstr ""
+
+#: .\songbook\templates\edit_song.html:5
+msgid "Edit current Song"
+msgstr ""
+
+#: .\songbook\templates\event_detail.html:116
+msgid "Event title:"
+msgstr ""
+
+#: .\songbook\templates\event_detail.html:117
+msgid "Set date:"
+msgstr ""
+
+#: .\songbook\templates\event_detail.html:118
+msgid "Created date:"
+msgstr ""
+
+#: .\songbook\templates\event_detail.html:119
+msgid "Created by:"
+msgstr ""
+
+#: .\songbook\templates\event_detail.html:120
+msgid "Links:"
+msgstr ""
+
+#: .\songbook\templates\event_detail.html:124
+#: .\songbook\templates\view_song.html:55
+#: .\songbook\templates\view_song.html:70
+msgid "Edit"
+msgstr ""
+
+#: .\songbook\templates\event_detail.html:132
+msgid "Stage mode"
+msgstr ""
+
+#: .\songbook\templates\event_detail.html:133
+msgid "Vocal"
+msgstr ""
+
+#: .\songbook\templates\event_detail.html:134
+msgid "Music sheets"
+msgstr ""
+
+#: .\songbook\templates\explore.html:10
+msgid "Recently added songs"
+msgstr ""
+
+#: .\songbook\templates\explore.html:22
+msgid "Schedule"
+msgstr ""
+
+#: .\songbook\templates\img_upload.html:5
+msgid "Image"
+msgstr ""
+
+#: .\songbook\templates\login.html:9
+msgid "Sign In"
+msgstr ""
+
+#: .\songbook\templates\login.html:15
+msgid "Don't have an account? "
+msgstr ""
+
+#: .\songbook\templates\login.html:15
+msgid "Create an account"
+msgstr ""
+
+#: .\songbook\templates\manage_media.html:13
+msgid "Add Audio"
+msgstr ""
+
+#: .\songbook\templates\manage_media.html:43 .\songbook\templates\user.html:21
+msgid "Upload"
+msgstr ""
+
+#: .\songbook\templates\manage_media.html:47
+msgid "Media list"
+msgstr ""
+
+#: .\songbook\templates\manage_media.html:55
+msgid "type"
+msgstr ""
+
+#: .\songbook\templates\manage_media.html:56
+msgid "Created on"
+msgstr ""
+
+#: .\songbook\templates\onstage.html:87 .\songbook\templates\stage.html:83
+msgid "Settings:"
+msgstr ""
+
+#: .\songbook\templates\onstage.html:92 .\songbook\templates\stage.html:88
+msgid "L_size"
+msgstr ""
+
+#: .\songbook\templates\onstage.html:97 .\songbook\templates\onstage.html:109
+#: .\songbook\templates\onstage.html:122 .\songbook\templates\onstage.html:133
+#: .\songbook\templates\stage.html:93 .\songbook\templates\stage.html:105
+#: .\songbook\templates\stage.html:118 .\songbook\templates\stage.html:129
+msgid "Normal"
+msgstr ""
+
+#: .\songbook\templates\onstage.html:104 .\songbook\templates\stage.html:100
+msgid "C_size"
+msgstr ""
+
+#: .\songbook\templates\onstage.html:116 .\songbook\templates\stage.html:112
+msgid "Spacing"
+msgstr ""
+
+#: .\songbook\templates\onstage.html:120 .\songbook\templates\stage.html:116
+msgid "Extralow"
+msgstr ""
+
+#: .\songbook\templates\onstage.html:121 .\songbook\templates\stage.html:117
+msgid "Low"
+msgstr ""
+
+#: .\songbook\templates\onstage.html:123 .\songbook\templates\stage.html:119
+msgid "Tall"
+msgstr ""
+
+#: .\songbook\templates\onstage.html:128 .\songbook\templates\stage.html:124
+msgid "Char_W"
+msgstr ""
+
+#: .\songbook\templates\onstage.html:132 .\songbook\templates\stage.html:128
+msgid "Slim"
+msgstr ""
+
+#: .\songbook\templates\onstage.html:134 .\songbook\templates\stage.html:130
+msgid "Wide"
+msgstr ""
+
+#: .\songbook\templates\planner.html:7
+msgid "New list"
+msgstr ""
+
+#: .\songbook\templates\register.html:9 .\songbook\templates\register.html:13
+msgid "Register"
+msgstr ""
+
+#: .\songbook\templates\register.html:15
+msgid "If you already have an account, <a href=\"/login\">login</a> instead."
+msgstr ""
+
+#: .\songbook\templates\reset_password.html:5
+msgid "Reset Your Password"
+msgstr ""
+
+#: .\songbook\templates\reset_password_request.html:5
+msgid "Reset Password"
+msgstr ""
+
+#: .\songbook\templates\search.html:7
+msgid "Search by keyword: "
+msgstr ""
+
+#: .\songbook\templates\search.html:18
+#: .\songbook\templates\tag_songlist.html:31
+msgid "Artist/singer"
+msgstr ""
+
+#: .\songbook\templates\search.html:21
+msgid "Action"
+msgstr ""
+
+#: .\songbook\templates\search.html:34
+msgid "Previous"
+msgstr ""
+
+#: .\songbook\templates\search.html:39
+msgid "Next"
+msgstr ""
+
+#: .\songbook\templates\search.html:49 .\songbook\views.py:587
+msgid "Tag list"
+msgstr ""
+
+#: .\songbook\templates\sidebar.html:10
+msgid ""
+"Currently this project is under development. Therefore some issues may "
+"appear. Please contact us and describe any encountered issues."
+msgstr ""
+
+#: .\songbook\templates\songbook.html:54
+msgid "Published"
+msgstr ""
+
+#: .\songbook\templates\songbook.html:56
+msgid "Draft"
+msgstr ""
+
+#: .\songbook\templates\stage_2.html:77
+msgid "Background brightness:"
+msgstr ""
+
+#: .\songbook\templates\stage_2.html:81
+msgid "Lyrics text size:"
+msgstr ""
+
+#: .\songbook\templates\stage_2.html:86
+msgid "Chords text size:"
+msgstr ""
+
+#: .\songbook\templates\stage_2.html:116
+msgid "Let's prepare our hearts for this special time..."
+msgstr ""
+
+#: .\songbook\templates\stage_2.html:116
+msgid "Leaving our pride, ego, doubt and evil behind..."
+msgstr ""
+
+#: .\songbook\templates\tag_list.html:17
+msgid "Add tag"
+msgstr ""
+
+#: .\songbook\templates\tag_songlist.html:21
+msgid "Category:"
+msgstr ""
+
+#: .\songbook\templates\tag_songlist.html:46
+msgid "Add to folder"
+msgstr ""
+
+#: .\songbook\templates\tag_songlist.html:53
+#: .\songbook\templates\tag_songlist.html:56
+msgid "Remove"
+msgstr ""
+
+#: .\songbook\templates\user.html:4
+msgid "Profile Page"
+msgstr ""
+
+#: .\songbook\templates\user.html:31
+msgid "Save Changes"
+msgstr ""
+
+#: .\songbook\templates\user.html:32
+msgid "Reset"
+msgstr ""
+
+#: .\songbook\templates\view_song.html:16
+msgid ""
+"This song currently is in draft status, as its not final and needs "
+"publisher's comfirmation! Only published songs are available for everyone."
+msgstr ""
+
+#: .\songbook\templates\view_song.html:28
+msgid "Title:"
+msgstr ""
+
+#: .\songbook\templates\view_song.html:29
+msgid "Artist:"
+msgstr ""
+
+#: .\songbook\templates\view_song.html:30
+msgid "Prepared by:"
+msgstr ""
+
+#: .\songbook\templates\view_song.html:31
+msgid "Published on:"
+msgstr ""
+
+#: .\songbook\templates\view_song.html:36
+msgid "Lyrics with chords"
+msgstr ""
+
+#: .\songbook\templates\view_song.html:42
+msgid "Links"
+msgstr ""
+
+#: .\songbook\templates\view_song.html:45
+msgid "Translations"
+msgstr ""
+
+#: .\songbook\templates\view_song.html:62
+#: .\songbook\templates\view_song.html:77
+msgid "Genre/Tag"
+msgstr ""
+
+#: .\songbook\templates\view_song.html:92
+msgid "Genre and tags"
+msgstr ""
+
+#: .\songbook\templates\view_song.html:97
+msgid ""
+"Thematical grouping, song types, or groups based on temp are listed in here. "
+"Multiple choice."
+msgstr ""
+
+#: .\songbook\templates\view_song.html:112
+msgid "Confirm your action"
+msgstr ""
+
+#: .\songbook\templates\view_song.html:116
+msgid "You are about to permanently delete this song."
+msgstr ""
+
+#: .\songbook\templates\view_song.html:117
+msgid "Are you sure?"
+msgstr ""
+
+#: .\songbook\templates\view_song.html:120
+msgid "Close"
+msgstr ""
+
+#: .\songbook\views.py:74
+msgid "You are now logged in as {}."
+msgstr ""
+
+#: .\songbook\views.py:77 .\songbook\views.py:79
+msgid "Invalid username or password."
+msgstr ""
+
+#: .\songbook\views.py:85
+msgid "You have successfully logged out."
+msgstr ""
+
+#: .\songbook\views.py:94
+msgid "Registration successful."
+msgstr ""
+
+#: .\songbook\views.py:96
+msgid "Unsuccessful registration. Invalid information."
+msgstr ""
+
+#: .\songbook\views.py:149
+msgid "Error, failed to POST."
+msgstr ""
+
+#: .\songbook\views.py:170
+msgid "Your post is drafted."
+msgstr ""
+
+#: .\songbook\views.py:173
+msgid "Not validated."
+msgstr ""
+
+#: .\songbook\views.py:184 .\songbook\views.py:199
+msgid "Your post is on air."
+msgstr ""
+
+#: .\songbook\views.py:212
+msgid "Details of post:{}"
+msgstr ""
+
+#: .\songbook\views.py:280
+msgid "Song successfully created as a draft."
+msgstr ""
+
+#: .\songbook\views.py:292
+msgid "Song has successfully been published."
+msgstr ""
+
+#: .\songbook\views.py:346
+msgid " | transposed to "
+msgstr ""
+
+#: .\songbook\views.py:352
+msgid "Current song does not have lyrics"
+msgstr ""
+
+#: .\songbook\views.py:378
+msgid "View Song"
+msgstr ""
+
+#: .\songbook\views.py:407
+msgid "Song has been permanently deleted."
+msgstr ""
+
+#: .\songbook\views.py:418
+msgid "Song has been updated successfully."
+msgstr ""
+
+#: .\songbook\views.py:453
+msgid "Video link has been successfully added."
+msgstr ""
+
+#: .\songbook\views.py:522
+msgid "Image has been successfully deleted."
+msgstr ""
+
+#: .\songbook\views.py:532 .\songbook\views.py:542
+msgid "Audio file has been successfully deleted."
+msgstr ""
+
+#: .\songbook\views.py:557
+msgid "Translation has been successfully linked."
+msgstr ""
+
+#: .\songbook\views.py:569
+msgid "Translation has been successfully unlinked."
+msgstr ""
+
+#: .\songbook\views.py:572
+msgid "Error occured. Please reload page and try again."
+msgstr ""
+
+#: .\songbook\views.py:584
+msgid "Tag is saved successfully."
+msgstr ""
+
+#: .\songbook\views.py:632
+msgid "Tag is successfully deleted."
+msgstr ""
+
+#: .\songbook\views.py:635
+msgid "Error, failed to delete tag."
+msgstr ""
+
+#: .\songbook\views.py:664
+msgid "Error, failed to validate."
+msgstr ""
+
+#: .\songbook\views.py:667
+msgid "Error, failed to add tag to this song."
+msgstr ""
+
+#: .\songbook\views.py:675
+msgid "{} tag is no longer related to this song."
+msgstr ""
+
+#: .\songbook\views.py:684
+msgid "Current song now has no tags."
+msgstr ""
+
+#: .\songbook\views.py:723
+msgid "Assign to event"
+msgstr ""
+
+#: .\songbook\views.py:741
+msgid "Success! Event is set and list added."
+msgstr ""
+
+#: .\songbook\views.py:744 .\songbook\views.py:767 .\songbook\views.py:934
+#: .\songbook\views.py:1148
+msgid "Error! Form failed to validate."
+msgstr ""
+
+#: .\songbook\views.py:764
+msgid "Success! Cart list added to event {}-{}."
+msgstr ""
+
+#: .\songbook\views.py:931
+msgid "Success! Event is set."
+msgstr ""
+
+#: .\songbook\views.py:950
+msgid "Event has been updated successfully."
+msgstr ""
+
+#: .\songbook\views.py:964
+msgid "Event is removed successfully."
+msgstr ""
+
+#: .\songbook\views.py:1042
+msgid "Event Details"
+msgstr ""
+
+#: .\songbook\views.py:1068
+msgid "Error, there are no items in this event."
+msgstr ""
+
+#: .\songbook\views.py:1071
+msgid "Error, view condition is not defined."
+msgstr ""
+
+#: .\songbook\views.py:1126
+msgid "On Stage"
+msgstr ""
+
+#: .\songbook\views.py:1145
+msgid ""
+"Thank you for your feedback. If you have given us your contact information, "
+"we will get back to you as soon as possible"
+msgstr ""
+
+#: .\songbook\views.py:1151
+msgid "Contact us"
+msgstr ""

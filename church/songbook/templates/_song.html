@@ -1,6 +1,6 @@
         <tr valign="top">
             <td class="d-none d-sd-block">{{ song.id }}</td>
-			<td><a href="{% url 'view_song' song_id=song.id key=song.key %}">{{ song.title }}</a></td>
+			<td><a href="{% url 'view_song' song_id=song.id key=song.key %}">{{ song.title }}</a>{% if song.status == 0 %} - Draft {% endif %}- <a href="{% url 'edit_song' song_id=song.id %}"><img src="/static/pencil16.gif" class="img-fluid" alt="Edit"/></a>   {% if song.audio %}<img src="/static/audio.gif" class="img-fluid" alt="Audio"/>{% endif %}{% if song.image %}<img src="/static/music-sheets.gif" class="img-fluid" alt="Music sheets"/>{% endif %}{% if song.media.all %}<img src="/static/youtube.gif" class="img-fluid" alt="Video"/>{% endif %}</td>
             <td class="d-none d-sd-block">{{ song.singer }}</td>
 			<td>
 			{% if song.key %}
@@ -27,4 +27,6 @@
 						<input type="submit" class='btn btn-success btn-sm' value='{% translate "Add to song folder" %}'/>
 					</form>{% endif %}
 			</td>
+			<td>{% if song.status == 0 %}<font size="3" color="red">Draft</font>{% endif %} <a href="{% url 'edit_song' song_id=song.id %}"><img src="/static/pencil16.gif" class="img-fluid" alt="Edit"/></a>       {% if song.audio %}<img src="/static/audio.gif" class="img-fluid" alt="Audio"/>{% endif %}{% if song.image %}<img src="/static/music-sheets.gif" class="img-fluid" alt="Music sheets"/>{% endif %}{% if song.media.all %}<img src="/static/youtube.gif" class="img-fluid" alt="Video"/>{% endif %}</td>
+					
         </tr>

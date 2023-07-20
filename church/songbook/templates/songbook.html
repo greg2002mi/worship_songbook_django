@@ -14,6 +14,7 @@
 	</div>	
 	<br>
 	<div class="row">	
+		{% if search_word %}<h4>{% translate "Search results:" %}</h4>{% endif %}
 		<div class="col-md-9 col-xs-12">
 			<table class="table table-hover">
 			<thead>
@@ -27,6 +28,7 @@
 				 {% endif %}
 				 <th class="d-none d-sd-block">Language</th>
 				 <th>Action</th>
+				 <th>Media</th>
 			  </tr>
 			</thead>
 			<tbody>
@@ -69,6 +71,7 @@
 							</form>
 						{% endif %}
 						</td>
+						<td>{% if song.status == 0 %}<font size="3" color="red">Draft</font>{% endif %} <a href="{% url 'edit_song' song_id=song.id %}"><img src="/static/pencil16.gif" class="img-fluid" alt="Edit"/></a>       {% if song.audio %}<img src="/static/audio.gif" class="img-fluid" alt="Audio"/>{% endif %}{% if song.image %}<img src="/static/music-sheets.gif" class="img-fluid" alt="Music sheets"/>{% endif %}{% if song.media.all %}<img src="/static/youtube.gif" class="img-fluid" alt="Video"/>{% endif %}</td>
 					</tr>
 				{% endfor %}
 			{% else %}	 

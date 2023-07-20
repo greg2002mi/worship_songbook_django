@@ -122,7 +122,7 @@
 		<div class="col-md-4 col-xs-12">
 			<nav class="nav nav-pills justify-content-end">
 				<a class="nav-link active" aria-current="page" href="{% url 'edit_event' listid=event.id %}">{% translate "Edit" %}</a>&nbsp;&nbsp;
-				<form action="{% url 'delete_event' eventid=event.id jump='calendar' %}" method="post">
+				<form action="{% url 'delete_event' eventid=event.id jump=1 %}" method="post">
 								{% csrf_token %}
 								<input type="submit" class='btn btn-secondary' value='{% translate "Delete" %}'/>
 				</form>

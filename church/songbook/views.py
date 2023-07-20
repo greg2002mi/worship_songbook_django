@@ -5,11 +5,11 @@ from django.core.paginator import (EmptyPage, PageNotAnInteger,
 Paginator)
 from django.views import generic
 from django.core.paginator import Paginator
-from django.urls import reverse
-from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, LANG, CHORDNOTE, Audio
+from django.urls import reverse, reverse_lazy
+from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, LANG, CHORDNOTE, Audio, Issues
 from django.contrib.auth.models import User, Group
 from django.utils.translation import gettext as _
-from .forms import AddSongForm, Transpose, AddTagForm, TagsForm, SongsForm, EmptyForm, EditSongForm, Assign2Event, NewUForm, UpdateUForm, UpdateProfileForm, UploadAvatarForm, AddSongTagForm, AddMediaForm, AddEventForm
+from .forms import AddSongForm, Transpose, AddTagForm, PostForm, EditPostForm, TagsForm, SetPasswordForm, ContactUsForm, SongsForm, EmptyForm, EditSongForm, Assign2Event, NewUForm, UpdateUForm, UpdateProfileForm, UploadAvatarForm, AddSongTagForm, AddMediaForm, AddEventForm
 from .core import Chordpro_html
 from django import forms
 import os, uuid, json
@@ -21,17 +21,21 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
 from datetime import datetime
 from django.utils import timezone
+from django.core.mail import send_mail  # later to send mail - send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
+from django.contrib.auth.views import PasswordResetConfirmView
 
 PAGE_SIZE = getattr(settings, "PAGE_SIZE", 50)
 
 # splits text into two columns 
-def split_text(text, viewtype, ori_key_int, transpose):
+def split_text(text, control, ori_key_int, transpose):
     lyrics = ""
     lines = text.split('\n')
     first_part = []
     second_part = []
     count = 0
     half_total = len(lines)/2
+    html1 = ""
+    html2 = ""
     
     
     for line in lines:
@@ -49,16 +53,21 @@ def split_text(text, viewtype, ori_key_int, transpose):
     first = '\n'.join(first_part) 
     second = '\n'.join(second_part)
     
-    if viewtype == 1:
+    if control == 1:
         html1 = Chordpro_html(first, 1, ori_key_int, transpose)
         html2 = Chordpro_html(second, 1, ori_key_int, transpose)
-    elif viewtype ==2:
+    elif control ==2:
         html1 = Chordpro_html(first, False, 0, 0)
         html2 = Chordpro_html(second, False, 0, 0)
     
     lyrics = '<div class="row"><div class="col-auto">&nbsp;</div><div class="col-5">{}</div><div class="col-5"><br><br><br><br><br>{}</div></div>'.format(html1, html2)
     
     return lyrics
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'registration/change_password_form.html'
+    post_reset_login = True
+    success_url = reverse_lazy('index')
 
 def login_page(request):
     if request.method == "POST":
@@ -95,15 +104,30 @@ def register_page(request):
     form = NewUForm()
     return render (request, "register.html", context={"form":form})
     
-    
+@login_required
+def change_password(request):
+    user = request.user
+    if request.method == 'POST':
+        form = SetPasswordForm(user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your password has been changed")
+            return redirect('login')
+        else:
+            for error in list(form.errors.values()):
+                messages.error(request, error)
+
+    form = SetPasswordForm(user)
+    return render(request, 'registration/password_reset_form.html', {'form': form})   
 
 @login_required
 def profile(request):
     avatar_form = UploadAvatarForm()
+    me = request.user
     if request.method == 'POST':
         
-        user_form = UpdateUForm(request.POST, instance=request.user)
-        profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        user_form = UpdateUForm(request.POST, instance=me)
+        profile_form = UpdateProfileForm(request.POST, request.FILES, instance=me.profile)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
@@ -111,19 +135,23 @@ def profile(request):
             messages.success(request, 'Your profile is updated successfully')
             return redirect('profile')
     else:
-        user_form = UpdateUForm(instance=request.user)
-        profile_form = UpdateProfileForm(instance=request.user.profile)
-        
+        user_form = UpdateUForm(instance=me)
+        profile_form = UpdateProfileForm(instance=me.profile)
+        songlist = me.song.all()
+        postlist = me.post.all()
     context = {
-        'title': _('Songbook'),
+        'title': _('Profile'),
         'user_form': user_form,
         'profile_form': profile_form,
         'avatar_form': avatar_form,
+        'songlist': songlist,
+        'postlist': postlist,
     }
     
     return render(request, 'user.html', context)
 
 # function to upload avatar, and delete previous if exists.
+@login_required
 def avatar_upload(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     if request.method == 'POST':
@@ -142,19 +170,98 @@ def avatar_upload(request, user_id):
     messages.error(request, _("Error, failed to POST."))
     return redirect('profile')
 
+
 class PostList(generic.ListView):
     queryset = Post.objects.filter(status=1).order_by('-created_on')
     template_name = 'index.html'
-
-class PostDetail(generic.DetailView):
-    model = Post
-    template_name = 'post_detail.html'
-
-   
-def songbook(request):
     
-    songs = Song.objects.filter(status=1).order_by('title')
-    songs_all = Song.objects.order_by('title')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = PostForm()  # Replace 'MyForm' with the name of your form class
+        return context
+
+def make_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid(): 
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            post_id = post.id
+            messages.success(request, _("Your post is drafted."))
+            return redirect('confirm_post', post_id)
+        else:
+            messages.error(request, _("Not validated."))
+            return redirect('make_post', post_id)
+        
+def confirm_post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid(): 
+            post = form.save(commit=False)
+            post.status = 1
+            post.save()
+            messages.success(request, _("Your post is on air."))
+            return redirect('index')
+    else:
+        context = {
+            'form': EditPostForm(instance=post),
+            'post': post, 
+            }
+        return render(request, 'confirm_post.html', context) 
+
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid(): 
+            form.save()
+            messages.success(request, _("Your post is on air."))
+            return redirect('index')
+    else:
+        context = {
+            'form': EditPostForm(instance=post),
+            'post': post, 
+            }
+        return render(request, 'edit_post.html', context)
+
+
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    context = {
+        'title': _('Details of post:{}'.format(post.title)),
+        'post': post,
+        }
+    return render(request, 'post_detail.html', context)
+
+
+@login_required
+def explore(request):
+    current_datetime = timezone.now()
+    songs = Song.objects.filter(status=1).order_by('-timestamp')
+    new_songs = songs[:40]
+    events = Lists.objects.filter(date_time__gt=current_datetime).order_by('date_time')
+    o_events = Lists.objects.filter(date_time__lt=current_datetime).order_by('date_time')
+    context = {
+        'title': _('Explore'),
+        'new_songs': new_songs,
+        'events': events,
+        'o_events': o_events,
+        # 'next_url': next_url,
+        # 'prev_url': prev_url,
+    }
+    return render(request, 'explore.html', context)
+
+@login_required
+def songbook(request):  
+    search_songs = request.GET.get('search')
+    if search_songs:
+        songs = Song.objects.filter(Q(title__icontains=search_songs) & Q(lyrics__icontains=search_songs)).order_by('title')
+        songs_all = Song.objects.filter(Q(title__icontains=search_songs) & Q(lyrics__icontains=search_songs)).order_by('title')
+    else:    
+        songs = Song.objects.filter(status=1).order_by('title')
+        songs_all = Song.objects.order_by('title')
     form = AddSongForm()
     tags = Tag.objects.all()
     # page = request.GET.get('page', 1)
@@ -184,10 +291,12 @@ def songbook(request):
         'tags': tags,
         'page_obj': page_obj,
         'c': 2, # here c means return to 2 - return to songbook. 
-        'keyword': 'None' # change later
+        'search_word': search_songs,
+        # change later
     }
     return render(request, 'songbook.html', context)
- 
+
+@login_required
 def add_song(request):
     if request.method == 'POST':
         form = AddSongForm(request.POST)
@@ -202,6 +311,7 @@ def add_song(request):
     
     return render(request, 'add_song.html', {'form': form})
 
+@login_required
 def publish(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     song.status = 1
@@ -316,7 +426,7 @@ def view_song(request, song_id, key):
         }
         return render(request, 'view_song.html', context)
 
-
+@login_required
 def delete_song(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     song.delete()
@@ -342,6 +452,7 @@ def edit_song(request, song_id):
             }
         return render(request, 'edit_song.html', context)
 
+@login_required
 def upload_audio(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     if request.method == 'POST':
@@ -357,6 +468,7 @@ def upload_audio(request, song_id):
         return redirect('manage_media', song_id=song.id)
     return '', 204
 
+@login_required
 def upload_video(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     if request.method == 'POST':
@@ -368,6 +480,7 @@ def upload_video(request, song_id):
             messages.success(request, _('Video link has been successfully added.'))
             return redirect('manage_media', song_id=song.id)
 
+@login_required
 def file_upload(request, song_id, mtype):
     song = get_object_or_404(Song, pk=song_id)
     if request.method == 'POST':
@@ -398,9 +511,9 @@ def wrapper(instance, filename):
     # return the whole path to the file
     return os.path.join('images/', filename)
 
-def delete_file(request, song_id, mlink_id):
-    pass
-
+# def delete_file(request, song_id, mlink_id):
+#     pass
+@login_required
 def manage_media(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     if song.image:
@@ -426,6 +539,7 @@ def manage_media(request, song_id):
         }
     return render(request, 'manage_media.html', context)
 
+@login_required
 def delete_image(request, song_id, image_id):
     song = get_object_or_404(Song, pk=song_id)
     image = get_object_or_404(Image, pk=image_id)
@@ -435,6 +549,7 @@ def delete_image(request, song_id, image_id):
         messages.success(request, _('Image has been successfully deleted.'))
         return redirect('manage_media', song_id=song.id)
 
+@login_required
 def delete_audio(request, song_id, audio_id):
     song = get_object_or_404(Song, pk=song_id)
     audio = get_object_or_404(Audio, pk=audio_id)
@@ -443,7 +558,8 @@ def delete_audio(request, song_id, audio_id):
         audio.delete()
         messages.success(request, _('Audio file has been successfully deleted.'))
         return redirect('manage_media', song_id=song.id)
-    
+
+@login_required    
 def delete_video(request, song_id, mlink_id):
     song = get_object_or_404(Song, pk=song_id)
     video = get_object_or_404(Mlinks, pk=mlink_id)
@@ -453,9 +569,10 @@ def delete_video(request, song_id, mlink_id):
         messages.success(request, _('Audio file has been successfully deleted.'))
         return redirect('manage_media', song_id=song.id)
 
-def upload_i(request, filename):
-    pass
+# def upload_i(request, filename):
+#     pass
 
+@login_required
 def add_transl(request, song_id):
     current_song = get_object_or_404(Song, pk=song_id)
     if request.method == 'POST':
@@ -467,6 +584,7 @@ def add_transl(request, song_id):
             messages.success(request, _('Translation has been successfully linked.'))
             return redirect('view_song', song_id=current_song.id, key=current_song.key)
 
+@login_required
 def remove_transl(request, selsong_id, cursong_id):
     current_song = get_object_or_404(Song, pk=cursong_id)
     selected_song = get_object_or_404(Song, pk=selsong_id)
@@ -480,6 +598,7 @@ def remove_transl(request, selsong_id, cursong_id):
         else:
             messages.error(request, _('Error occured. Please reload page and try again.'))
             return redirect('view_song', song_id=current_song.id, key=current_song.key)
+
 
 def tag_list(request):
     tags = Tag.objects.all()
@@ -531,7 +650,8 @@ def tag_songlist(request, tag_id):
     
         
     return render(request, 'tag_songlist.html', context)
-    
+
+@login_required    
 def delete_tag(request, tag_id):
     tag = get_object_or_404(Tag, pk=tag_id)
     if request.method == 'POST':
@@ -543,7 +663,7 @@ def delete_tag(request, tag_id):
         return redirect('tag_list')
 
 
-    
+@login_required    
 def tagging(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     # tag_states = {tag.id: tag in song.tags.all() for tag in Tag.objects.all()}
@@ -573,7 +693,8 @@ def tagging(request, song_id):
     else:
         messages.error(request, _('Error, failed to add tag to this song.'))
         return redirect('view_song', song_id=song.id, key=song.key)    
-    
+
+@login_required    
 def untag(request, tag_id, song_id):
     song = get_object_or_404(Song, pk=song_id)
     tag = get_object_or_404(Tag, pk=tag_id)
@@ -581,7 +702,7 @@ def untag(request, tag_id, song_id):
     messages.success(request, _('{} tag is no longer related to this song.'.format(tag.name)))
     return redirect('tag_songlist', tag_id=tag_id)
                     
-                    
+@login_required                    
 def untagall(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     for t in song.tags.all():
@@ -589,8 +710,11 @@ def untagall(request, song_id):
     song.save()
     messages.success(request, _('Current song now has no tags.'))
     return redirect('view_song', song_id=song.id, key=song.key)
+
+
 # cart
 
+@login_required
 def cart(request):
     current_user = request.user
     group = Group.objects.get(name="Minister")
@@ -604,6 +728,7 @@ def cart(request):
         }
     return render(request, 'cart.html', context)
 
+@login_required
 def delete_item(request, item):
     current_user = request.user 
     for i in current_user.cart.all():
@@ -611,11 +736,13 @@ def delete_item(request, item):
             current_user.cart.remove(i)
     return redirect('cart')        
 
+@login_required
 def empty_cart(request):
     current_user = request.user
     current_user.cart.clear()
     return redirect('songbook')
 
+@login_required
 def assign2event(request):
     addform = AddEventForm()
     assignform = Assign2Event()
@@ -626,6 +753,7 @@ def assign2event(request):
         }       
     return render(request, 'assign2event.html', context) 
 
+@login_required
 def add2event(request):
     current_user = request.user
     if request.method == "POST":
@@ -643,6 +771,7 @@ def add2event(request):
             messages.error(request, _('Error! Form failed to validate.'))
             return redirect('assign2event')
 
+@login_required
 def add2xevent(request):
     current_user = request.user
     if request.method == "POST":
@@ -665,6 +794,7 @@ def add2xevent(request):
             messages.error(request, _('Error! Form failed to validate.'))
             return redirect('assign2event')    
 
+@login_required
 def add_to_cart(request, songid, c, keyword):
     song = get_object_or_404(Song, pk=songid)
     current_user = request.user
@@ -829,13 +959,14 @@ def add_event(request):
             return redirect('calendar')
         else:
             messages.error(request, _('Error! Form failed to validate.'))
-            return redirect(add_event)
+            return redirect('add_event')
     context = {
         'title': _('Add event'),
         'form': form,
         }
     return render(request, 'add_event.html', context)
 
+@login_required
 def edit_event(request, listid):
     event = get_object_or_404(Lists, pk=listid)
     if request.method == 'POST':
@@ -852,6 +983,7 @@ def edit_event(request, listid):
             }
         return render(request, 'edit_event.html', context)
 
+@login_required
 def delete_event(request, eventid, jump):
     event = get_object_or_404(Lists, pk=eventid)
     if request.method == 'POST':
@@ -861,6 +993,7 @@ def delete_event(request, eventid, jump):
         if jump == 1:
             return redirect('calendar')
 
+@login_required
 def unsign_from_listitem(request, item_id, username, state):
     user = get_object_or_404(User, username=username)
     item = get_object_or_404(ListItem, pk=item_id)
@@ -868,13 +1001,14 @@ def unsign_from_listitem(request, item_id, username, state):
     listid = item.lists.first()
     return redirect('lists', list_id=listid.id)
     
-
+@login_required
 def list_delete_item(request, item, listid):
     event = get_object_or_404(Lists, pk=listid)
     for i in event.items.all():
         if i.id == item:
             event.items.remove(i)
     return redirect('lists', list_id=listid)
+
 
 def jall_events(request):                                                                                                 
     all_events = Lists.objects.all()                                                                                    
@@ -891,6 +1025,7 @@ def jall_events(request):
                                                                                                                      
     return JsonResponse(out, safe=False)  
 
+@login_required
 def jadd_event(request):
     start = request.GET.get("start", None)
     end = request.GET.get("end", None)
@@ -900,7 +1035,7 @@ def jadd_event(request):
     data = {}
     return JsonResponse(data)
 
-
+@login_required
 def jupdate(request):
     start = request.GET.get("start", None)
     end = request.GET.get("end", None)
@@ -914,7 +1049,7 @@ def jupdate(request):
     data = {}
     return JsonResponse(data)
 
-
+@login_required
 def jremove(request):
     id = request.GET.get("id", None)
     event = Lists.objects.get(pk=id)
@@ -946,7 +1081,7 @@ def lists(request, list_id):
 def onstage(request, eventid, viewtype):
     event = get_object_or_404(Lists, pk=eventid)
 
-    unsorted = sorted(event.items, key=lambda x: x.listorder)
+    unsorted = sorted(event.items.all(), key=lambda x: x.listorder)
     songlist = [item for item in unsorted]
     transpose = 0
     stage_mode = {}
@@ -965,17 +1100,18 @@ def onstage(request, eventid, viewtype):
     # create two lists of lyrics with chords and without
     for i in unsorted:
         transpose = i.desired_key
-        for s in i.song:
+        for s in i.song.all():
             ori_key_int = s.key
             # if song does not have chords lyrics without chords must be added.
             if s.key:
-                split1 = split_text(s.lyrics, viewtype, ori_key_int, transpose) 
+                split1 = split_text(s.lyrics, 1, ori_key_int, transpose) 
             else:
                 split1 = split_text(s.lyrics, 2, 0, 0)    
             split2 = split_text(s.lyrics, 2, 0, 0)
         
             lyrics.append(split2)
             chords.append(split1)
+            # check if song has images and append True state into list. otherwise False
             cntrl = s.image.count()
             
             if cntrl < 1:
@@ -988,13 +1124,13 @@ def onstage(request, eventid, viewtype):
                
     # make a list of murls of pictures in a list
     for index, i in enumerate(unsorted):
-        index_list.append(index)
-        for ss in i.song:
+        index_list.append(index + 1)
+        for ss in i.song.all():
             # create list of lists of images
             if image_state[index]:
                 music_patch = []
                 for i in ss.image.all():
-                    music_patch.append(i)    
+                    music_patch.append(i.image.url)    
                 music_sh.append(music_patch)
             # if no image available append chords with lyrics
             elif not image_state[index]:
@@ -1003,87 +1139,44 @@ def onstage(request, eventid, viewtype):
                 split = split_text(ss.lyrics, 1, ori_key_int, transpose)
                 music_sh.append(split) 
     
-    # chords - ok
-    # lyrics - ok
-    # index_list - ok
-    # image_state - ok
-    # music_sh - ok
+    stage_mode = {
+    "id": index_list,
+    "state": image_state,
+    "chords": chords,
+    "lyrics": lyrics,
+    "images": music_sh,
+}
     
-    # if viewtype == 1: # songs with chords
-        
-    # if viewtype == 2: # only lyrics
-    #     pass
-    # if viewtype == 3: # pics 
-    #     pass
-    stage_mode["id"]=index_list
-    stage_mode["state"]=image_state
-    stage_mode["chords"]=chords
-    stage_mode["lyrics"]=lyrics
-    stage_mode["images"]=music_sh
-    
-    # print(stage_mode)
-    # mlinks_check = []
-    # music_sh = []
-    # my_dict = {}
-    
-    # if viewtype < 3:
-    #     for i in unsorted:
-    #         transpose = i.desired_key
-    #         # make sure viewtype has been passed
-
-    #         for s in i.song:
-    #             ori_key_int = s.key
-    #             if transpose:
-    #                 split = split_text(s.lyrics, viewtype, ori_key_int, transpose)
-    #             else:    
-    #                 split = split_text(s.lyrics, 2, 0, 0)
-    #         lyrics.append(split)
-    #         # if viewtype is 3, then gather as many 
-    # if viewtype == 3:
-    #     # making a list of booleans if song.media has pictures or not
-    #     index_list = []
-    #     for i in unsorted:
-    #         for s in i.song:
-    #             if not s.media:
-    #                 mlinks_check.append(False)
-    #             else:
-    #                 cntrl = 0
-    #                 for m in s.media:
-    #                     if m.mtype == 3:
-    #                         cntrl=cntrl+1
-    #                 if cntrl > 1:
-    #                     mlinks_check.append(True)
-    #                 else:
-    #                     mlinks_check.append(False)
-    #             break
-                    
-    #     # make a list of murls of pictures in a list
-    #     for index, i in enumerate(unsorted):
-                       
-    #         index_list.append(index)
-    #         for ss in i.song:
-    #             if mlinks_check[index]:
-    #                 ex = []
-    #                 for ll in ss.media:
-    #                     if ll.mtype ==3:
-    #                         murl = ll.murl
-    #                         ex.append(murl) 
-    #                 music_sh.append(ex)
-    #             elif mlinks_check[index] == False:
-    #                 ori_key_int = ss.key
-    #                 transpose = i.desired_key
-    #                 split = split_text(ss.lyrics, 1, ori_key_int, transpose)
-    #                 music_sh.append(split)         
-    #     # make a dict
-    #     my_dict["id"]= index_list
-    #     my_dict["image"] = mlinks_check
-    #     my_dict["values"] = music_sh 
+    stage_one = zip(stage_mode["id"], stage_mode["chords"], stage_mode["lyrics"])
+    stage_two = zip(stage_mode["id"], stage_mode["state"], stage_mode["images"])
     context = {
         'title': _('On Stage'),
-        'songlist':songlist, 
+        'songlist': songlist, 
         'event': event,
         'lyrics': lyrics,
-        'viewtype':viewtype, 
+        'viewtype': viewtype, 
         'stage_mode': stage_mode,
+        'stage_one': stage_one,
+        'stage_two': stage_two,
         }
     return render(request, 'onstage.html', context)
+
+# feedback 
+def contact_us(request):
+    issues = Issues.objects.order_by('timestamp', 'status').all()
+    form = ContactUsForm()
+    if request.method == "POST":
+        form = ContactUsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('Thank you for your feedback. If you have given us your contact information, we will get back to you as soon as possible'))
+            return redirect('index')
+        else:
+            messages.error(request, _('Error! Form failed to validate.'))
+            return redirect(add_event)
+    context = {
+        'title': _('Contact us'),
+        'form': form,
+        'issues': issues,
+        }
+    return render(request, 'contact_us.html', context)

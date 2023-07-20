@@ -52,6 +52,12 @@ EV_STATUS = [
     (2, 'Passed'), 
     ]
 
+ISSUE_STATUS = [
+    (0, 'New'),
+    (1, 'Processing'), 
+    (2, 'Solved'), 
+    ]
+
 """ Only delete the file if no other instances of that model are using it"""    
 def delete_file_if_unused(model,instance,field,instance_file_field):
     dynamic_field = {}
@@ -112,9 +118,9 @@ class Post(models.Model):
     body = models.CharField(max_length=140)
     timestamp = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="post")
-    language = models.CharField(max_length=5)
+    language = models.CharField(max_length=5, blank=True, null=True)
     updated_on = models.DateTimeField(auto_now= True)
-    created_on = models.DateTimeField(auto_now_add=True, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=STATUS, default=0)
     slug = AutoSlugField(populate_from='title', blank=True, null=True, unique_with=['created_on'])
     
@@ -226,4 +232,11 @@ class ListItem(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="cart")
     song = models.ManyToManyField(Song, related_name='inlist') 
     slug = AutoSlugField(populate_from='title', unique_with=['created'])
-   
+
+class Issues(models.Model):
+    name = models.CharField(max_length=140, default="Anonymous")
+    title = models.CharField(max_length=140)
+    issue = models.TextField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    contact_info = models.CharField(max_length=140, null=True, blank=True)
+    status = models.IntegerField(default=0, choices=ISSUE_STATUS)

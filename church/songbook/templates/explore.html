@@ -1,13 +1,17 @@
 {% extends "base.html" %}
+{% load custom_tags %}
+{% load i18n %}
+
+
 
 {% block app_content %}
     <div class="row">
 	<div class="col-md-8 col-xs-12">
-	<h3>{{ _('Recently added songs') }}</h3>
+	<h3>{% translate "Recently added songs" %}</h3>
 	<ul class="list-group">
 	{% if new_songs %}
 	{% for ns in new_songs %}
-		<li class="list-group-item"><a href="{{ url_for('.view_song', id=ns.id) }}">{{ns.title}}</a></li>
+		<li class="list-group-item"><a href="{% url 'view_song' song_id=ns.id key=ns.key %}">{{ns.title}}</a>{% if ns.status == 0 %}<font size="3" color="red">Draft</font>{% endif %} <a href="{% url 'edit_song' song_id=ns.id %}"><img src="/static/pencil16.gif" class="img-fluid" alt="Edit"/></a>       {% if ns.audio %}<img src="/static/audio.gif" class="img-fluid" alt="Audio"/>{% endif %}{% if ns.image %}<img src="/static/music-sheets.gif" class="img-fluid" alt="Music sheets"/>{% endif %}{% if ns.media.all %}<img src="/static/youtube.gif" class="img-fluid" alt="Video"/>{% endif %}</li>
 	{% endfor %}
 	{% endif %}</ul>
 	</div>
@@ -15,13 +19,13 @@
 	<div class="card">
   <div class="card-body">
     
-	<h3>{{ _('Schedule') }}</h3>
+	<h3>{% translate "Schedule" %}</h3>
 	<div class="list-group">
 	{% for e in events %}
-		<a href="{{ url_for('.lists', listid=e.id) }}" class="list-group-item list-group-item-action">{{ e.list_title}} - {{e.date_time}}&nbsp;&nbsp;<span class="badge bg-primary rounded-pill">{%if itemqty[e.id] %}{{ itemqty[e.id] }}{% else %} 0 {% endif %}</span></a>
+		<a href="{% url 'lists' list_id=e.id %}" class="list-group-item list-group-item-action">{{ e.title}} - {{e.date_time}}&nbsp;&nbsp;<span class="badge bg-primary rounded-pill">{% if e.items.all %}{{ e.items.all.count }}{% else %} 0 {% endif %}</span></a>
 	{% endfor %}
 	{% for o in o_events %}
-		<a href="{{ url_for('.lists', listid=o.id) }}" class="list-group-item list-group-item-action">{{ o.list_title}} - {{o.date_time}}&nbsp;&nbsp;<span class="badge bg-primary rounded-pill">{%if itemqty[o.id] %}{{ itemqty[o.id] }}{% else %} 0 {% endif %}</span></a>
+		<a href="{% url 'lists' list_id=o.id %}" class="list-group-item list-group-item-action">{{ o.title}} - {{o.date_time}}&nbsp;&nbsp;<span class="badge bg-primary rounded-pill">{% if o.items.all %}{{ o.items.all.count }}{% else %} 0 {% endif %}</span></a>
 	{% endfor %}
 	</div>
   </div>

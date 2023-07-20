@@ -1,16 +1,17 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
 
-<div class="container">
+
+{% block app_content %}
+
   <div class="row">
     <div class="col-md-8 card mb-4  mt-3 left  top">
       <div class="card-body">
-        <h1>{% block title %} {{ object.title }} {% endblock title %}</h1>
+        <h4>{{ title }}</h4>
         <p class=" text-muted">{{ post.user }} | {{ post.created_on }}</p>
-        <p class="card-text ">{{ object.body | safe }}</p>
+        <p class="card-text ">{{ post.body | safe }}</p>
       </div>
     </div>
 	{% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
   </div>
-</div>
 
-{% endblock content %}
+{% endblock%}

@@ -3,23 +3,30 @@
 
 {% block app_content %}
     
-	<h3>Hi, {% if user.first_name %}{{ user.first_name }}{% else %} {{ user.username }} {% endif %}!</h3>
+	<h4>Draft to confirm</h4>
+	
 	    <div class="row">
 		<!-- Blog Entries Column -->
         <div class="col-md-8 mt-3 left">
-            {% for post in post_list %}
             <div class="card mb-4">
-                <div class="card-body">
-                    <h4 class="card-title">{{ post.title }}</h4>
+                <div class="card-header"> Preview </div>
+				<div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
                     <p class="card-text text-muted h6">{{ post.user }} | {{ post.created_on}} </p>
-                    <p class="card-text">{{post.body|slice:":200" }}</p>
-                    <a href="{% url 'post_detail' post_id=post.id  %}" class="btn btn-primary">Read More &rarr;</a>
+                    <p class="card-text">{{ post.body }}</p>
                 </div>
             </div>
-            {% endfor %}
         </div>
+		<div class="col-md-4 float-right ">
+			<div class="card my-4">
+					<h5 class="card-header">{% translate "Tip" %}</h5>
+				<div class="card-body">
+					<p class="card-text">{% translate "Currently you are in draft stage of your post prior to posting. It's a good chance to check for any errors or make any updates to your post. Upon confirming your post will be published." %}</p>
+				</div>
+			</div>
+		</div>
 		        <div class="col-md-8 mt-3 left">
-		<form class="form-floating needs-validation" action="{% url 'make_post' %}" method="post" novalidate>
+		<form class="form-floating needs-validation" action="{% url 'confirm_post' post_id=post.id %}" method="post" novalidate>
         {% csrf_token %}
         <div class="row mb-3">
             {{ form.title.errors }}
@@ -40,11 +47,10 @@
 			</div>
         </div>
         <div class="d-grid gap-2 col-2 mx-auto">
-			<input type="submit" class='btn btn-success' value='{% translate "Post" %}'/>
+			<input type="submit" class='btn btn-success' value='{% translate "Publish" %}'/>
 			
         </div>
     </form>
 		</div>
-		{% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
     </div>
 {% endblock %}

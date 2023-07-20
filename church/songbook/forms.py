@@ -1,6 +1,6 @@
 from django import forms
 from django.db.models import F
-from .models import Song, Tag, Mlinks, CHORDNOTE, Post, Audio, Image, Lists, Profile
+from .models import Song, Tag, Mlinks, CHORDNOTE, Post, Audio, Image, Lists, Profile, Issues
 from django.utils.translation import gettext as _
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -9,7 +9,67 @@ from phonenumber_field.widgets import PhoneNumberPrefixWidget
 import os
 from django.conf import settings
 from django_flatpickr.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
+from django.contrib.auth.forms import SetPasswordForm
 
+class SetPasswordForm(SetPasswordForm):
+    class Meta:
+        model = User
+        fields = ['new_password1', 'new_password2']
+
+
+class ContactUsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        self.fields['name'].widget.attrs['style'] = 'min-width: 100%'
+        self.fields['name'].widget.attrs['placeholder'] = 'You can submit an issue anonymously by leaving this field blank'
+        self.fields['title'].widget.attrs['style'] = 'min-width: 100%'
+        self.fields['title'].widget.attrs['placeholder'] = 'Generally describe your issue'
+        self.fields['issue'].widget.attrs['style'] = 'min-width: 100%'
+        self.fields['issue'].widget.attrs['rows'] = '10'
+        self.fields['issue'].widget.attrs['placeholder'] = 'Describe in detail an issue or error. Please also add where it happened and any additional details would be helpful'
+        self.fields['contact_info'].widget.attrs['style'] = 'min-width: 100%'
+        self.fields['contact_info'].widget.attrs['placeholder'] = 'Its not required, but if you provide your contact information, we may contact you for more details regarding an issue'
+    
+    
+    class Meta:
+        model = Issues
+        fields = ['name', 'title', 'issue', 'contact_info']
+        labels = {
+            'title': _('Submit an issue'),
+            'name': _('Your name'),
+            'title': _('Title'),
+            'issue': _('Issue'),
+            'contact_info': _('Your contacts'),
+        }
+    
+class PostForm(forms.ModelForm):
+    title = forms.CharField(max_length=150, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    body = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
+    
+    class Meta:
+        model = Post
+        fields = ['title', 'body']
+        labels = {
+            'title': _('Title'),
+            'body': _('Post'),
+        }
+
+class EditPostForm(forms.ModelForm):
+    title = forms.CharField(max_length=150, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    body = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
+    
+    class Meta:
+        model = Post
+        fields = ['title', 'body', 'status']
+        labels = {
+            'title': _('Title'),
+            'body': _('Post'),
+            'status': _('Status'),
+
+        }
+    
 
 class UpdateUForm(forms.ModelForm):
     first_name = forms.CharField(max_length=150, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -224,7 +284,8 @@ class SongsForm(forms.Form):
         # Make the query here
         MYQUERY = Song.objects.values_list('id', 'title')
         self.fields['title'] = forms.ChoiceField(choices=(*MYQUERY,))
-    
+        self.fields['title'].widget.attrs['style'] = 'min-width: 100%'
+        self.fields['title'].widget.attrs['class'] = 'form-control'
     # to make a dropdown list choices populated from model 
     # choice = forms.ModelChoiceField(label='Songs', queryset=Song.objects.filter(language=1), required=True)
     

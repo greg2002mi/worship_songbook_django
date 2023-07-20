@@ -3,15 +3,23 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from . import views
+from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
+    
     path("", views.PostList.as_view(), name="index"),
+    path("index", views.PostList.as_view(), name="index"),
     path("register/", views.register_page, name="register"),
     path("login/", views.login_page, name="login"),
     path("logout/", views.logout_page, name="logout"),
+    path("contact_us", views.contact_us, name="contact_us"),
     path("profile/", views.profile, name="profile"),
-    path("<slug:slug>/", views.PostDetail.as_view(), name="post_detail"),
+    path("post_detail/<int:post_id>", views.post_detail, name="post_detail"),
     path("songbook", views.songbook, name="songbook"),
+    path("explore", views.explore, name="explore"),
+    path("make_post", views.make_post, name="make_post"),
+    path("confirm_post/<int:post_id>", views.confirm_post, name="confirm_post"),
+    path("edit_post/<int:post_id>", views.edit_post, name="edit_post"),
     path("song/add/", views.add_song, name="add_song"),
     path("<int:song_id>/<int:key>/view_song", views.view_song, name="view_song"),
     path("<int:song_id>/edit_song", views.edit_song, name="edit_song"),
@@ -22,7 +30,7 @@ urlpatterns = [
     path("<int:audio_id>/<int:song_id>/delete_audio", views.delete_audio, name="delete_audio"),
     path("<int:mlink_id>/<int:song_id>/delete_video", views.delete_video, name="delete_video"),
     path("<int:song_id>/manage_media", views.manage_media, name="manage_media"),
-    path("<int:song_id>/upload_i", views.upload_i, name="upload_i"),
+    #path("<int:song_id>/upload_i", views.upload_i, name="upload_i"),
     path("<int:song_id>/add_transl", views.add_transl, name="add_transl"),
     path("remove_transl/<int:selsong_id>/<int:cursong_id>", views.remove_transl, name="remove_transl"),
     path("<int:song_id>/tagging", views.tagging, name="tagging"),
@@ -36,6 +44,9 @@ urlpatterns = [
     path("<int:user_id>/avatar_upload", views.avatar_upload, name="avatar_upload"),
     path("add_to_cart/<int:songid>/<int:c>/<str:keyword>", views.add_to_cart, name="add_to_cart"),
     path("events", views.events, name="events"),
+    
+    path("change_password", views.change_password, name="change_password"),
+    
     
     path("calendar", views.calendar, name="calendar"),
     
@@ -67,8 +78,3 @@ urlpatterns = [
     path('cart_assign_user', views.cart_assign_user, name='cart_assign_user'),
     ]
 
-# Serving the media files in development mode
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-else:
-    urlpatterns += staticfiles_urlpatterns()

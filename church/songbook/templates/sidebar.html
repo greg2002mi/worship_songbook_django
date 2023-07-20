@@ -1,20 +1,15 @@
+{% load i18n %}
 {% block sidebar %}
 
-<style>
-        .card{
-            box-shadow: 0 16px 48px #E3E7EB;
-        }
-       
-</style>
 
 <!-- Sidebar Widgets Column -->
 <div class="col-md-4 float-right ">
 <div class="card my-4">
-        <h5 class="card-header">About Me</h5>
+        <h5 class="card-header">Notice</h5>
     <div class="card-body">
-        <p class="card-text">Lorem Ipsum sit dolor amet.</p>
-        <a href="#"
-           class="btn btn-danger">Contact me</a>
+        <p class="card-text">{% translate "Currently this project is under development. Therefore some issues may appear. Please contact us and describe any encountered issues." %}</p>
+        <a href="{% url 'contact_us' %}"
+           class="btn btn-danger">Contact Us</a>
     </div>
 </div>
 </div>

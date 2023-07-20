@@ -7,7 +7,10 @@
 {% endblock %}
 {% block app_content %}
 {% load crispy_forms_tags %}
-    <div class="row my-3 p-3">
+<div class="row py-3"><div class="col">  </div></div>
+<div class="row py-3">    
+	<div class="col-md-8 col-xs-12">
+	<div class="row my-3 p-3">
         <img class="rounded-circle account-img" src="{{ user.profile.avatar.url }} " style="cursor: pointer; width: 100px !important; cursor:zoom-in" height="100" width="100" onclick="document.getElementById('modal{{ user.id }}').style.display='block'"/>
     </div>
 	<div>
@@ -28,8 +31,37 @@
 		<button class="btn btn-primary" type="submit">{% translate "Save Changes" %}</button>
 		<button class="btn btn-dark" type="reset">{% translate "Reset" %}</button>
 	</form>
+	<p><a href="{% url 'change_password' %}">{% translate "Change Password" %}</a></p>
 </div>
-	
+</div>
+<div class="col-md-4 col-xs-12">
+	<div class="card">
+		<div class="card-header">Published songs by me:</div>
+		<div class="card-body">
+			<ul class="list-group">
+		{% if songlist %}
+		{% for s in songlist %}
+			<li class="list-group-item text-truncate"><a href="{% url 'view_song' song_id=s.id key=s.key %}">{{ s.title }}</a>{% if s.status == 0 %} - Draft {% endif %}- <a href="{% url 'edit_song' song_id=s.id %}"><img src="/static/pencil16.gif" class="img-fluid" alt="Edit"/></a>   {% if s.audio %}<img src="/static/audio.gif" class="img-fluid" alt="Audio"/>{% endif %}{% if s.image %}<img src="/static/music-sheets.gif" class="img-fluid" alt="Music sheets"/>{% endif %}{% if s.media.all %}<img src="/static/youtube.gif" class="img-fluid" alt="Video"/>{% endif %}</li>
+		{% endfor %}
+		{% endif %}
+		</ul>
+	  </div>	
+	</div>	
+	<br>
+	<div class="card">
+		<div class="card-header">Recent posts</div>
+		<div class="card-body">
+			<ul class="list-group">
+		{% if songlist %}
+		{% for s in songlist %}
+			<li class="list-group-item"><a href="{% url 'view_song' song_id=s.id key=s.key }}">{{ s.title }}</a> ({{ s.status }})</li>
+		{% endfor %}
+		{% endif %}
+		</ul>
+	  </div>	
+	</div>	
+</div>	
+</div>	
 	
 	<div id="modal{{ user.id }}" class="w3-modal" onclick="this.style.display='none'">
 		<span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
