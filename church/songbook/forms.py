@@ -9,12 +9,11 @@ from phonenumber_field.widgets import PhoneNumberPrefixWidget
 import os
 from django.conf import settings
 from django_flatpickr.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
-from django.contrib.auth.forms import SetPasswordForm
 
-class SetPasswordForm(SetPasswordForm):
-    class Meta:
-        model = User
-        fields = ['new_password1', 'new_password2']
+# class SetPasswordForm(PasswordChangeForm):
+#     class Meta:
+#         model = User
+#         fields = ['new_password1', 'new_password2']
 
 
 class ContactUsForm(forms.ModelForm):
@@ -30,7 +29,7 @@ class ContactUsForm(forms.ModelForm):
         self.fields['issue'].widget.attrs['rows'] = '10'
         self.fields['issue'].widget.attrs['placeholder'] = 'Describe in detail an issue or error. Please also add where it happened and any additional details would be helpful'
         self.fields['contact_info'].widget.attrs['style'] = 'min-width: 100%'
-        self.fields['contact_info'].widget.attrs['placeholder'] = 'Its not required, but if you provide your contact information, we may contact you for more details regarding an issue'
+        self.fields['contact_info'].widget.attrs['placeholder'] = 'Its not required, but if provided, we may contact you for more details regarding an issue'
     
     
     class Meta:

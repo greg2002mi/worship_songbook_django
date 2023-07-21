@@ -1,28 +1,35 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
+from django.core.paginator import Paginator
 from django.core.paginator import (EmptyPage, PageNotAnInteger,
 Paginator)
 from django.views import generic
-from django.core.paginator import Paginator
 from django.urls import reverse, reverse_lazy
 from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, LANG, CHORDNOTE, Audio, Issues
 from django.contrib.auth.models import User, Group
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.utils.translation import gettext as _
-from .forms import AddSongForm, Transpose, AddTagForm, PostForm, EditPostForm, TagsForm, SetPasswordForm, ContactUsForm, SongsForm, EmptyForm, EditSongForm, Assign2Event, NewUForm, UpdateUForm, UpdateProfileForm, UploadAvatarForm, AddSongTagForm, AddMediaForm, AddEventForm
+from .forms import (AddSongForm, Transpose, AddTagForm, PostForm, EditPostForm, TagsForm, ContactUsForm, 
+                    SongsForm, EmptyForm, EditSongForm, Assign2Event, NewUForm, UpdateUForm, UpdateProfileForm, 
+                    UploadAvatarForm, AddSongTagForm, AddMediaForm, AddEventForm)
 from .core import Chordpro_html
 from django import forms
 import os, uuid, json
-from django.contrib import messages
+
 from uuid import uuid4
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
+
+
 from django.db.models import Q
 from datetime import datetime
 from django.utils import timezone
 from django.core.mail import send_mail  # later to send mail - send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
-from django.contrib.auth.views import PasswordResetConfirmView
+from django.contrib.auth.views import PasswordResetConfirmView, PasswordResetView
+
 
 PAGE_SIZE = getattr(settings, "PAGE_SIZE", 50)
 
@@ -64,10 +71,20 @@ def split_text(text, control, ori_key_int, transpose):
     
     return lyrics
 
-class CustomPasswordResetConfirmView(PasswordResetConfirmView):
-    template_name = 'registration/change_password_form.html'
-    post_reset_login = True
-    success_url = reverse_lazy('index')
+# class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+#     template_name = 'registration/change_password_form.html'
+#     post_reset_login = True
+#     success_url = reverse_lazy('index')
+
+class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
+    template_name = 'password_reset.html'
+    email_template_name = 'password_reset_email.html'
+    subject_template_name = 'password_reset_subject'
+    success_message = "We've emailed you instructions for setting your password, " \
+                      "if an account exists with the email you entered. You should receive them shortly." \
+                      " If you don't receive an email, " \
+                      "please make sure you've entered the address you registered with, and check your spam folder."
+    success_url = reverse_lazy('users-home')
 
 def login_page(request):
     if request.method == "POST":
@@ -108,7 +125,7 @@ def register_page(request):
 def change_password(request):
     user = request.user
     if request.method == 'POST':
-        form = SetPasswordForm(user, request.POST)
+        form = PasswordChangeForm(user, request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Your password has been changed")
@@ -117,8 +134,8 @@ def change_password(request):
             for error in list(form.errors.values()):
                 messages.error(request, error)
 
-    form = SetPasswordForm(user)
-    return render(request, 'registration/password_reset_form.html', {'form': form})   
+    form = PasswordChangeForm(user)
+    return render(request, 'password_change_form.html', {'form': form})   
 
 @login_required
 def profile(request):

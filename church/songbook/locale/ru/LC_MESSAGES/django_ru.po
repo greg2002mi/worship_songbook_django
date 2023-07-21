@@ -1,0 +1,1027 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-20 13:13+0900\n"
+"PO-Revision-Date: 2023-07-21 11:04+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: .\songbook\forms.py:34
+msgid "Submit an issue"
+msgstr "Сообщить о проблеме"
+
+#: .\songbook\forms.py:35
+msgid "Your name"
+msgstr "Имя"
+
+#: .\songbook\forms.py:36 .\songbook\forms.py:49 .\songbook\forms.py:61
+#: .\songbook\forms.py:164 .\songbook\forms.py:199 .\songbook\forms.py:308
+#: .\songbook\templates\cart.html:134 .\songbook\templates\contact_us.html:61
+#: .\songbook\templates\event_detail.html:152
+#: .\songbook\templates\manage_media.html:54
+#: .\songbook\templates\search.html:17
+#: .\songbook\templates\tag_songlist.html:30
+msgid "Title"
+msgstr "Заголовок"
+
+#: .\songbook\forms.py:37
+msgid "Issue"
+msgstr "Проблема"
+
+#: .\songbook\forms.py:38
+msgid "Your contacts"
+msgstr "Контактные данные"
+
+#: .\songbook\forms.py:50 .\songbook\forms.py:62
+#: .\songbook\templates\index.html:43
+msgid "Post"
+msgstr "Пост"
+
+#: .\songbook\forms.py:63 .\songbook\forms.py:206 .\songbook\forms.py:313
+#: .\songbook\templates\contact_us.html:63
+msgid "Status"
+msgstr "Статус"
+
+#: .\songbook\forms.py:87
+msgid "About_me"
+msgstr "О себе"
+
+#: .\songbook\forms.py:88
+msgid "Mobile"
+msgstr "Мобильный телефон"
+
+#: .\songbook\forms.py:89
+msgid "My birthday"
+msgstr "День рождения"
+
+#: .\songbook\forms.py:98
+msgid "My avatar"
+msgstr "Аватар"
+
+#: .\songbook\forms.py:121
+msgid "Name a new genre or tag if not in the list"
+msgstr "Введите новый жанр или ярлык, если он отсутствует в списке"
+
+#: .\songbook\forms.py:127
+msgid "Tag name"
+msgstr "Название тэга"
+
+#: .\songbook\forms.py:155 .\songbook\forms.py:190
+msgid "Write singer or music group here"
+msgstr "Добавьте имя исполнителя или группы"
+
+#: .\songbook\forms.py:156 .\songbook\forms.py:191
+msgid "Any useful information, such as tempo, original key, etc."
+msgstr "Полезная информация, например, темп, исходная тональность и т.д."
+
+#: .\songbook\forms.py:157 .\songbook\forms.py:192
+msgid "Write song lyrics here in chordpro format"
+msgstr "Введите текст песни здесь в формате chordpro"
+
+#: .\songbook\forms.py:165 .\songbook\forms.py:200
+msgid "Singer"
+msgstr "Исполнитель"
+
+#: .\songbook\forms.py:166 .\songbook\forms.py:201
+msgid "Information"
+msgstr "Сведения"
+
+#: .\songbook\forms.py:167 .\songbook\forms.py:202
+#: .\songbook\templates\cart.html:135
+#: .\songbook\templates\event_detail.html:153
+#: .\songbook\templates\search.html:19
+msgid "Key"
+msgstr "Тональность"
+
+#: .\songbook\forms.py:168 .\songbook\forms.py:203
+msgid "minor"
+msgstr "минор"
+
+#: .\songbook\forms.py:169 .\songbook\forms.py:204
+#: .\songbook\templates\view_song.html:39
+msgid "Lyrics"
+msgstr "Текст песни"
+
+#: .\songbook\forms.py:170 .\songbook\forms.py:205
+#: .\songbook\templates\_translations.html:29
+#: .\songbook\templates\search.html:20
+msgid "Language"
+msgstr "Язык"
+
+#: .\songbook\forms.py:175 .\songbook\templates\_song_chords.html:13
+msgid "Transpose"
+msgstr "Транспозиция"
+
+#: .\songbook\forms.py:243
+msgid "Title of a video or type Youtube"
+msgstr "Название видео-ролика (можно написать \"YouTube\")"
+
+#: .\songbook\forms.py:245
+msgid "Paste embed url link, taken from desired youtube clip"
+msgstr "Вставьте ссылку, прикрепленную к соответствующему ролику из YouTube"
+
+#: .\songbook\forms.py:251
+msgid "File name"
+msgstr "Имя файла"
+
+#: .\songbook\forms.py:252
+msgid "URL"
+msgstr "Адрес страницы"
+
+#: .\songbook\forms.py:294
+msgid "Sunday service, Morning Prayer, Prayer and Worship service etc."
+msgstr ""
+"Воскресное служение, утренняя молитва, молитвенное собрание и служение "
+"поклонения и т.д."
+
+#: .\songbook\forms.py:297
+msgid "Link from Youtube. Embed links only"
+msgstr "Ссылка из YouTube. Только ссылки \"Встроить\" (Embed)"
+
+#: .\songbook\forms.py:301
+msgid "Slogans, Theme of service, Bible verse, etc."
+msgstr "Слоган, тема служения, стих из библии и т.д."
+
+#: .\songbook\forms.py:309
+msgid "Start date"
+msgstr "Начало"
+
+#: .\songbook\forms.py:310
+msgid "till"
+msgstr "до"
+
+#: .\songbook\forms.py:311
+msgid "Media Link"
+msgstr "Ссылки на медиа-файлы"
+
+#: .\songbook\forms.py:312
+msgid "Bible passage"
+msgstr "Отрывок из Библии"
+
+#: .\songbook\templates\404.html:4
+msgid "Not Found"
+msgstr "Не найдено"
+
+#: .\songbook\templates\404.html:5 .\songbook\templates\500.html:6
+msgid "Back"
+msgstr "Назад"
+
+#: .\songbook\templates\500.html:4
+msgid "An unexpected error has occurred"
+msgstr "Возникла непредвиденная ошибка"
+
+#: .\songbook\templates\500.html:5
+msgid "The administrator has been notified. Sorry for the inconvenience!"
+msgstr "Уведомление отправлено администратору. Просим прощения за неудобство!"
+
+#: .\songbook\templates\_offcanvas.html:15
+msgid "Tag"
+msgstr "Присвоить ярлык"
+
+#: .\songbook\templates\_offcanvas.html:18
+msgid "Untag All"
+msgstr "Очистить ярлыки"
+
+#: .\songbook\templates\_post.html:11
+msgid "said"
+msgstr "сказал (-ла)"
+
+#: .\songbook\templates\_post.html:17
+msgid "Translate"
+msgstr "Перевод"
+
+#: .\songbook\templates\_song.html:22 .\songbook\templates\_song.html:27
+#: .\songbook\templates\songbook.html:64 .\songbook\templates\songbook.html:69
+msgid "Add to song folder"
+msgstr "Добавить в папку с песнями"
+
+#: .\songbook\templates\_song_chords.html:21
+msgid "Original key:"
+msgstr "Исходная тональность:"
+
+#: .\songbook\templates\_song_chords.html:32 .\songbook\templates\cart.html:176
+#: .\songbook\templates\event_detail.html:194
+msgid "None"
+msgstr "Нет"
+
+#: .\songbook\templates\_song_chords.html:45
+msgid "Description"
+msgstr "Описание"
+
+#: .\songbook\templates\_song_chords.html:46
+msgid "Functionality and features"
+msgstr "Функциональность и свойства"
+
+#: .\songbook\templates\_song_chords.html:47
+msgid "Underneath of title and singer/author there are several tabs:"
+msgstr "Под наименованием заголовком и исполнителем есть несколько вкладок:"
+
+#: .\songbook\templates\_song_chords.html:49
+msgid ""
+"Lyrics with chords - is a current page with main features, which will be "
+"described below."
+msgstr ""
+"Текст песни с аккордами - это текущая страница с основными функциями, "
+"которые описаны ниже."
+
+#: .\songbook\templates\_song_chords.html:50
+msgid "Lyrics - page without any chords."
+msgstr "Текст песни - это страница без аккордов."
+
+#: .\songbook\templates\_song_chords.html:51
+msgid ""
+"Media - media section, where there will be links and players. Gives you a "
+"chance to listen, learn and prepare for service."
+msgstr ""
+"Медиа - это раздел с медиа-файлами со ссылками и средствами воспроизведения "
+"медиа-файлов, где можно прослушать песню, изучить материал и подготовиться к "
+"служению."
+
+#: .\songbook\templates\_song_chords.html:52
+msgid ""
+"Translations - page to bind translation versions of current song to the "
+"database."
+msgstr ""
+"Переводы - это страница, где можно найти переводы выбранной песни на другие "
+"языки."
+
+#: .\songbook\templates\_song_links.html:4
+msgid "Manage Media library"
+msgstr "Управление библиотекой медиа-файлов"
+
+#: .\songbook\templates\_song_links.html:9
+msgid "Images"
+msgstr "Изображение"
+
+#: .\songbook\templates\_song_links.html:10
+#: .\songbook\templates\upload_avatar.html:9
+msgid "File Upload"
+msgstr "Загрузка файла"
+
+#: .\songbook\templates\_song_links.html:21
+msgid "Audio"
+msgstr "Аудио"
+
+#: .\songbook\templates\_tags.html:8 .\songbook\templates\cart.html:133
+#: .\songbook\templates\event_detail.html:151
+#: .\songbook\templates\manage_media.html:53
+#: .\songbook\templates\search.html:16
+#: .\songbook\templates\tag_songlist.html:29
+msgid "No."
+msgstr "№"
+
+#: .\songbook\templates\_tags.html:9
+msgid "Tags"
+msgstr "Ярлыки"
+
+#: .\songbook\templates\_tags.html:10 .\songbook\templates\tag_songlist.html:32
+msgid "Functions"
+msgstr "Функции"
+
+#: .\songbook\templates\_tags.html:23 .\songbook\templates\cart.html:184
+#: .\songbook\templates\event_detail.html:127
+#: .\songbook\templates\event_detail.html:202
+#: .\songbook\templates\manage_media.html:69
+#: .\songbook\templates\manage_media.html:81
+#: .\songbook\templates\manage_media.html:93
+#: .\songbook\templates\view_song.html:58
+#: .\songbook\templates\view_song.html:73
+#: .\songbook\templates\view_song.html:124
+msgid "Delete"
+msgstr "Удалить"
+
+#: .\songbook\templates\_translations.html:5
+msgid "Add translation to"
+msgstr "Добавить перевод"
+
+#: .\songbook\templates\_translations.html:5
+msgid "from the list of existing song titles"
+msgstr "из списка имеющихся названий песен"
+
+#: .\songbook\templates\_translations.html:18
+msgid "Link"
+msgstr "Ссылка"
+
+#: .\songbook\templates\_translations.html:28
+msgid "Songs"
+msgstr "Песни"
+
+#: .\songbook\templates\_translations.html:30
+#: .\songbook\templates\cart.html:140
+#: .\songbook\templates\event_detail.html:158
+#: .\songbook\templates\manage_media.html:57
+msgid "Actions"
+msgstr "Действия"
+
+#: .\songbook\templates\_translations.html:50
+msgid "Unlink"
+msgstr "Убрать ссылки"
+
+#: .\songbook\templates\_translations.html:53
+msgid "To unlink permissions required"
+msgstr "Чтобы удалить ссылку требуется разрешение"
+
+#: .\songbook\templates\add_event.html:22
+#: .\songbook\templates\make_list.html:18
+msgid "Add Event (Create list for worship service)"
+msgstr "Добавить событие (создать список для прославления)"
+
+#: .\songbook\templates\add_event.html:81
+#: .\songbook\templates\edit_event.html:81
+msgid "Add"
+msgstr "Добавить"
+
+#: .\songbook\templates\add_song.html:5
+msgid "Add a New Song"
+msgstr "Добавить новую песню"
+
+#: .\songbook\templates\add_song.html:60 .\songbook\templates\edit_song.html:60
+msgid "Instructions"
+msgstr "Инструкции"
+
+#: .\songbook\templates\add_song.html:74 .\songbook\templates\edit_post.html:40
+#: .\songbook\templates\edit_song.html:82
+msgid "Save"
+msgstr "Сохранить"
+
+#: .\songbook\templates\add_song.html:81 .\songbook\templates\edit_song.html:88
+msgid "Instructions on text format"
+msgstr "Инструкции по формату текста"
+
+#: .\songbook\templates\add_song.html:86 .\songbook\templates\edit_song.html:93
+msgid ""
+"Here are the key instructions on how to properly input lyrics with chords "
+"and headings for each song section."
+msgstr ""
+"В данной части даются инструкции по правильному вводу текста песни с "
+"аккордами и заголовками для каждой части песни."
+
+#: .\songbook\templates\add_song.html:88 .\songbook\templates\edit_song.html:95
+msgid "Chords must be incased in square brackets: Eg.:"
+msgstr "Аккорд следует указывать в квадратных скобках: Например,:"
+
+#: .\songbook\templates\add_song.html:89 .\songbook\templates\edit_song.html:96
+msgid ""
+"Chords with bass chord inside square brackets are split with slash '&#47;': "
+"Eg.:"
+msgstr ""
+"Аккорды с указанием басовой линии следует вводить через косую линию '&#47;': "
+"например:"
+
+#: .\songbook\templates\add_song.html:90 .\songbook\templates\edit_song.html:97
+msgid ""
+"This app identifies only Intro, Chorus, Verse #, Bridge, Instrumental "
+"encased in curly brackets."
+msgstr ""
+"Данное приложение распознает только вступление. припев, куплет, мост, "
+"проигрыш, которые указываются в фигурных скобках."
+
+#: .\songbook\templates\add_song.html:91 .\songbook\templates\edit_song.html:98
+msgid ""
+"Chords must be located in front of a letter, where chord should be located."
+msgstr ""
+"Аккорд следует заносить перед слогом, над которым он должен быть расположен."
+
+#: .\songbook\templates\assign2event.html:27
+msgid "Create new Event"
+msgstr "Создать новое событие"
+
+#: .\songbook\templates\assign2event.html:87
+#: .\songbook\templates\assign2event.html:106
+#: .\songbook\templates\contact_us.html:51
+msgid "Submit"
+msgstr "Приложить"
+
+#: .\songbook\templates\assign2event.html:93
+msgid "or Add to Existing Event"
+msgstr "или добавить к существующему событию"
+
+#: .\songbook\templates\base.html:64
+msgid "Home"
+msgstr "Главнвя"
+
+#: .\songbook\templates\base.html:67 .\songbook\views.py:226
+msgid "Explore"
+msgstr "Поиск"
+
+#: .\songbook\templates\base.html:68 .\songbook\views.py:257
+#: .\songbook\views.py:615 .\songbook\views.py:892
+msgid "Songbook"
+msgstr "Сборник песен"
+
+#: .\songbook\templates\base.html:69
+msgid "Genre&Tags"
+msgstr "Жанры и тэги"
+
+#: .\songbook\templates\base.html:70
+msgid "Calendar"
+msgstr "Календарь"
+
+#: .\songbook\templates\base.html:101
+msgid "Selected songs"
+msgstr "Выбранные песни"
+
+#: .\songbook\templates\base.html:104
+msgid "Logout"
+msgstr "Выйти"
+
+#: .\songbook\templates\base.html:105 .\songbook\templates\base.html:108
+#: .\songbook\views.py:122
+msgid "Profile"
+msgstr "Профиль"
+
+#: .\songbook\templates\base.html:107 .\songbook\templates\login.html:13
+msgid "Login"
+msgstr "Войти"
+
+#: .\songbook\templates\base.html:113
+msgid "Search"
+msgstr "Поиск"
+
+#: .\songbook\templates\calendar.html:113 .\songbook\templates\planner.html:6
+msgid "Church service"
+msgstr "Служение в церкви"
+
+#: .\songbook\templates\calendar.html:116 .\songbook\views.py:697
+#: .\songbook\views.py:937
+msgid "Add event"
+msgstr "Добавить событие"
+
+#: .\songbook\templates\calendar.html:117
+msgid "Disabled"
+msgstr "Отключено"
+
+#: .\songbook\templates\cart.html:116
+msgid "Add to service"
+msgstr "Добавить к служению"
+
+#: .\songbook\templates\cart.html:120 .\songbook\templates\cart.html:123
+msgid "Empty"
+msgstr "Пусто"
+
+#: .\songbook\templates\cart.html:136
+#: .\songbook\templates\event_detail.html:154
+msgid "order"
+msgstr "порядок"
+
+#: .\songbook\templates\cart.html:137
+#: .\songbook\templates\event_detail.html:155
+msgid "Comments"
+msgstr "Комментарии"
+
+#: .\songbook\templates\cart.html:138
+#: .\songbook\templates\event_detail.html:156
+msgid "Assigned"
+msgstr "Назначен"
+
+#: .\songbook\templates\cart.html:139
+#: .\songbook\templates\event_detail.html:157
+msgid "Assigned User"
+msgstr "Назначить пользователя"
+
+#: .\songbook\templates\confirm_post.html:22
+msgid "Tip"
+msgstr "Подсказка"
+
+#: .\songbook\templates\confirm_post.html:24
+msgid ""
+"Currently you are in draft stage of your post prior to posting. It's a good "
+"chance to check for any errors or make any updates to your post. Upon "
+"confirming your post will be published."
+msgstr ""
+"В настоящий момент Вы находитесь на этапе предварительного просмотра перед "
+"публикацией поста. Проверьте, пожалуйста, текст на наличие ошибок и внесите "
+"необхидимые корректировки. После подтверждения Ваш пост будет опубликован."
+
+#: .\songbook\templates\confirm_post.html:50
+#: .\songbook\templates\view_song.html:67
+msgid "Publish"
+msgstr "Опубликовать"
+
+#: .\songbook\templates\contact_us.html:6
+msgid "Submit your issue regarding this web portal"
+msgstr "Опишите Вашу проблему при работе с данным веб-порталом"
+
+#: .\songbook\templates\contact_us.html:62
+msgid "submitted on:"
+msgstr "Форма отправлена:"
+
+#: .\songbook\templates\edit_event.html:22
+msgid "Edit Event"
+msgstr "Изменить событие"
+
+#: .\songbook\templates\edit_post.html:6
+msgid "Edit your post"
+msgstr "Изменить пост"
+
+#: .\songbook\templates\edit_profile.html:5
+msgid "Edit Profile"
+msgstr "Редактировать профиль"
+
+#: .\songbook\templates\edit_profile.html:6
+msgid "Upload avatar"
+msgstr "Обновить картинку профиля"
+
+#: .\songbook\templates\edit_song.html:5
+msgid "Edit current Song"
+msgstr "Редактировать выбранную песню"
+
+#: .\songbook\templates\event_detail.html:116
+msgid "Event title:"
+msgstr "Название события:"
+
+#: .\songbook\templates\event_detail.html:117
+msgid "Set date:"
+msgstr "Установить дату:"
+
+#: .\songbook\templates\event_detail.html:118
+msgid "Created date:"
+msgstr "Созданная дата:"
+
+#: .\songbook\templates\event_detail.html:119
+msgid "Created by:"
+msgstr "Создал:"
+
+#: .\songbook\templates\event_detail.html:120
+msgid "Links:"
+msgstr "Ссылки:"
+
+#: .\songbook\templates\event_detail.html:124
+#: .\songbook\templates\view_song.html:55
+#: .\songbook\templates\view_song.html:70
+msgid "Edit"
+msgstr "Редактировать"
+
+#: .\songbook\templates\event_detail.html:132
+msgid "Stage mode"
+msgstr "Режим на сцене"
+
+#: .\songbook\templates\event_detail.html:133
+msgid "Vocal"
+msgstr "Вокальный режим"
+
+#: .\songbook\templates\event_detail.html:134
+msgid "Music sheets"
+msgstr "Ноты"
+
+#: .\songbook\templates\explore.html:10
+msgid "Recently added songs"
+msgstr "Недавно добавленные песни"
+
+#: .\songbook\templates\explore.html:22
+msgid "Schedule"
+msgstr "График"
+
+#: .\songbook\templates\img_upload.html:5
+msgid "Image"
+msgstr "Изображение"
+
+#: .\songbook\templates\login.html:9
+msgid "Sign In"
+msgstr "Войти"
+
+#: .\songbook\templates\login.html:15
+msgid "Don't have an account? "
+msgstr "У вас есть учетная запись? "
+
+#: .\songbook\templates\login.html:15
+msgid "Create an account"
+msgstr "Создать учетную запись"
+
+#: .\songbook\templates\manage_media.html:13
+msgid "Add Audio"
+msgstr "Добавить аудио"
+
+#: .\songbook\templates\manage_media.html:43 .\songbook\templates\user.html:21
+msgid "Upload"
+msgstr "Загрузить"
+
+#: .\songbook\templates\manage_media.html:47
+msgid "Media list"
+msgstr "Список медиа-файлов"
+
+#: .\songbook\templates\manage_media.html:55
+msgid "type"
+msgstr "тип"
+
+#: .\songbook\templates\manage_media.html:56
+msgid "Created on"
+msgstr "Создано"
+
+#: .\songbook\templates\onstage.html:87 .\songbook\templates\stage.html:83
+msgid "Settings:"
+msgstr "Настройки:"
+
+#: .\songbook\templates\onstage.html:92 .\songbook\templates\stage.html:88
+msgid "L_size"
+msgstr "Размер текста"
+
+#: .\songbook\templates\onstage.html:97 .\songbook\templates\onstage.html:109
+#: .\songbook\templates\onstage.html:122 .\songbook\templates\onstage.html:133
+#: .\songbook\templates\stage.html:93 .\songbook\templates\stage.html:105
+#: .\songbook\templates\stage.html:118 .\songbook\templates\stage.html:129
+msgid "Normal"
+msgstr "Нормальный"
+
+#: .\songbook\templates\onstage.html:104 .\songbook\templates\stage.html:100
+msgid "C_size"
+msgstr "Размер аккордов"
+
+#: .\songbook\templates\onstage.html:116 .\songbook\templates\stage.html:112
+msgid "Spacing"
+msgstr "Отступ"
+
+#: .\songbook\templates\onstage.html:120 .\songbook\templates\stage.html:116
+msgid "Extralow"
+msgstr "Очень низкий"
+
+#: .\songbook\templates\onstage.html:121 .\songbook\templates\stage.html:117
+msgid "Low"
+msgstr "Низкий"
+
+#: .\songbook\templates\onstage.html:123 .\songbook\templates\stage.html:119
+msgid "Tall"
+msgstr "Высокий"
+
+#: .\songbook\templates\onstage.html:128 .\songbook\templates\stage.html:124
+msgid "Char_W"
+msgstr "Ширина страницы"
+
+#: .\songbook\templates\onstage.html:132 .\songbook\templates\stage.html:128
+msgid "Slim"
+msgstr "Узкий"
+
+#: .\songbook\templates\onstage.html:134 .\songbook\templates\stage.html:130
+msgid "Wide"
+msgstr "Широкий"
+
+#: .\songbook\templates\planner.html:7
+msgid "New list"
+msgstr "Новый список"
+
+#: .\songbook\templates\register.html:9 .\songbook\templates\register.html:13
+msgid "Register"
+msgstr "Зарегистрировать"
+
+#: .\songbook\templates\register.html:15
+msgid "If you already have an account, <a href=\"/login\">login</a> instead."
+msgstr "Если у Вас уже имеется учетная запись, <a href=\"/login\">войдите</a>."
+
+#: .\songbook\templates\reset_password.html:5
+msgid "Reset Your Password"
+msgstr "Сбросьте пароль"
+
+#: .\songbook\templates\reset_password_request.html:5
+msgid "Reset Password"
+msgstr "Сброс пароля"
+
+#: .\songbook\templates\search.html:7
+msgid "Search by keyword: "
+msgstr "Искать по ключевым словам: "
+
+#: .\songbook\templates\search.html:18
+#: .\songbook\templates\tag_songlist.html:31
+msgid "Artist/singer"
+msgstr "Исполнитель"
+
+#: .\songbook\templates\search.html:21
+msgid "Action"
+msgstr "Действия"
+
+#: .\songbook\templates\search.html:34
+msgid "Previous"
+msgstr "Назад"
+
+#: .\songbook\templates\search.html:39
+msgid "Next"
+msgstr "Далее"
+
+#: .\songbook\templates\search.html:49 .\songbook\views.py:587
+msgid "Tag list"
+msgstr "Список тэгов"
+
+#: .\songbook\templates\sidebar.html:10
+msgid ""
+"Currently this project is under development. Therefore some issues may "
+"appear. Please contact us and describe any encountered issues."
+msgstr ""
+"В настоящее время проект находится в режиме разработки, поэтому могут "
+"возникнуть проблемы. Пожалуйста, свяжитесь с нами и опишите проблему, в "
+"случае ее возникновения."
+
+#: .\songbook\templates\songbook.html:54
+msgid "Published"
+msgstr "Опубликовано"
+
+#: .\songbook\templates\songbook.html:56
+msgid "Draft"
+msgstr "Черновик"
+
+#: .\songbook\templates\stage_2.html:77
+msgid "Background brightness:"
+msgstr "Яркость фона:"
+
+#: .\songbook\templates\stage_2.html:81
+msgid "Lyrics text size:"
+msgstr "Размер текста песни:"
+
+#: .\songbook\templates\stage_2.html:86
+msgid "Chords text size:"
+msgstr "Размер аккордов:"
+
+#: .\songbook\templates\stage_2.html:116
+msgid "Let's prepare our hearts for this special time..."
+msgstr "Приготовим наши сердца к особенному времени..."
+
+#: .\songbook\templates\stage_2.html:116
+msgid "Leaving our pride, ego, doubt and evil behind..."
+msgstr "Оставим нашу гордость, эго, сомнения и все злое позади..."
+
+#: .\songbook\templates\tag_list.html:17
+msgid "Add tag"
+msgstr "Добавить тэг"
+
+#: .\songbook\templates\tag_songlist.html:21
+msgid "Category:"
+msgstr "Категория:"
+
+#: .\songbook\templates\tag_songlist.html:46
+msgid "Add to folder"
+msgstr "Добавить в папку"
+
+#: .\songbook\templates\tag_songlist.html:53
+#: .\songbook\templates\tag_songlist.html:56
+msgid "Remove"
+msgstr "Удалить"
+
+#: .\songbook\templates\user.html:4
+msgid "Profile Page"
+msgstr "Страница профиля"
+
+#: .\songbook\templates\user.html:31
+msgid "Save Changes"
+msgstr "Сохранить изменения"
+
+#: .\songbook\templates\user.html:32
+msgid "Reset"
+msgstr "Сброс"
+
+#: .\songbook\templates\view_song.html:16
+msgid ""
+"This song currently is in draft status, as its not final and needs "
+"publisher's comfirmation! Only published songs are available for everyone."
+msgstr ""
+"Данная песня находится в черновом режиме и нуждается в подтверждении "
+"создателя публикации. Только опубликованные песни доступны другим "
+"пользователям."
+
+#: .\songbook\templates\view_song.html:28
+msgid "Title:"
+msgstr "Название:"
+
+#: .\songbook\templates\view_song.html:29
+msgid "Artist:"
+msgstr "Исполнитель:"
+
+#: .\songbook\templates\view_song.html:30
+msgid "Prepared by:"
+msgstr "Подготовил:"
+
+#: .\songbook\templates\view_song.html:31
+msgid "Published on:"
+msgstr "Опубликовал:"
+
+#: .\songbook\templates\view_song.html:36
+msgid "Lyrics with chords"
+msgstr "Текст песни с аккордами"
+
+#: .\songbook\templates\view_song.html:42
+msgid "Links"
+msgstr "Ссылки"
+
+#: .\songbook\templates\view_song.html:45
+msgid "Translations"
+msgstr "Переводы"
+
+#: .\songbook\templates\view_song.html:62
+#: .\songbook\templates\view_song.html:77
+msgid "Genre/Tag"
+msgstr "Жанр/тэг"
+
+#: .\songbook\templates\view_song.html:92
+msgid "Genre and tags"
+msgstr "Жанр и тэги"
+
+#: .\songbook\templates\view_song.html:97
+msgid ""
+"Thematical grouping, song types, or groups based on temp are listed in here. "
+"Multiple choice."
+msgstr ""
+"Здесь можно отсортировать песни по темам, типу или темпу. Возможность выбора "
+"нескольких критериев."
+
+#: .\songbook\templates\view_song.html:112
+msgid "Confirm your action"
+msgstr "Подтвердите Ваше действие"
+
+#: .\songbook\templates\view_song.html:116
+msgid "You are about to permanently delete this song."
+msgstr "Эта песня будет полностью удалена."
+
+#: .\songbook\templates\view_song.html:117
+msgid "Are you sure?"
+msgstr "Продолжить?"
+
+#: .\songbook\templates\view_song.html:120
+msgid "Close"
+msgstr "Закрыть"
+
+#: .\songbook\views.py:74
+msgid "You are now logged in as {}."
+msgstr "Вы вошли как {}."
+
+#: .\songbook\views.py:77 .\songbook\views.py:79
+msgid "Invalid username or password."
+msgstr "Неверное имя пользователя или пароль."
+
+#: .\songbook\views.py:85
+msgid "You have successfully logged out."
+msgstr "Выход успешно выполнен."
+
+#: .\songbook\views.py:94
+msgid "Registration successful."
+msgstr "Регистрация завершена."
+
+#: .\songbook\views.py:96
+msgid "Unsuccessful registration. Invalid information."
+msgstr "Регистрация не выполнена. Проверьте введенные данные."
+
+#: .\songbook\views.py:149
+msgid "Error, failed to POST."
+msgstr "Ошибка, ПОСТ не опубликован."
+
+#: .\songbook\views.py:170
+msgid "Your post is drafted."
+msgstr "Ваш пост сохранен как черновик."
+
+#: .\songbook\views.py:173
+msgid "Not validated."
+msgstr "Не подтверждено."
+
+#: .\songbook\views.py:184 .\songbook\views.py:199
+msgid "Your post is on air."
+msgstr "Идет загрузка Вашего поста."
+
+#: .\songbook\views.py:212
+msgid "Details of post:{}"
+msgstr "Сведения о посте:{}"
+
+#: .\songbook\views.py:280
+msgid "Song successfully created as a draft."
+msgstr "Песня успешно сохранена в черновике."
+
+#: .\songbook\views.py:292
+msgid "Song has successfully been published."
+msgstr "Песня успешно опубликована."
+
+#: .\songbook\views.py:346
+msgid " | transposed to "
+msgstr " | транспонировать в "
+
+#: .\songbook\views.py:352
+msgid "Current song does not have lyrics"
+msgstr "В данной песне отсутствует текст"
+
+#: .\songbook\views.py:378
+msgid "View Song"
+msgstr "Показать песню"
+
+#: .\songbook\views.py:407
+msgid "Song has been permanently deleted."
+msgstr "Песня была поностью удалена."
+
+#: .\songbook\views.py:418
+msgid "Song has been updated successfully."
+msgstr "Песня успешно обновлена."
+
+#: .\songbook\views.py:453
+msgid "Video link has been successfully added."
+msgstr "Ссылка на видео-ролик успешно добавлена."
+
+#: .\songbook\views.py:522
+msgid "Image has been successfully deleted."
+msgstr "Изображение успешно удалено."
+
+#: .\songbook\views.py:532 .\songbook\views.py:542
+msgid "Audio file has been successfully deleted."
+msgstr "Аудио-файл был успешно удален."
+
+#: .\songbook\views.py:557
+msgid "Translation has been successfully linked."
+msgstr "Перевод был успешно привязан."
+
+#: .\songbook\views.py:569
+msgid "Translation has been successfully unlinked."
+msgstr "Перевод успешно отвязан."
+
+#: .\songbook\views.py:572
+msgid "Error occured. Please reload page and try again."
+msgstr "Ошибка. Перезагрузите страницу и попробуйте снова."
+
+#: .\songbook\views.py:584
+msgid "Tag is saved successfully."
+msgstr "Тэг успешно сохранен."
+
+#: .\songbook\views.py:632
+msgid "Tag is successfully deleted."
+msgstr "Тэг успешно удален."
+
+#: .\songbook\views.py:635
+msgid "Error, failed to delete tag."
+msgstr "Ошибка, тэг не был удален."
+
+#: .\songbook\views.py:664
+msgid "Error, failed to validate."
+msgstr "Ошибка. Тэг не был подтвержден."
+
+#: .\songbook\views.py:667
+msgid "Error, failed to add tag to this song."
+msgstr "Ошибка. не удалось добавить тэг к этой песне."
+
+#: .\songbook\views.py:675
+msgid "{} tag is no longer related to this song."
+msgstr "{} данный тэг больше не относится к этой песне."
+
+#: .\songbook\views.py:684
+msgid "Current song now has no tags."
+msgstr "К данной песне не привязано ни одного тэга."
+
+#: .\songbook\views.py:723
+msgid "Assign to event"
+msgstr "Назначить событие"
+
+#: .\songbook\views.py:741
+msgid "Success! Event is set and list added."
+msgstr "Поздравляем! Событие установлено и список добавлен."
+
+#: .\songbook\views.py:744 .\songbook\views.py:767 .\songbook\views.py:934
+#: .\songbook\views.py:1148
+msgid "Error! Form failed to validate."
+msgstr "Ошибка! Не удалось подтвердить форму."
+
+#: .\songbook\views.py:764
+msgid "Success! Cart list added to event {}-{}."
+msgstr "Поздравляем! Список добавлен к событию {}-{}."
+
+#: .\songbook\views.py:931
+msgid "Success! Event is set."
+msgstr "Поздравляем! Событие установлено."
+
+#: .\songbook\views.py:950
+msgid "Event has been updated successfully."
+msgstr "Событие было успешно обновлено."
+
+#: .\songbook\views.py:964
+msgid "Event is removed successfully."
+msgstr "Событие успешно удалено."
+
+#: .\songbook\views.py:1042
+msgid "Event Details"
+msgstr "Сведения о событии"
+
+#: .\songbook\views.py:1068
+msgid "Error, there are no items in this event."
+msgstr "Ошибка. Для данного события не установлено никаких деталей."
+
+#: .\songbook\views.py:1071
+msgid "Error, view condition is not defined."
+msgstr "Ошибка. Режим просмотра не определен."
+
+#: .\songbook\views.py:1126
+msgid "On Stage"
+msgstr "Сцена"
+
+#: .\songbook\views.py:1145
+msgid ""
+"Thank you for your feedback. If you have given us your contact information, "
+"we will get back to you as soon as possible"
+msgstr ""
+"Спасибо за Ваш отзыв. Если Вы предоставили нам Ваши контактные данные, мы "
+"свяжемся с Вами в ближайшее время"
+
+#: .\songbook\views.py:1151
+msgid "Contact us"
+msgstr "Свяжитесь с нами"

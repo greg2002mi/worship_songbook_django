@@ -12,6 +12,7 @@
     {{ form|crispy }}
     <button class="btn btn-primary" type="submit">{% translate "Login" %}</button>
   </form>
-  <p class="text-center">{% translate "Don't have an account? " %}<a href="/register">{% translate "Create an account" %}</a>.</p>
+  <p class="text-center">{% translate "Don't have an account? " %}<a href="/register">{% translate "Create an account" %}</a><br>
+  <a href="{% url 'password_reset' %}"><i>Forgot Password?</i></a></p>
 </div>
 {% endblock %}

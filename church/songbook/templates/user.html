@@ -52,9 +52,9 @@
 		<div class="card-header">Recent posts</div>
 		<div class="card-body">
 			<ul class="list-group">
-		{% if songlist %}
-		{% for s in songlist %}
-			<li class="list-group-item"><a href="{% url 'view_song' song_id=s.id key=s.key }}">{{ s.title }}</a> ({{ s.status }})</li>
+		{% if postlist %}
+		{% for p in postlist %}
+			<li class="list-group-item"><a href="{% url 'edit_post' post_id=p.id %}">{{ p.title }}</a> {% if p.status == 0 %} ( Draft ) {% endif %}</li>
 		{% endfor %}
 		{% endif %}
 		</ul>

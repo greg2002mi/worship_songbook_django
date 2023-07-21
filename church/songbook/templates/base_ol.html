@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	{% load i18n %}
+	<title>
+	{% if title %}
+	{{ title }} - Global Victory Church
+	{% else %}
+	Welcome to GBL's Portal
+	{% endif %}
+	</title>
+  	{% load static %}
+  	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+  	<link rel="shortcut icon" href="{% static 'favicon.ico' %}"/>
+
+	<style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+	main > .container {
+	  padding: 60px 15px 0;
+	}
+    .card{
+		box-shadow: 0 16px 48px #E3E7EB;
+	}
+    .navbar{
+		box-shadow: 0 16px 48px #E3E7EB;
+	}   
+
+    </style>
+	
+	<script>
+		function goBack() {
+		  window.history.back();
+		}
+	</script>
+	{% block head_js %}{% endblock %}	
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header><div class="container-flush sticky-top">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div class="container-fluid">
+				 <a class="navbar-brand" href="{% url 'index' %}">
+				 <img src="{% static 'logo.png' %}" alt="" width="30" height="30" class="d-inline-block align-text-top">
+				 Global Victory Church</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item">
+							<a class="nav-link active" aria-current="page" href="{% url 'index' %}">{% translate "Home" %}</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{% url 'explore' %}">{% translate "Explore" %}</a></li>
+						<li class="nav-item"><a class="nav-link" href="{% url 'songbook' %}">{% translate "Songbook" %}</a></li>
+						<li class="nav-item"><a class="nav-link" href="{% url 'tag_list' %}">{% translate "Genre&Tags" %}</a></li>
+						<li class="nav-item"><a class="nav-link" href="{% url 'calendar' %}">{% translate "Calendar" %}</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+    					  <div class="btn-header">
+							<form action="{% url 'set_language' %}" method="post">
+							  {% csrf_token %}
+							  <input name="next" type="hidden" value="{{ redirect_to }}" />
+								{% get_current_language as LANGUAGE_CODE %}
+								{% get_available_languages as LANGUAGES %}
+								{% get_language_info_list for LANGUAGES as languages %}
+								{% for language in languages %}
+								  <button type="submit" name="language" value="{{ language.code }}"
+									class="btn btn-dark">
+									{{ language.code }}
+								  </button>|&nbsp;
+								{% endfor %}
+							</form>
+						  </div>
+						
+						
+						{% if user.is_authenticated %}
+						<li class="nav-item position-relative">
+    						
+    						
+						<a class="nav-link" href="{% url 'cart' %}">  
+						  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
+  <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z"/>
+</svg>
+						  {% if user.cart %}
+						  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+							{{user.cart.all.count}}
+							<span class="visually-hidden">{% translate "Selected songs" %}</span>
+						  </span>{% endif %}<a/>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">{% translate "Logout" %}</a></li>
+						<li class="nav-item"><a class="nav-link" href="/profile">{% translate "Profile" %}</a></li>
+						{% else %}
+						<li class="nav-item"><a class="nav-link" href="{% url 'login' %}">{% translate "Login" %}</a></li>
+						<li class="nav-item"><a class="nav-link" href="/profile">{% translate "Profile" %}</a></li>
+						{% endif %}
+					</ul>
+					<form class="d-flex" method="GET" action="{% url 'songbook' %}">
+						{% csrf_token %}
+						<input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search"/>
+						<button class="btn btn-outline-success" type="submit">{% translate "Search" %}</button>
+					</form>
+				</div>
+			</div>
+		</nav>
+	</div></header>
+	<main class="flex-shring-0"><div class="container-xxl">
+    {% if messages %}
+		<ul class="messages">
+			{% for message in messages %}
+			<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+				{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+				{{ message }}
+			</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+	
+	{% block app_content %}{% endblock %}
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	</main>
+	<footer class="footer mt-auto py-3 bg-light">
+            <p class="m-0 text-dark text-center ">Copyright &copy; pc_carpenter</p>
+    </footer>	
+{% block scripts %}
+	<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static 'js/howler.js' %}"></script>
+	
+{% endblock %}
+</body>
+</html>
