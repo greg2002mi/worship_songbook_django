@@ -15,11 +15,18 @@ import environ, os
 env=environ.Env()
 environ.Env.read_env()
 
+# gettext windows 10
+os.environ.setdefault("PATH", "")  # Prevent potential issues with missing PATH variable
+os.environ["PATH"] += os.pathsep + r'C:\Program Files\gettext-iconv\bin'
+
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
+LOGIN_REDIRECT_URL = 'index'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -45,6 +52,7 @@ INSTALLED_APPS = [
     # 'songbook',
     'songbook.apps.SongbookConfig',
     'songbook.templatetags',
+    'import_export',
     'crispy_forms',
     'crispy_bootstrap4',
     'bootstrap4',
@@ -57,12 +65,12 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
     'audiofield.middleware.threadlocals.ThreadLocals',
     
 ]
@@ -114,6 +122,9 @@ DATABASES = {
     }
 }
 
+# import-export
+IMPORT_EXPORT_USE_TRANSACTIONS = True
+
 # Celery
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_RESULT_BACKEND_DB = ''.join(['postgresql+psycopg2://', os.getenv("DB_USER"), ":", os.getenv("DB_PASSWORD"), "@localhost/", os.getenv("DB_NAME")]) 
@@ -148,10 +159,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 LANGUAGES = (
-    ("en-us", "US English"),
+    ("en", "US English"),
     ("ko", "Korean"),
     ("ru", "Russian"),
     
@@ -171,8 +182,23 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
+
+# Mailing system
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
+EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

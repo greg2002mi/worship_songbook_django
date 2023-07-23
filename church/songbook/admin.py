@@ -1,4 +1,5 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 import os
@@ -6,7 +7,7 @@ import os
 # Register your models here.
 from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, Audio, Profile
 
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(ImportExportModelAdmin):
     list_display = ('title', 'status','created_on')
     list_filter = ("status",)
     search_fields = ['title', 'body']
@@ -35,7 +36,7 @@ class AudioFileAdmin(admin.ModelAdmin):
         del actions['delete_selected']
         return actions
 
-class SongAdmin(admin.ModelAdmin):
+class SongAdmin(ImportExportModelAdmin):
     list_display = ( 'id','title', 'singer', 'key', 'minor', 'get_publisher', 'status','timestamp')
     list_filter = ("title",)
     search_fields = ['title', 'singer','lyrics']
