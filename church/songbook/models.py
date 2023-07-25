@@ -97,7 +97,7 @@ def delete_files_when_file_changed(sender,instance, **kwargs):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(default='default.png', upload_to='profile_images/')
-    about_me = models.TextField(max_length=140)
+    about_me = models.TextField(max_length=140, blank=True, null=True)
     mobile_no = PhoneNumberField(blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
     
