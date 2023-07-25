@@ -195,20 +195,20 @@
 			  </div>
 			{% endfor %}
 		{% elif viewtype == 3 %}
-			{% for index, state, images in stage_two %}
+			{% for index, state, chords, images in stage_two %}
 				<div class="swiper-slide">
 				<br>
 			  <br>
 			  <br>
 				<div class="col-12"><center><h4>Song {{ index }} </h4></center></div>
-					{% if state %}
+					{% if state is True %}
 						{% for url in images %}
 						<div class="image">
 						<img src="{{ url }}"/>
 						</div>
 						{% endfor %}
 					{% endif %}
-					{% if not state %}
+					{% if state is False %}
 						{% for index_list, chords, lyrics in stage_one %}
 							{% if index == index_list %}
 								{{ chords|safe }}
