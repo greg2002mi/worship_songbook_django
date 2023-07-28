@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 import os
 
 # Register your models here.
-from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, Audio, Profile
+from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, Audio, Profile, BgImg
 
 class PostAdmin(ImportExportModelAdmin):
     list_display = ('title', 'status','created_on')
@@ -49,6 +49,11 @@ class ImageAdmin(admin.ModelAdmin):
     list_filter = ("song",)
     search_fields = ['filename', 'song']
     
+class BgIgmAdmin(admin.ModelAdmin):
+    list_display = ( 'title', 'filename','image')
+    list_filter = ("title",)
+    search_fields = ['title', 'filename', 'song']
+    
 class TagAdmin(admin.ModelAdmin):
     list_display = ( 'name', 'created_on')
     list_filter = ("name",)
@@ -80,3 +85,4 @@ admin.site.register(Song, SongAdmin)
 admin.site.register(Lists)
 admin.site.register(ListItem, ListItemsAdmin)
 admin.site.register(Image)
+admin.site.register(BgImg, BgIgmAdmin)
