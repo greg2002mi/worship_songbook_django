@@ -178,6 +178,18 @@ class Image(models.Model):
         
     def __str__(self):
         return str(self.date)
+    
+class BgImg(models.Model):
+    title = models.CharField(max_length=150)
+    filename = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='bg/')
+    date = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering=['id']
+        
+    def __str__(self):
+        return str(self.title)
 
 class Audio(models.Model):
     title = models.CharField(max_length=150)

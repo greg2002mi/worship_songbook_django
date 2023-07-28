@@ -6,7 +6,7 @@ def clean_text(text):
     # Remove chords in square brackets from the text
     return re.sub(r'\[[^\]]+\]', '', text)
 
-def CreatePptx(lyrics, output_filename, bg_path):
+def CreatePptx(lyrics, bg_path):
     # Split the lyrics into lines
     lines = lyrics.split('\n')
 
@@ -46,6 +46,8 @@ def CreatePptx(lyrics, output_filename, bg_path):
     # Iterate through each line
     for line in lines:
         line = line.strip()
+        if line.startswith("{Intro}"):
+            continue
         if line.startswith("{") and line.endswith("}"):
             # If the line is a section header like {Intro}, {Chorus}, {Verse 1}, etc.
             if slide is not None and text:
@@ -83,4 +85,5 @@ def CreatePptx(lyrics, output_filename, bg_path):
         text_frame.auto_size = True
 
     # Save the presentation to the specified output filename
-    presentation.save(output_filename)
+    # presentation.save(output_filename)
+    return presentation

@@ -6,7 +6,7 @@ from django.core.paginator import (EmptyPage, PageNotAnInteger,
 Paginator)
 from django.views import generic
 from django.urls import reverse, reverse_lazy
-from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, LANG, CHORDNOTE, Audio, Issues
+from .models import Post, Mlinks, Tag, Song, Lists, ListItem, Image, LANG, CHORDNOTE, Audio, Issues, BgImg
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -18,6 +18,7 @@ from .forms import (AddSongForm, Transpose, AddTagForm, PostForm, EditPostForm, 
                     SongsForm, EmptyForm, EditSongForm, Assign2Event, NewUForm, UpdateUForm, UpdateProfileForm, 
                     UploadAvatarForm, AddSongTagForm, AddMediaForm, AddEventForm)
 from .core import Chordpro_html
+from .slides import CreatePptx
 from django import forms
 import os, uuid, json
 
@@ -440,6 +441,25 @@ def view_song(request, song_id, key):
             
         }
         return render(request, 'view_song.html', context)
+
+def download_presentation(request, song_id, bg):
+    song = get_object_or_404(Song, pk=song_id)
+    lyrics = song.lyrics
+    # make bg model that stores various backgrounds for presentation.
+    bgimg = get_object_or_404(BgImg, pk=song_id)
+    # Create presentation
+    presentation = CreatePptx(lyrics, bgimg.image.url)
+    
+    # Save the presentation to a BytesIO buffer
+    from io import BytesIO
+    buffer = BytesIO()
+    presentation.save(buffer)
+    
+    # Create the HttpResponse object with the presentation content
+    response = HttpResponse(buffer.getvalue(), content_type="application/vnd.openxmlformats-officedocument.presentationml.presentation")
+    response["Content-Disposition"] = "attachment; filename={}.pptx".format(song.title)
+
+    return response
 
 @login_required
 def delete_song(request, song_id):
