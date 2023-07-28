@@ -209,16 +209,14 @@ def make_post(request):
             return redirect('confirm_post', post_id)
         else:
             messages.error(request, _("Not validated."))
-            return redirect('make_post', post_id)
+            return redirect('index')
         
 def confirm_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
+        form = EditPostForm(request.POST, instance=post)
         if form.is_valid(): 
-            post = form.save(commit=False)
-            post.status = 1
-            post.save()
+            form.save()
             messages.success(request, _("Your post is on air."))
             return redirect('index')
     else:
@@ -231,7 +229,7 @@ def confirm_post(request, post_id):
 def edit_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
+        form = EditPostForm(request.POST, instance=post)
         if form.is_valid(): 
             form.save()
             messages.success(request, _("Your post is on air."))
@@ -1165,7 +1163,7 @@ def onstage(request, eventid, viewtype):
 }
     
     stage_one = zip(stage_mode["id"], stage_mode["chords"], stage_mode["lyrics"])
-    stage_two = zip(stage_mode["id"], stage_mode["state"], stage_mode["images"])
+    stage_two = zip(stage_mode["id"], stage_mode["state"], stage_mode["chords"], stage_mode["images"])
     context = {
         'title': _('On Stage'),
         'songlist': songlist, 

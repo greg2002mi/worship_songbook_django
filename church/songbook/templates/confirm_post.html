@@ -46,6 +46,16 @@
             {{ form.body }}
 			</div>
         </div>
+		<div class="row mb-3">
+            <div class="alert alert-warning" role="alert">
+			{{ form.status.errors }}
+			<div class="col-sm-2 col-form-label">
+			<label for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+			</div>
+			<div class="col-10">
+            {{ form.status }}
+			</div></div>
+        </div>
         <div class="d-grid gap-2 col-2 mx-auto">
 			<input type="submit" class='btn btn-success' value='{% translate "Publish" %}'/>
 			
