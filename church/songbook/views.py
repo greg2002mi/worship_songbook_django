@@ -20,7 +20,7 @@ from .forms import (AddSongForm, Transpose, AddTagForm, PostForm, EditPostForm, 
 from .core import Chordpro_html
 from .slides import CreatePptx
 from django import forms
-import os, uuid, json
+import os, uuid, json, re
 
 from uuid import uuid4
 
@@ -31,6 +31,14 @@ from django.utils import timezone
 from django.core.mail import send_mail  # later to send mail - send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
 from django.contrib.auth.views import PasswordResetConfirmView, PasswordResetView
 
+
+## pptx creation
+from pptx import Presentation
+from pptx.util import Inches, Cm, Pt
+from io import BytesIO
+from pptx.dml.color import RGBColor
+from pptx.enum.text import MSO_ANCHOR, MSO_AUTO_SIZE, PP_ALIGN
+## pptx creation
 
 PAGE_SIZE = getattr(settings, "PAGE_SIZE", 50)
 
@@ -1111,6 +1119,120 @@ def lists(request, list_id):
         'deleteform': deleteform,
         }
     return render(request, 'event_detail.html', context)
+
+### presentation creation
+
+# def createpresentation(request, list_id):
+#     event = get_object_or_404(Lists, pk=list_id)
+
+def create_list_items(song_id):
+    song = get_object_or_404(Song, pk=song_id)
+    lyrics = song.lyrics
+    lyrics = lyrics.replace('\n', '\x0A')
+    # Remove {Intro} to {Chorus} or {Verse} and clean up []
+    cleaned_lyrics = re.sub(r'\{Intro\}.*?\{(?:Chorus|Verse \d+)\}', '', lyrics, flags=re.DOTALL)
+    cleaned_lyrics = re.sub(r'\[.*?\]', '', cleaned_lyrics)
+
+    # Split by section
+    sections = re.split(r'\{(?:Chorus|Verse \d+|Pre-Chorus|Ending)\}', cleaned_lyrics)
+    # sections = [section.strip() for section in sections if section.strip()]
+
+    # Create ListItem instances
+    li = []
+    for section in sections:
+        lines = section.split('\n')
+        li.append([line.strip() for line in lines if line.strip()])
+
+    return li
+
+
+
+def create_presentation(request, list_id, background_color=None):
+    try:
+        event = Lists.objects.get(pk=list_id)
+        list_items = event.items.all()
+
+        # Create a presentation
+        prs = Presentation()
+        
+        slide_width = Inches(16)  # Adjust the width as needed (or use Cm for centimeters)
+        slide_height = Inches(9)  # Adjust the height as needed (or use Cm for centimeters)
+        prs.slide_width = slide_width
+        prs.slide_height = slide_height
+        
+        for item in list_items:
+            
+            song = item.song.first()
+            lyrlist = []
+            lyrlist = create_list_items(song.id)
+            
+            if not len(lyrlist):
+                slide = prs.slides.add_slide(prs.slide_layouts[5])
+                if background_color:
+                    slide.background.fill.solid()
+                    slide.background.fill.fore_color.rgb = int(background_color, 16)
+                else:
+                    slide.background.fill.solid()
+                    slide.background.fill.fore_color.rgb = RGBColor(0, 0, 0)  # Black background
+            else:
+                for sl in lyrlist:
+                    slide = prs.slides.add_slide(prs.slide_layouts[1])  # Use a blank slide layout
+        
+                    # Set the background color or image for the slide
+                    if background_color:
+                        slide.background.fill.solid()
+                        slide.background.fill.fore_color.rgb = int(background_color, 16)
+                    else:
+                        slide.background.fill.solid()
+                        slide.background.fill.fore_color.rgb = RGBColor(0, 0, 0)  # Black background
+        
+                    # Add title and content to the slide
+                    # shapes = slide.shapes
+                    # title_shape = shapes.title
+                    # title_shape.text = "Song " + str(item.listorder)
+            # Add lyrics or other content to the slide
+            # lyrics = " ".join([song.lyrics for song in item.song.all()])
+                    left = Cm(1)
+                    top = Cm(2)
+                    width = Inches(15)
+                    height = Inches(7)
+                    txBox = slide.shapes.add_textbox(left, top, width, height)
+                    tf = txBox.text_frame
+                    tf.vertical_anchor = MSO_ANCHOR.TOP
+                    tf.word_wrap = True
+                    tf.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
+                    p = tf.add_paragraph()
+                    p.text = "Song " + str(item.listorder)
+                    p.font.bold = True
+                    p.font.size = Pt(18)
+                    p.font.color.rgb = RGBColor(255, 255, 255)  # White text
+                    for sll in sl:
+                        p = tf.add_paragraph()
+                        p.text = sll
+                        p.font.bold = True
+                        p.font.size = Pt(36)
+                        p.alignment = PP_ALIGN.CENTER
+                        p.font.color.rgb = RGBColor(255, 255, 255)  # White text
+
+        # Create a byte stream to save the presentation
+        presentation_stream = BytesIO()
+        prs.save(presentation_stream)
+        presentation_stream.seek(0)
+
+        # Create an HTTP response with the presentation
+        response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.presentationml.presentation")
+        response["Content-Disposition"] = f'attachment; filename="{event.title}.pptx"'
+        response.write(presentation_stream.read())
+
+        return response
+
+    except Lists.DoesNotExist:
+        # Handle the case where the list doesn't exist
+        messages.error(request, _('Error, list is empty.'))
+        return redirect('list', list_id=list_id)    
+    
+
+### testing presentation creation
 
 # on stage mode. in general three modes. lyrics with chords, lyrics, or images
 def onstage(request, eventid, viewtype):
