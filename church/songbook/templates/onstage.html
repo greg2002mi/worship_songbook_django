@@ -84,54 +84,54 @@
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
         <!--
 		<li class="nav-item">
-          <a class="nav-link disabled">{{ _('Settings:') }}</a>
+          <a class="nav-link disabled">{% translate "Settings:" %}</a>
         </li>
 		-->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ _('L_size') }}
+            {% translate "L_size" %}
           </a>
           <ul class="dropdown-menu">
 			<li><hr class="dropdown-divider"></li>
 			<li><a class="dropdown-item" href="#" onclick="changeFontSize(10)">10px</a></li>
-			<li><a class="dropdown-item" href="#" onclick="changeFontSize(16)">16px {{ _('Normal') }}</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeFontSize(16)">16px {% translate "Normal" %}</a></li>
             <li><a class="dropdown-item" href="#" onclick="changeFontSize(20)">20px</a></li>
 			<li><a class="dropdown-item" href="#" onclick="changeFontSize(24)">24px</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ _('C_size') }}
+            {% translate "C_size" %}
           </a>
           <ul class="dropdown-menu">
 			<li><hr class="dropdown-divider"></li>
 			<li><a class="dropdown-item" href="#" onclick="changeCFontSize(10)">10px</a></li>
-			<li><a class="dropdown-item" href="#" onclick="changeCFontSize(16)">16px {{ _('Normal') }}</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeCFontSize(16)">16px {% translate "Normal" %}</a></li>
             <li><a class="dropdown-item" href="#" onclick="changeCFontSize(20)">20px</a></li>
 			<li><a class="dropdown-item" href="#" onclick="changeCFontSize(24)">24px</a></li>
           </ul>
         </li>
 		<li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ _('Spacing') }}
+            {% translate "Spacing" %}
           </a>
           <ul class="dropdown-menu">
 			<li><hr class="dropdown-divider"></li>
-			<li><a class="dropdown-item" href="#" onclick="changeMargin(-5)">{{ _('Extralow') }}</a></li>
-			<li><a class="dropdown-item" href="#" onclick="changeMargin(-2)">{{ _('Low') }}</a></li>
-            <li><a class="dropdown-item" href="#" onclick="changeMargin(0.5)">{{ _('Normal') }}</a></li>
-			<li><a class="dropdown-item" href="#" onclick="changeMargin(1)">{{ _('Tall') }}</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeMargin(-5)">{% translate "Extralow" %}</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeMargin(-2)">{% translate "Low" %}</a></li>
+            <li><a class="dropdown-item" href="#" onclick="changeMargin(0.5)">{% translate "Normal" %}</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeMargin(1)">{% translate "Tall" %}</a></li>
           </ul>
         </li>
 		<li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ _('Char_W') }}
+            {% translate "Char_W" %}
           </a>
           <ul class="dropdown-menu">
 			<li><hr class="dropdown-divider"></li>
-			<li><a class="dropdown-item" href="#" onclick="changeCharacterWidth(-0.5)">{{ _('Slim') }}</a></li>
-			<li><a class="dropdown-item" href="#" onclick="changeCharacterWidth(0)">{{ _('Normal') }}</a></li>
-            <li><a class="dropdown-item" href="#" onclick="changeCharacterWidth(0.5)">{{ _('Wide') }}</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeCharacterWidth(-0.5)">{% translate "Slim" %}</a></li>
+			<li><a class="dropdown-item" href="#" onclick="changeCharacterWidth(0)">{% translate "Normal" %}</a></li>
+            <li><a class="dropdown-item" href="#" onclick="changeCharacterWidth(0.5)">{% translate "Wide" %}</a></li>
           </ul>
         </li>
       </ul>
