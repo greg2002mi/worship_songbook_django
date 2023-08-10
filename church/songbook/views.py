@@ -1131,10 +1131,13 @@ def create_list_items(song_id):
     lyrics = lyrics.replace('\n', '\x0A')
     # Remove {Intro} to {Chorus} or {Verse} and clean up []
     cleaned_lyrics = re.sub(r'\{Intro\}.*?\{(?:Chorus|Verse \d+)\}', '', lyrics, flags=re.DOTALL)
+    cleaned_lyrics = re.sub(r'\{Instrumental\}.*?\{(?:Chorus|Verse \d+|Pre-Chorus|Ending|Bridge)\}', '', cleaned_lyrics, flags=re.DOTALL)
     cleaned_lyrics = re.sub(r'\[.*?\]', '', cleaned_lyrics)
+    # Remove all ... .. ..  .  .  extra dots and spaces
+    cleaned_lyrics = re.sub(r'\.(?![a-zA-Z\n])\s*', '', cleaned_lyrics)
 
     # Split by section
-    sections = re.split(r'\{(?:Chorus|Verse \d+|Pre-Chorus|Ending)\}', cleaned_lyrics)
+    sections = re.split(r'\{(?:Chorus|Verse \d+|Pre-Chorus|Ending|Bridge)\}', cleaned_lyrics)
     # sections = [section.strip() for section in sections if section.strip()]
 
     # Create ListItem instances
@@ -1150,7 +1153,7 @@ def create_list_items(song_id):
 def create_presentation(request, list_id, background_color=None):
     try:
         event = Lists.objects.get(pk=list_id)
-        list_items = event.items.all()
+        list_items = event.items.order_by("listorder").all()
 
         # Create a presentation
         prs = Presentation()
@@ -1167,7 +1170,7 @@ def create_presentation(request, list_id, background_color=None):
             lyrlist = create_list_items(song.id)
             
             if not len(lyrlist):
-                slide = prs.slides.add_slide(prs.slide_layouts[5])
+                slide = prs.slides.add_slide(prs.slide_masters[0].slide_layouts[6])
                 if background_color:
                     slide.background.fill.solid()
                     slide.background.fill.fore_color.rgb = int(background_color, 16)
@@ -1192,20 +1195,32 @@ def create_presentation(request, list_id, background_color=None):
                     # title_shape.text = "Song " + str(item.listorder)
             # Add lyrics or other content to the slide
             # lyrics = " ".join([song.lyrics for song in item.song.all()])
+                    # first textbox with a label of a song        
                     left = Cm(1)
-                    top = Cm(2)
+                    top = Cm(1)
+                    width = Inches(15)
+                    height = Inches(1)
+                    tx1Box = slide.shapes.add_textbox(left, top, width, height)
+                    tf1 = tx1Box.text_frame
+                    tf1.vertical_anchor = MSO_ANCHOR.TOP
+                    tf1.word_wrap = False
+                    tf1.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
+                    p1 = tf1.add_paragraph()
+                    p1.text = "Song " + str(item.listorder) + ": " + item.title
+                    p1.font.bold = True
+                    p1.font.size = Pt(12)
+                    p1.font.color.rgb = RGBColor(105, 105, 105)  # White text
+                    
+                    # main textbox with lyrics
+                    left = Cm(1)
+                    top = Cm(3)
                     width = Inches(15)
                     height = Inches(7)
                     txBox = slide.shapes.add_textbox(left, top, width, height)
                     tf = txBox.text_frame
-                    tf.vertical_anchor = MSO_ANCHOR.TOP
+                    tf.vertical_anchor = MSO_ANCHOR.MIDDLE
                     tf.word_wrap = True
                     tf.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
-                    p = tf.add_paragraph()
-                    p.text = "Song " + str(item.listorder)
-                    p.font.bold = True
-                    p.font.size = Pt(18)
-                    p.font.color.rgb = RGBColor(255, 255, 255)  # White text
                     for sll in sl:
                         p = tf.add_paragraph()
                         p.text = sll

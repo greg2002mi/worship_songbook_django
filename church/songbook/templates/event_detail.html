@@ -209,9 +209,12 @@
 
 		</div>
 	</div>
-	<div class="row">
-		<div class="col">
-		<a href="{% url 'create_presentation' list_id=event.id %}">Make a presentation</a>
+	<h5>{% translate "Create Powerpoint presentation for service" %}</h5>
+	<div class="row bg-light">
+		
+		<div class="col-10 text-muted">{% translate "This feature is currently in beta mode. Thus it only builds a ppt file out of the current list with fixed settings. Background is set to black and text set to white." %}</div>
+		<div class="col-2 text-end">
+		<a class="btn btn-success" href="{% url 'create_presentation' list_id=event.id %}">{% translate "Build a presentation" %}</a>
 		</div>
 	</div>
 {% endblock %}

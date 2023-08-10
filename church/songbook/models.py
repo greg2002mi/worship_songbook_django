@@ -178,12 +178,26 @@ class Image(models.Model):
         
     def __str__(self):
         return str(self.date)
+
+### for uploading separate ppts
+# class Document(models.Model):
+#     name = models.CharField(max_length=255, blank=True)
+#     document = models.FileField(upload_to='documents/')
+#     uploaded_at = models.DateTimeField(auto_now_add=True)
+#     song = models.ForeignKey(Song, on_delete=models.CASCADE, related_name="doc")
+    
+#     class Meta:
+#         ordering=['name']
+        
+#     def __str__(self):
+#         return str(self.name)
     
 class BgImg(models.Model):
     title = models.CharField(max_length=150)
     filename = models.CharField(max_length=255)
     image = models.ImageField(upload_to='bg/')
     date = models.DateTimeField(auto_now_add=True)
+    # song = models.ForeignKey(Song, on_delete=models.CASCADE, related_name="bgimg")
     
     class Meta:
         ordering=['id']
