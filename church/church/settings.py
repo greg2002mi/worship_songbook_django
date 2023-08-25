@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'audiofield',
     'celery',
-    'django_flatpickr',
 ]
 
 MIDDLEWARE = [

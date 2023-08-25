@@ -1,0 +1,256 @@
+*** the app is solely html based. good for blogs and posts. each new line encapsulates into <p></p> ***
+
+pip install django-tinymce
+
+Spellchecking needs to install PyEnchant
+
+FreeBSD
+The quickest way is to install libenchant using pkg(8):
+
+pkg install enchant2
+
+Linux
+The quickest way is to install libenchant using the package manager of your current distribution. PyEnchant tries to be compatible with a large number of libenchant versions. If you find an incompatibility with your libenchant installation, feel free to open a bug report.
+To detect the libenchant binaries, PyEnchant uses ctypes.util.find_library(), which requires ldconfig, gcc, objdump or ld to be installed. This is the case on most major distributions, however statically linked distributions (like Alpine Linux) might not bring along binutils by default.
+
+<script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+
+<style>
+.mce-content-body {
+    white-space: pre-line; /* Preserve whitespace and newlines */
+}
+</style>
+
+<script>
+// Initialize TinyMCE
+tinymce.init({
+    mode : "textareas",
+	selector: '#lyrics-editor', // Replace with the ID of your textarea
+    plugins: 'spellchecker custombuttons', // Include only the spellchecker plugin
+    toolbar: 'spellchecker cus_btn_intro cus_btn_verse1 cus_btn_verse2 cus_btn_verse3 cus_btn_verse4 cus_btn_chorus cus_btn_prechorus cus_btn_bridge cus_btn_instr custom_button_chord cus_btn_cc cus_btn_dd cus_btn_ee cus_btn_ff cus_btn_gg cus_btn_aa cus_btn_bb cus_btn_c cus_btn_d cus_btn_e cus_btn_f cus_btn_g cus_btn_a cus_btn_b cus_btn_sharp cus_btn_bimol cus_btn_maj cus_btn_dim cus_btn_bass cus_btn_bro cus_btn_brc', // Use only the spellchecker toolbar
+	forced_root_block: 'linebreak',
+	invalid_elements: "div",
+	force_br_newlines : true,
+	force_p_newlines : false,
+	menubar: false, // Hide the default menubar
+	setup: function (editor) {
+        // Add custom buttons to the editor
+        editor.ui.registry.addButton('cus_btn_intro', {
+            text: 'Intro',
+            onAction: function (_) {
+                editor.insertContent('{Intro}');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_verse1', {
+            text: 'Verse 1',
+            onAction: function (_) {
+                editor.insertContent('{Verse 1}');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_verse2', {
+            text: 'Verse 2',
+            onAction: function (_) {
+                editor.insertContent('{Verse 2}');
+            }
+        });
+        
+		editor.ui.registry.addButton('cus_btn_verse3', {
+            text: 'Verse 3',
+            onAction: function (_) {
+                editor.insertContent('{Verse 3}');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_verse4', {
+            text: 'Verse 4',
+            onAction: function (_) {
+                editor.insertContent('{Verse 4}');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_prechorus', {
+            text: 'Pre-Chorus',
+            onAction: function (_) {
+                editor.insertContent('{Pre-Chorus}');
+            }
+        });		
+		
+        editor.ui.registry.addButton('cus_btn_chorus', {
+            text: 'Chorus',
+            onAction: function (_) {
+                editor.insertContent('{Chorus}');
+            }
+        });
+        
+        editor.ui.registry.addButton('cus_btn_bridge', {
+            text: 'Bridge',
+            onAction: function (_) {
+                editor.insertContent('{Bridge}');
+            }
+        });
+		
+        editor.ui.registry.addButton('cus_btn_instr', {
+            text: 'Instrumental',
+            onAction: function (_) {
+                editor.insertContent('{Instrumental}');
+            }
+        });		
+		
+        editor.ui.registry.addButton('custom_button_chord', {
+            text: '[]',
+            onAction: function (_) {
+                editor.insertContent('[]');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_cc', {
+            text: '[C]',
+            onAction: function (_) {
+                editor.insertContent('[C]');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_dd', {
+            text: '[D]',
+            onAction: function (_) {
+                editor.insertContent('[D]');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_ee', {
+            text: '[E]',
+            onAction: function (_) {
+                editor.insertContent('[E]');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_ff', {
+            text: '[F]',
+            onAction: function (_) {
+                editor.insertContent('[F]');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_gg', {
+            text: '[G]',
+            onAction: function (_) {
+                editor.insertContent('[G]');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_aa', {
+            text: '[A]',
+            onAction: function (_) {
+                editor.insertContent('[A]');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_bb', {
+            text: '[B]',
+            onAction: function (_) {
+                editor.insertContent('[B]');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_c', {
+            text: 'C',
+            onAction: function (_) {
+                editor.insertContent('C');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_d', {
+            text: 'D',
+            onAction: function (_) {
+                editor.insertContent('D');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_e', {
+            text: 'E',
+            onAction: function (_) {
+                editor.insertContent('E');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_f', {
+            text: 'F',
+            onAction: function (_) {
+                editor.insertContent('F');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_g', {
+            text: 'G',
+            onAction: function (_) {
+                editor.insertContent('G');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_a', {
+            text: 'A',
+            onAction: function (_) {
+                editor.insertContent('A');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_b', {
+            text: 'B',
+            onAction: function (_) {
+                editor.insertContent('B');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_sharp', {
+            text: '#',
+            onAction: function (_) {
+                editor.insertContent('#');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_bimol', {
+            text: 'b',
+            onAction: function (_) {
+                editor.insertContent('b');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_maj', {
+            text: 'maj',
+            onAction: function (_) {
+                editor.insertContent('maj');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_dim', {
+            text: 'dim',
+            onAction: function (_) {
+                editor.insertContent('dim');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_bass', {
+            text: '/',
+            onAction: function (_) {
+                editor.insertContent('/');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_bro', {
+            text: '[',
+            onAction: function (_) {
+                editor.insertContent('[');
+            }
+        });
+		
+		editor.ui.registry.addButton('cus_btn_brc', {
+            text: ']',
+            onAction: function (_) {
+                editor.insertContent(']');
+            }
+        });
+	}
+});
+</script>

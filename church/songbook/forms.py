@@ -81,9 +81,17 @@ class UpdateUForm(forms.ModelForm):
         fields = ['username', 'email', 'last_name', 'first_name']
         
 class UpdateProfileForm(forms.ModelForm):
-    about_me = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
-    mobile_no = PhoneNumberField()
-    birthday = forms.DateField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+        
+        self.fields['mobile_no'].widget.attrs['style'] = 'min-width: 100%'
+        self.fields['mobile_no'].widget.attrs['placeholder'] = _('Phone number')
+        self.fields['birthday'].widget.attrs['class'] = 'datepicker'
+        self.fields['about_me'].widget.attrs['style'] = 'min-width: 100%'
+        self.fields['about_me'].widget.attrs['placeholder'] = _('Write about yourself...')
+        self.fields['about_me'].widget.attrs['rows'] = '10'
     
     class Meta:
         model = Profile
@@ -92,6 +100,9 @@ class UpdateProfileForm(forms.ModelForm):
             'about_me': _('About_me'),
             'mobile_no': _('Mobile'),
             'birthday': _('My birthday'),
+        }
+        widgets = {
+            "birthday": DatePickerInput(),
         }
 
 class UploadAvatarForm(forms.ModelForm):

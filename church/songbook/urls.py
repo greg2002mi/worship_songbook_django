@@ -67,6 +67,9 @@ urlpatterns = [
     path("add_event", views.add_event, name="add_event"),
     path("lists/<int:list_id>", views.lists, name="lists"),
     
+    path("create_presentation/<int:list_id>", views.create_presentation, name="create_presentation"),
+    
+    
     path('onstage/<int:eventid>/<int:viewtype>', views.onstage, name='onstage'),
     
     path('cart', views.cart, name='cart'),

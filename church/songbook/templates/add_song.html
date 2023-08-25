@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
+
+{% block head_js %}
+
+{% endblock %}
 
 {% block app_content %}
     <h4>{% translate "Add a New Song" %}</h4>
@@ -59,6 +64,9 @@
 				<a class="btn btn-secondary btn-sm" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
 				  {% translate "Instructions" %}
 				</a>
+				<a class="btn btn-primary btn-sm" data-bs-toggle="offcanvas" href="#offcanvasTools" role="button" aria-controls="offcanvasTools">
+				  {% translate "Insert Chords" %}
+				</a>
 			</div>      
 		</div>
         <div class="row mb-3">
@@ -91,6 +99,1063 @@
         <li>{% translate "Chords must be located in front of a letter, where chord should be located." %}</li>
       </ul>
     </div>
+  </div>
+</div>
+<div id="chordContextMenu" style="position: absolute; display: none;">
+    <div class="card" style="width: 30rem;">
+		<div class="card-body">
+	
+			<nav>
+			  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+				<button class="nav-link active" id="nav-c-tab" data-bs-toggle="tab" data-bs-target="#nav-c" type="button" role="tab" aria-controls="nav-c" aria-selected="true">C</button>
+				<button class="nav-link" id="nav-d-tab" data-bs-toggle="tab" data-bs-target="#nav-d" type="button" role="tab" aria-controls="nav-d" aria-selected="false">D</button>
+				<button class="nav-link" id="nav-e-tab" data-bs-toggle="tab" data-bs-target="#nav-e" type="button" role="tab" aria-controls="nav-e" aria-selected="false">E</button>
+				<button class="nav-link" id="nav-f-tab" data-bs-toggle="tab" data-bs-target="#nav-f" type="button" role="tab" aria-controls="nav-f" aria-selected="false">F</button>
+				<button class="nav-link" id="nav-g-tab" data-bs-toggle="tab" data-bs-target="#nav-g" type="button" role="tab" aria-controls="nav-g" aria-selected="false">G</button>
+				<button class="nav-link" id="nav-a-tab" data-bs-toggle="tab" data-bs-target="#nav-a" type="button" role="tab" aria-controls="nav-a" aria-selected="false">A</button>
+				<button class="nav-link" id="nav-b-tab" data-bs-toggle="tab" data-bs-target="#nav-b" type="button" role="tab" aria-controls="nav-b" aria-selected="false">B</button>
+			  </div>
+			</nav>
+			<div class="tab-content" id="nav-tabContent">
+			  <div class="tab-pane fade show active" id="nav-c" role="tabpanel" aria-labelledby="nav-v-tab">
+					<h5>C - major: Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="C chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C]">C</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Dm]">Dm</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Em]">Em</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F]">F</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G]">G</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Gsus4]">Gsus4</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Am]">Am</button>
+					</div>
+					<hr class="hr" />
+					<h5>7th</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="C chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C7]">C7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Cmaj7]">Cmaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Dm7]">Dm7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Em7]">Em7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F7]">F7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Fmaj7]">Fmaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G7]">G7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Am7]">Am7</button>
+					</div>
+					<hr class="hr" />
+					<h5>Non-Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="C chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A]">A</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D/F#]">D/F#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[E]">E</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B]">B</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bb]">Bb</button>
+
+					</div>
+					<hr class="hr" />
+					<h5>7th</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="C chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A7]">A7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D7]">D7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[E7]">E7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B7]">B7</button>		  	  
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bb7]">Bb7</button>
+					</div>
+					<hr class="hr" />
+			  </div>
+			  
+			  
+			  <div class="tab-pane fade" id="nav-d" role="tabpanel" aria-labelledby="nav-d-tab">
+					<h5>D - major: Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="D chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D]">D</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Em]">Em</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#m]">F#m</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G]">G</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A]">A</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Asus4]">Asus4</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bm]">Bm</button>
+					</div>
+					<hr class="hr" />
+					<h5>7th</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="D chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D7]">D7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Dmaj7]">Dmaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Em7]">Em7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#m7]">F#m7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G7]">G7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Gmaj7]">Gmaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A7]">A7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bm7]">Bm7</button>
+					</div>
+					<hr class="hr" />
+					<h5>Non-Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="D chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B]">B</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[E/G#]">E/G#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F]">F#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B]">C#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bb]">C</button>
+
+					</div>
+					<hr class="hr" />
+					<h5>7th</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="D chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B7]">B7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[E7]">E7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#7]">F#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C7]">C7</button>		  	  
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bb7]">C#7</button>
+					</div>
+					<hr class="hr" />
+
+			  </div>
+			  
+			  
+			  <div class="tab-pane fade" id="nav-e" role="tabpanel" aria-labelledby="nav-e-tab">
+					<h5>E - major: Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="E chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[E]">E</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#m]">F#m</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G#m]">G#m</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A]">A</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B]">B</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bsus4]">Bsus4</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C#m]">C#m</button>
+					</div>
+					<hr class="hr" />
+					<h5>7th</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="E chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[E7]">E7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Emaj7]">Emaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#m7]">F#m7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G#m7]">G#m7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A7]">A7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Amaj7]">Amaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B7]">B7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C#m7]">C#m7</button>
+					</div>
+					<hr class="hr" />
+					<h5>Non-Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="E chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C]">C</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#/A#]">F#/A#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G#]">G#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D#]">D#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D]">D</button>
+					</div>
+					<hr class="hr" />
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="E chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C7]">C7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#7]">F#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G#7]">G#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D#7]">D#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D7]">D7</button>
+					</div>	  
+			  
+			  </div>
+			  
+			  
+			  <div class="tab-pane fade" id="nav-f" role="tabpanel" aria-labelledby="nav-f-tab">
+					<h5>F - major: Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="F chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F]">F</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Gm]">Gm</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Am]">Am</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bb]">Bb</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C]">C</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Csus4]">Csus4</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Dm]">Dm</button>
+					</div>
+					<hr class="hr" />
+					<h5>7th</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="F chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F7]">F7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Fmaj7]">Fmaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Gm7]">Gm7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Am7]">Am7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bb7]">Bb7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bbmaj7]">Bbmaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C7]">C7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Dm7]">Dm7</button>
+					</div>
+					<hr class="hr" />
+					<h5>Non-Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="F chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C#]">C#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G/B]">G/B</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A]">A</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[E]">E</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D#]">D#</button>
+					</div>
+					<hr class="hr" />
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="F chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C#7]">C#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G7]">G7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A7]">A7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[E7]">E7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D#7]">D#7</button>
+					</div>	  
+			  
+			  </div>
+			  
+			  
+			  <div class="tab-pane fade" id="nav-g" role="tabpanel" aria-labelledby="nav-g-tab">
+					<h5>G - major: Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="G chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G]">G</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Am]">Am</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bm]">Bm</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C]">C</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D]">D</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Dsus4]">Dsus4</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Em]">Em</button>
+					</div>
+					<hr class="hr" />
+					<h5>7th</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="G chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G7]">G7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Gmaj7]">Gmaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Am7]">Am7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bm7]">Bm7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C7]">C7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Cmaj7]">Cmaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D7]">D7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Em7]">Em7</button>
+					</div>
+					<hr class="hr" />
+					<h5>Non-Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="G chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D#]">D#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A/C#]">A/C#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B]">B</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#]">F#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F]">F</button>
+					</div>
+					<hr class="hr" />
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="G chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D#7]">D#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A7]">A7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B7]">B7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#7]">F#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F7]">F7</button>
+					</div>	  
+			  
+			  </div>
+			  
+			  
+			  <div class="tab-pane fade" id="nav-a" role="tabpanel" aria-labelledby="nav-a-tab">
+					<h5>A - major: Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="A chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A]">A</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bm]">Bm</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C#m]">C#m</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D]">D</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[E]">E</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Esus4]">Esus4</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#m]">F#m</button>
+					</div>
+					<hr class="hr" />
+					<h5>7th</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="A chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A7]">A7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Amaj7]">Amaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bm7]">Bm7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C#m7]">C#m7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D7]">D7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Dmaj7]">Dmaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[E7]">E7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#m7]">F#m7</button>
+					</div>
+					<hr class="hr" />
+					<h5>Non-Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="A chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F]">F</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B/D#]">B/D#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C#]">C#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G#]">G#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G]">G</button>
+					</div>
+					<hr class="hr" />
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="A chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F]">F7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B7]">B7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C#7]">C#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G#7]">G#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G]">G7</button>
+					</div>	  
+			  </div>
+			  
+			  
+			  <div class="tab-pane fade" id="nav-b" role="tabpanel" aria-labelledby="nav-b-tab">
+					<h5>B - major: Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="B chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B]">B</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C#m]">C#m</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D#m]">D#m</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[E]">E</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#]">F#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#sus4]">F#sus4</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G#m]">G#m</button>
+					</div>
+					<hr class="hr" />
+					<h5>7th</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="B chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[B7]">B7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Bmaj7]">Bmaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C#m7]">C#m7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D#m7]">D#m7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[E7]">E7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[Emaj7]">Emaj7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[F#7]">F#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G#m7]">G#m7</button>
+					</div>
+					<hr class="hr" />
+					<h5>Non-Diatonic Chords</h5>
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="B chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G]">G</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C#/F]">C#/F</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D#]">D#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A#]">A#</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A]">A</button>
+					</div>
+					<hr class="hr" />
+					<div class="cbtn-group btn-group-sm" role="group" aria-label="B chords">
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[G7]">G7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[C#7]">C#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[D#7]">D#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A#7]">A#7</button>
+					  <button type="button" class="cbtn btn-outline-primary" data-chord="[A7]">A7</button>
+					</div>	  
+			  
+			  </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasTools" aria-labelledby="offcanvasToolsLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasToolsLabel">Colored with scrolling</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <button class="btn btn-outline-info" id="btnIntro">&#123;I&#125;</button>
+	<button class="btn btn-outline-info" id="btnV1">&#123;V1&#125;</button>
+	<button class="btn btn-outline-info" id="btnV2">&#123;V2&#125;</button>
+	<button class="btn btn-outline-info" id="btnV3">&#123;V3&#125;</button>
+	<button class="btn btn-outline-info" id="btnV4">&#123;V4&#125;</button>
+	<button class="btn btn-outline-info" id="btnPChorus">&#123;Pre-Chorus&#125;</button>
+	<button class="btn btn-outline-info" id="btnChorus">&#123;Chorus&#125;</button>
+	<button class="btn btn-outline-info" id="btnBridge">&#123;Bridge&#125;</button>
+	<button class="btn btn-outline-info" id="btnEnding">&#123;Ending&#125;</button>
+	<button class="btn btn-outline-info" id="btnInstrumental">&#123;Instrumental&#125;</button>
+	<hr class="hr" />
+	<nav>
+	  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+		<button class="nav-link active" id="nav-c-tab" data-bs-toggle="tab" data-bs-target="#nav-c" type="button" role="tab" aria-controls="nav-c" aria-selected="true">C</button>
+		<button class="nav-link" id="nav-d-tab" data-bs-toggle="tab" data-bs-target="#nav-d" type="button" role="tab" aria-controls="nav-d" aria-selected="false">D</button>
+		<button class="nav-link" id="nav-e-tab" data-bs-toggle="tab" data-bs-target="#nav-e" type="button" role="tab" aria-controls="nav-e" aria-selected="false">E</button>
+		<button class="nav-link" id="nav-f-tab" data-bs-toggle="tab" data-bs-target="#nav-f" type="button" role="tab" aria-controls="nav-f" aria-selected="false">F</button>
+		<button class="nav-link" id="nav-g-tab" data-bs-toggle="tab" data-bs-target="#nav-g" type="button" role="tab" aria-controls="nav-g" aria-selected="false">G</button>
+		<button class="nav-link" id="nav-a-tab" data-bs-toggle="tab" data-bs-target="#nav-a" type="button" role="tab" aria-controls="nav-a" aria-selected="false">A</button>
+		<button class="nav-link" id="nav-b-tab" data-bs-toggle="tab" data-bs-target="#nav-b" type="button" role="tab" aria-controls="nav-b" aria-selected="false">B</button>
+	  </div>
+	</nav>
+	<div class="tab-content" id="nav-tabContent">
+	  <div class="tab-pane fade show active" id="nav-c" role="tabpanel" aria-labelledby="nav-v-tab">
+			<h5>C - major: Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="C chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnC">C</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDm">Dm</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnEm">Em</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnF">F</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnG">G</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGsus4">Gsus4</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnAm">Am</button>
+			</div>
+			<hr class="hr" />
+			<h5>7th</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="C chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnC7">C7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnCmaj7">Cmaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDm7">Dm7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnEm7">Em7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnF7">F7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnFmaj7">Fmaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnG7">G7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnAm7">Am7</button>
+			</div>
+			<hr class="hr" />
+			<h5>Non-Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="C chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnA">A</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDslFsharp">D/F#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnE">E</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnB">B</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnBb">Bb</button>
+
+			</div>
+			<hr class="hr" />
+			<h5>7th</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="C chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnA7">A7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnD7">D7</button>
+		  	  <button type="button" class="btn btn-outline-primary" id="btnE7">E7</button>
+              <button type="button" class="btn btn-outline-primary" id="btnB7">B7</button>		  	  
+              <button type="button" class="btn btn-outline-primary" id="btnBb7">Bb7</button>
+			</div>
+			<hr class="hr" />
+	  </div>
+	  
+	  
+	  <div class="tab-pane fade" id="nav-d" role="tabpanel" aria-labelledby="nav-d-tab">
+			<h5>D - major: Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="D chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnD">D</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnEm">Em</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnFmsharp">F#m</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnG">G</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnA">A</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnAsus4">Asus4</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnBm">Bm</button>
+			</div>
+			<hr class="hr" />
+			<h5>7th</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="D chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnD7">D7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDmaj7">Dmaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnEm7">Em7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnFmsharp7">F#m7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnG7">G7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGmaj7">Gmaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnA7">A7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnBm7">Bm7</button>
+			</div>
+			<hr class="hr" />
+			<h5>Non-Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="D chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnB">B</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnEslGsharp">E/G#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnF">F#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnB">C#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnBb">C</button>
+
+			</div>
+			<hr class="hr" />
+			<h5>7th</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="D chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnB7">B7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnE7">E7</button>
+		  	  <button type="button" class="btn btn-outline-primary" id="btnFsharp7">F#7</button>
+              <button type="button" class="btn btn-outline-primary" id="btnC7">C7</button>		  	  
+              <button type="button" class="btn btn-outline-primary" id="btnBb7">C#7</button>
+			</div>
+			<hr class="hr" />
+
+	  </div>
+	  
+	  
+	  <div class="tab-pane fade" id="nav-e" role="tabpanel" aria-labelledby="nav-e-tab">
+			<h5>E - major: Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="E chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnE">E</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnFmsharp">F#m</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGmsharp">G#m</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnA">A</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnB">B</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnBsus4">Bsus4</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnCmsharp">C#m</button>
+			</div>
+			<hr class="hr" />
+			<h5>7th</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="E chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnE7">E7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnEmaj7">Emaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnFmsharp7">F#m7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGmsharp7">G#m7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnA7">A7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnAmaj7">Amaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnB7">B7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnCmsharp7">C#m7</button>
+			</div>
+			<hr class="hr" />
+			<h5>Non-Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="E chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnC">C</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnFsharpslAsharp">F#/A#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGsharp">G#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDsharp">D#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnD">D</button>
+			</div>
+			<hr class="hr" />
+			<div class="btn-group btn-group-sm" role="group" aria-label="E chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnC7">C7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnFsharp7">F#7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGsharp7">G#7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDsharp7">D#7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnD7">D7</button>
+			</div>	  
+	  
+	  </div>
+	  
+	  
+	  <div class="tab-pane fade" id="nav-f" role="tabpanel" aria-labelledby="nav-f-tab">
+			<h5>F - major: Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="F chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnF">F</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGm">Gm</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnAm">Am</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnBb">Bb</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnC">C</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnCsus4">Csus4</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDm">Dm</button>
+			</div>
+			<hr class="hr" />
+			<h5>7th</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="F chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnF7">F7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnFmaj7">Fmaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGm7">Gm7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnAm7">Am7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnBb7">Bb7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnBbmaj7">Bbmaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnC7">C7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDm7">Dm7</button>
+			</div>
+			<hr class="hr" />
+			<h5>Non-Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="F chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnCsharp">C#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGslB">G/B</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnA">A</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnE">E</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDsharp">D#</button>
+			</div>
+			<hr class="hr" />
+			<div class="btn-group btn-group-sm" role="group" aria-label="F chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnCsharp7">C#7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnG7">G7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnA7">A7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnE7">E7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDsharp7">D#7</button>
+			</div>	  
+	  
+	  </div>
+	  
+	  
+	  <div class="tab-pane fade" id="nav-g" role="tabpanel" aria-labelledby="nav-g-tab">
+			<h5>G - major: Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="G chords">
+		  	  <button type="button" class="btn btn-outline-primary" id="btnG">G</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnAm">Am</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnBm">Bm</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnC">C</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnD">D</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnDsus4">Dsus4</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnEm">Em</button>
+			</div>
+			<hr class="hr" />
+			<h5>7th</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="G chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnG7">G7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGmaj7">Gmaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnAm7">Am7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnBm7">Bm7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnC7">C7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnCmaj7">Cmaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnD7">D7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnEm7">Em7</button>
+			</div>
+			<hr class="hr" />
+			<h5>Non-Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="G chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnDsharp">D#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnAslCsharp">A/C#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnB">B</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnFsharp">F#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnF">F</button>
+			</div>
+			<hr class="hr" />
+			<div class="btn-group btn-group-sm" role="group" aria-label="G chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnDsharp7">D#7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnA7">A7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnB7">B7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnFsharp7">F#7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnF7">F7</button>
+			</div>	  
+	  
+	  </div>
+	  
+	  
+	  <div class="tab-pane fade" id="nav-a" role="tabpanel" aria-labelledby="nav-a-tab">
+			<h5>A - major: Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="A chords">
+		  	  <button type="button" class="btn btn-outline-primary" id="btnA">A</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnBm">Bm</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnCmsharp">C#m</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnD">D</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnE">E</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnEsus4">Esus4</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnFmsharp">F#m</button>
+			</div>
+			<hr class="hr" />
+			<h5>7th</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="A chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnA7">A7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnAmaj7">Amaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnBm7">Bm7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnCmsharp7">C#m7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnD7">D7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDmaj7">Dmaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnE7">E7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnFmsharp7">F#m7</button>
+			</div>
+			<hr class="hr" />
+			<h5>Non-Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="A chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnF">F</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnBslDsharp">B/D#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnCsharp">C#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGsharp">G#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnG">G</button>
+			</div>
+			<hr class="hr" />
+			<div class="btn-group btn-group-sm" role="group" aria-label="A chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnF">F7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnB7">B7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnCsharp7">C#7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGsharp7">G#7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnG">G7</button>
+			</div>	  
+	  </div>
+	  
+	  
+	  <div class="tab-pane fade" id="nav-b" role="tabpanel" aria-labelledby="nav-b-tab">
+			<h5>B - major: Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="B chords">
+		  	  <button type="button" class="btn btn-outline-primary" id="btnB">B</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnCmsharp">C#m</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnDmsharp">D#m</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnE">E</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnFsharp">F#</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnFsharpsus4">F#sus4</button>
+  			  <button type="button" class="btn btn-outline-primary" id="btnGmsharp">G#m</button>
+			</div>
+			<hr class="hr" />
+			<h5>7th</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="B chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnB7">B7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnBmaj7">Bmaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnCmsharp7">C#m7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDmsharp7">D#m7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnE7">E7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnEmaj7">Emaj7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnFsharp7">F#7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnGmsharp7">G#m7</button>
+			</div>
+			<hr class="hr" />
+			<h5>Non-Diatonic Chords</h5>
+			<div class="btn-group btn-group-sm" role="group" aria-label="B chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnG">G</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnCsharpslF">C#/F</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDsharp">D#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnAsharp">A#</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnA">A</button>
+			</div>
+			<hr class="hr" />
+			<div class="btn-group btn-group-sm" role="group" aria-label="B chords">
+			  <button type="button" class="btn btn-outline-primary" id="btnG7">G7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnCsharp7">C#7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnDsharp7">D#7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnAsharp7">A#7</button>
+			  <button type="button" class="btn btn-outline-primary" id="btnA7">A7</button>
+			</div>	  
+	  
+	  </div>
+	</div>
+	
+	<script>
+        const editor = document.getElementById('lyrics-editor');
+        
+        const chordContextMenu = document.getElementById('chordContextMenu');
+        
+        
+        const btnIntro = document.getElementById('btnIntro');
+        const btnV1 = document.getElementById('btnV1');
+		const btnV2 = document.getElementById('btnV2');
+		const btnV3 = document.getElementById('btnV3');
+		const btnV4 = document.getElementById('btnV4');
+		const btnPChorus = document.getElementById('btnPChorus');
+		const btnChorus = document.getElementById('btnChorus');
+		const btnBridge = document.getElementById('btnBridge');
+		const btnEnding = document.getElementById('btnEnding');
+		const btnInstr = document.getElementById('btnInstrumental');
+		
+		// chords buttons references
+        const btnA = document.getElementById('btnA');
+        const btnAsharp = document.getElementById('btnAsharp');
+        const btnAsharp7 = document.getElementById('btnAsharp7');
+        const btnAslCsharp = document.getElementById('btnAslCsharp');
+        const btnA7 = document.getElementById('btnA7');
+        const btnAm = document.getElementById('btnAm');
+        const btnAm7 = document.getElementById('btnAm7');
+        const btnAmaj7 = document.getElementById('btnAmaj7');
+        const btnAsus4 = document.getElementById('btnAsus4');
+        const btnB = document.getElementById('btnB');
+        const btnBslDsharp = document.getElementById('btnBslDsharp');
+        const btnB7 = document.getElementById('btnB7');
+        const btnBb = document.getElementById('btnBb');
+        const btnBb7 = document.getElementById('btnBb7');
+        const btnBbmaj7 = document.getElementById('btnBbmaj7');
+        const btnBm = document.getElementById('btnBm');
+        const btnBm7 = document.getElementById('btnBm7');
+        const btnBmaj7 = document.getElementById('btnBmaj7');
+        const btnBsus4 = document.getElementById('btnBsus4');
+        const btnC = document.getElementById('btnC');
+        const btnCsharp = document.getElementById('btnCsharp');
+        const btnCsharpslF = document.getElementById('btnCsharpslF');
+        const btnCsharp7 = document.getElementById('btnCsharp7');
+        const btnCmsharp = document.getElementById('btnCmsharp');
+        const btnCmsharp7 = document.getElementById('btnCmsharp7');
+        const btnC7 = document.getElementById('btnC7');
+        const btnCmaj7 = document.getElementById('btnCmaj7');
+        const btnCsus4 = document.getElementById('btnCsus4');
+        const btnD = document.getElementById('btnD');
+        const btnDsharp = document.getElementById('btnDsharp');
+        const btnDsharp7 = document.getElementById('btnDsharp7');
+        const btnDmsharp = document.getElementById('btnDmsharp');
+        const btnDmsharp7 = document.getElementById('btnDmsharp7');
+        const btnDslFsharp = document.getElementById('btnDslFsharp');
+        const btnD7 = document.getElementById('btnD7');
+        const btnDm = document.getElementById('btnDm');
+        const btnDm7 = document.getElementById('btnDm7');
+        const btnDmaj7 = document.getElementById('btnDmaj7');
+        const btnDsus4 = document.getElementById('btnDsus4');
+        const btnE = document.getElementById('btnE');
+        const btnEslGsharp = document.getElementById('btnEslGsharp');
+        const btnE7 = document.getElementById('btnE7');
+        const btnEm = document.getElementById('btnEm');
+        const btnEm7 = document.getElementById('btnEm7');
+        const btnEmaj7 = document.getElementById('btnEmaj7');
+        const btnEsus4 = document.getElementById('btnEsus4');
+        const btnF = document.getElementById('btnF');
+        const btnFsharp = document.getElementById('btnFsharp');
+        const btnFsharpslAsharp = document.getElementById('btnFsharpslAsharp');
+        const btnFsharp7 = document.getElementById('btnFsharp7');
+        const btnFmsharp = document.getElementById('btnFmsharp');
+        const btnFmsharp7 = document.getElementById('btnFmsharp7');
+        const btnFsharpsus4 = document.getElementById('btnFsharpsus4');
+        const btnF7 = document.getElementById('btnF7');
+        const btnFmaj7 = document.getElementById('btnFmaj7');
+        const btnG = document.getElementById('btnG');
+        const btnGsharp = document.getElementById('btnGsharp');
+        const btnGsharp7 = document.getElementById('btnGsharp7');
+        const btnGmsharp = document.getElementById('btnGmsharp');
+        const btnGmsharp7 = document.getElementById('btnGmsharp7');
+        const btnGslB = document.getElementById('btnGslB');
+        const btnG7 = document.getElementById('btnG7');
+        const btnGm = document.getElementById('btnGm');
+        const btnGm7 = document.getElementById('btnGm7');
+        const btnGmaj7 = document.getElementById('btnGmaj7');
+        const btnGsus4 = document.getElementById('btnGsus4');		
+		// Add more button references
+        
+        btnIntro.addEventListener('click', () => {
+            insertContent('{Intro}');
+        });
+        
+        btnV1.addEventListener('click', () => {
+            insertContent('{Verse 1}');
+        });
+        btnV2.addEventListener('click', () => {
+            insertContent('{Verse 2}');
+        });
+        btnV3.addEventListener('click', () => {
+            insertContent('{Verse 3}');
+        });
+        btnV4.addEventListener('click', () => {
+            insertContent('{Verse 4}');
+        });
+        btnPChorus.addEventListener('click', () => {
+            insertContent('{Pre-Chorus}');
+        });
+        btnChorus.addEventListener('click', () => {
+            insertContent('{Chorus}');
+        });
+        btnBridge.addEventListener('click', () => {
+            insertContent('{Bridge}');
+        });
+        btnEnding.addEventListener('click', () => {
+            insertContent('{Ending}');
+        });
+        btnInstr.addEventListener('click', () => {
+            insertContent('{Instrumental}');
+        });
+        // chords
+        btnA.addEventListener('click', () => {
+            insertContent('[A]');
+        });
+        btnAsharp.addEventListener('click', () => {
+            insertContent('[A#]');
+        });
+        btnAsharp7.addEventListener('click', () => {
+            insertContent('[A#7]');
+        });
+        btnAslCsharp.addEventListener('click', () => {
+            insertContent('[A/C#]');
+        });
+        btnA7.addEventListener('click', () => {
+            insertContent('[A7]');
+        });
+        btnAm.addEventListener('click', () => {
+            insertContent('[Am]');
+        });
+        btnAm7.addEventListener('click', () => {
+            insertContent('[Am7]');
+        });
+        btnAmaj7.addEventListener('click', () => {
+            insertContent('[Amaj7]');
+        });
+        btnAsus4.addEventListener('click', () => {
+            insertContent('[Asus4]');
+        });
+        btnB.addEventListener('click', () => {
+            insertContent('[B]');
+        });
+        btnBslDsharp.addEventListener('click', () => {
+            insertContent('[B/D#]');
+        });
+        btnB7.addEventListener('click', () => {
+            insertContent('[B7]');
+        });
+        btnBb.addEventListener('click', () => {
+            insertContent('[Bb]');
+        });
+        btnBb7.addEventListener('click', () => {
+            insertContent('[Bb7]');
+        });
+        btnBbmaj7.addEventListener('click', () => {
+            insertContent('[Bbmaj7]');
+        });
+        btnBm.addEventListener('click', () => {
+            insertContent('[Bm]');
+        });
+        btnBm7.addEventListener('click', () => {
+            insertContent('[Bm7]');
+        });
+        btnBmaj7.addEventListener('click', () => {
+            insertContent('[Bmaj7]');
+        });
+        btnBsus4.addEventListener('click', () => {
+            insertContent('[Bsus4]');
+        });
+        btnC.addEventListener('click', () => {
+            insertContent('[C]');
+        });
+        btnCsharp.addEventListener('click', () => {
+            insertContent('[C#]');
+        });
+        btnCsharpslF.addEventListener('click', () => {
+            insertContent('[C#/F]');
+        });
+        btnCsharp7.addEventListener('click', () => {
+            insertContent('[C#7]');
+        });
+        btnCmsharp.addEventListener('click', () => {
+            insertContent('[C#m]');
+        });
+        btnCmsharp7.addEventListener('click', () => {
+            insertContent('[C#m7]');
+        });
+        btnC7.addEventListener('click', () => {
+            insertContent('[C7]');
+        });
+        btnCmaj7.addEventListener('click', () => {
+            insertContent('[Cmaj7]');
+        });
+        btnCsus4.addEventListener('click', () => {
+            insertContent('[Csus4]');
+        });
+        btnD.addEventListener('click', () => {
+            insertContent('[D]');
+        });
+        btnDsharp.addEventListener('click', () => {
+            insertContent('[D#]');
+        });
+        btnDsharp7.addEventListener('click', () => {
+            insertContent('[D#7]');
+        });
+        btnDmsharp.addEventListener('click', () => {
+            insertContent('[D#m]');
+        });
+        btnDmsharp7.addEventListener('click', () => {
+            insertContent('[D#m7]');
+        });
+        btnDslFsharp.addEventListener('click', () => {
+            insertContent('[D/F#]');
+        });
+        btnD7.addEventListener('click', () => {
+            insertContent('[D7]');
+        });
+        btnDm.addEventListener('click', () => {
+            insertContent('[Dm]');
+        });
+        btnDm7.addEventListener('click', () => {
+            insertContent('[Dm7]');
+        });
+        btnDmaj7.addEventListener('click', () => {
+            insertContent('[Dmaj7]');
+        });
+        btnDsus4.addEventListener('click', () => {
+            insertContent('[Dsus4]');
+        });
+        btnE.addEventListener('click', () => {
+            insertContent('[E]');
+        });
+        btnEslGsharp.addEventListener('click', () => {
+            insertContent('[E/G#]');
+        });
+        btnE7.addEventListener('click', () => {
+            insertContent('[E7]');
+        });
+        btnEm.addEventListener('click', () => {
+            insertContent('[Em]');
+        });
+        btnEm7.addEventListener('click', () => {
+            insertContent('[Em7]');
+        });
+        btnEmaj7.addEventListener('click', () => {
+            insertContent('[Emaj7]');
+        });
+        btnEsus4.addEventListener('click', () => {
+            insertContent('[Esus4]');
+        });
+        btnF.addEventListener('click', () => {
+            insertContent('[F]');
+        });
+        btnFsharp.addEventListener('click', () => {
+            insertContent('[F#]');
+        });
+        btnFsharpslAsharp.addEventListener('click', () => {
+            insertContent('[F#/A#]');
+        });
+        btnFsharp7.addEventListener('click', () => {
+            insertContent('[F#7]');
+        });
+        btnFmsharp.addEventListener('click', () => {
+            insertContent('[F#m]');
+        });
+        btnFmsharp7.addEventListener('click', () => {
+            insertContent('[F#m7]');
+        });
+        btnFsharpsus4.addEventListener('click', () => {
+            insertContent('[F#sus4]');
+        });
+        btnF7.addEventListener('click', () => {
+            insertContent('[F7]');
+        });
+        btnFmaj7.addEventListener('click', () => {
+            insertContent('[Fmaj7]');
+        });
+        btnG.addEventListener('click', () => {
+            insertContent('[G]');
+        });
+        btnGsharp.addEventListener('click', () => {
+            insertContent('[G#]');
+        });
+        btnGsharp7.addEventListener('click', () => {
+            insertContent('[G#7]');
+        });
+        btnGmsharp.addEventListener('click', () => {
+            insertContent('[G#m]');
+        });
+        btnGmsharp7.addEventListener('click', () => {
+            insertContent('[G#m7]');
+        });
+        btnGslB.addEventListener('click', () => {
+            insertContent('[G/B]');
+        });
+        btnG7.addEventListener('click', () => {
+            insertContent('[G7]');
+        });
+        btnGm.addEventListener('click', () => {
+            insertContent('[Gm]');
+        });
+        btnGm7.addEventListener('click', () => {
+            insertContent('[Gm7]');
+        });
+        btnGmaj7.addEventListener('click', () => {
+            insertContent('[Gmaj7]');
+        });
+        btnGsus4.addEventListener('click', () => {
+            insertContent('[Gsus4]');
+        });		
+		// Add more button listeners
+        
+        editor.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+            showChordContextMenu(event.clientX, event.clientY);
+        });
+        
+        // Handle clicking on a chord option
+        chordContextMenu.addEventListener('click', (event) => {
+			if (event.target && event.target.classList.contains('cbtn')) {
+				const chord = event.target.getAttribute('data-chord');
+				if (insertChord(chord)) {
+					hideChordContextMenu();
+				}
+			}
+		});
+		
+        // Show the chord context menu at the specified coordinates
+        function showChordContextMenu(x, y) {
+            chordContextMenu.style.left = x + 'px';
+            chordContextMenu.style.top = y + 'px';
+            chordContextMenu.style.display = 'block';
+        }
+        
+        // Hide the chord context menu
+        function hideChordContextMenu() {
+            chordContextMenu.style.display = 'none';
+        }
+        
+		function insertChord(chord) {
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const value = editor.value;
+            const newValue = value.substring(0, start) + chord + value.substring(end);
+            editor.value = newValue;
+            
+            // Set the new cursor position
+            editor.selectionStart = start + chord.length;
+            editor.selectionEnd = start + chord.length;
+            
+            // Return true to indicate successful insertion
+            return true;
+        }
+		
+        function insertContent(content) {
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const value = editor.value;
+            const newValue = value.substring(0, start) + content + value.substring(end);
+            
+            editor.value = newValue;
+            
+            // Set the new cursor position
+            editor.selectionStart = start + content.length;
+            editor.selectionEnd = start + content.length;
+			
+			
+        }
+		
+		document.addEventListener('click', (event) => {
+        if (isContextMenuOpen && !chordContextMenu.contains(event.target)) {
+            hideChordContextMenu();
+        }
+    });
+
+    </script>
   </div>
 </div>	
 {% endblock %}
