@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block head_js %}
-<script src="{% static '/js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static '/js/jquery-3.3.1.min.js' %}"></script>
 <script src="{% static '/js/jquery-ui.min.js' %}"></script>
 {% csrf_token %}
 <style>
@@ -27,11 +27,12 @@
     }
   </style>
   <script>
-    var state = 1;
+    
 	$(function() {
       $("#sortable").sortable({
         update: function(event, ui) {
           var order = [];
+		  var state = 1;
           $("#sortable li").each(function(index) {
             order.push($(this).data("item-id"));
           });
@@ -55,7 +56,7 @@
 	
 	function changeDesiredKey(itemId, newDesiredKey) {
 	  // Send the updated desired key to the backend using AJAX
-
+	  var state = 1;	  
 	  $.ajax({
 		url: "{% url 'cart_update_desired_key' %}",
 		type: "POST",
@@ -70,6 +71,7 @@
 	  });
 	}
 	function updateNotes(itemId, event) {
+	  var state = 1;
 	  if (event.key === 'Enter') {
 		var notes = $("#notes_" + itemId).val();
 		// Send the updated notes to the backend using AJAX
@@ -89,6 +91,7 @@
 	  }
 	}
 	function assignUser(itemId) {
+	  var state = 1;
 	  var userId = $("#user_" + itemId).val();
 	  // Send the updated assigned user to the backend using AJAX
 
@@ -190,12 +193,13 @@
 						{% endfor %}
 						{% endif %}</div>
 						<div class="col-1">
-						<select class="form-select form-select-sm" id="user_{{ s.id }}" onchange="assignUser('{{ s.id }}')">
-						  <option value="">{% translate "None" %}</option>
-						  {% for user in users %}
-							<option value="{{ user.id }}" {% if user.id == s.assigned_user_id %}selected{% endif %}>{{ user.username }}</option>
-						  {% endfor %}
-						</select></div>
+							<select class="form-select form-select-sm" id="user_{{ s.id }}" onchange="assignUser('{{ s.id }}')">
+							  <option value="">{% translate "None" %}</option>
+							  {% for user in users %}
+								<option value="{{ user.id }}" {% if user.id == s.assigned_user_id %}selected{% endif %}>{{ user.username }}</option>
+							  {% endfor %}
+							</select>
+						</div>
 						<div class="col-1">
 							<form class="needs-validation" action="{% url 'list_delete_item' item=s.id listid=event.id %}" method="post">
 								{% csrf_token %}

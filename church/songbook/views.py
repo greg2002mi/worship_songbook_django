@@ -887,10 +887,10 @@ def cart_update_list_order(request):
             listitem.listorder = index
             listitem.save()
         # return JsonResponse({'message': 'List order updated successfully.'})
-        if state == 1:
+        if state == '1':
             lists = listitem.lists.first()
             return redirect('lists', list_id = lists.id)
-        if state == 2:
+        if state == '2':
             return redirect('cart')
 
 @login_required
@@ -903,10 +903,10 @@ def cart_update_desired_key(request):
         list_item.desired_key = desired_key
         list_item.save()
         # return JsonResponse({'message': 'Desired key updated successfully.'})
-        if state == 1:
+        if state == '1':
             lists = list_item.lists.first()
             return redirect('lists', list_id = lists.id)
-        if state == 2:
+        if state == '2':
             return redirect('cart')
 
 @login_required
@@ -919,10 +919,10 @@ def cart_update_notes(request):
         list_item.notes = notes
         list_item.save()
         # return JsonResponse({'message': 'Notes updated successfully.'})
-        if state == 1:
+        if state == '1':
             lists = list_item.lists.first()
             return redirect('lists', list_id = lists.id)
-        if state == 2:
+        if state == '2':
             return redirect('cart')
 
 @login_required
@@ -936,10 +936,10 @@ def cart_assign_user(request):
         if user:
             listitem.assigned.add(user)
             listitem.save()
-        if state == 1:
+        if state == '1':
             lists = listitem.lists.first()
             return redirect('lists', list_id = lists.id)
-        if state == 2:
+        if state == '2':
             return redirect('cart')
 
 
@@ -1105,7 +1105,7 @@ def lists(request, list_id):
     de_form = EmptyForm()
     unroleform = EmptyForm()
     deleteform = EmptyForm()
-    songlist = event.items.all()
+    songlist = event.items.order_by('listorder').all()
     group = Group.objects.get(name="Minister")
     users = group.user_set.all()
     context = {

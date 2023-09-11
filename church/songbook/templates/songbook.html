@@ -1,8 +1,51 @@
 {% extends "base.html" %}
 {% load custom_tags %}
 {% load i18n %}
+{% load static %}
+
+{% block head_js %}
+<link rel="stylesheet" src="{% static '/datatables/jquery.dataTables_1.13.6.css' %}"></link>
+<link rel="stylesheet" src="{% static '/datatables/datatables_style.css' %}"></link>
+<script src="{% static '/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static '/datatables/jquery.dataTables_1.13.6.js' %}"></script>
+{% csrf_token %}
+<style>
+#songbook_length {
+    width: 150px; /* Adjust the width as needed */
+    float: left; /* This will make it appear on the same level as songbook_filter */
+}
+#songbook_filter {
+    width: 290px; /* Adjust the width as needed */
+    float: right; /* This will make it appear on the same level as songbook_filter */
+}
+</style>
+<script>
+$(document).ready(function() {
+    $('#songbook').DataTable({
+        "columnDefs": [
+            { "orderable": false, "targets": [5, 6] } // Disable sorting for columns 4, and 5
+        ]
+    });
+});
+
+</script>
+{% endblock %}
 
 {% block app_content %}
+<br>
+<br>
+	<div class="row">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				{% for t in tags %}
+					<a href="{% url 'tag_songlist' tag_id=t.id %}"><span class="badge bg-warning text-dark">{{ t.name }}</span></a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	</div>
+
     <br>
 	<div class="row">
 		<div class="col">
@@ -12,11 +55,11 @@
 			</nav>
 		</div>
 	</div>	
-	<br>
+	<br>	
 	<div class="row">	
 		{% if search_word %}<h4>{% translate "Search results:" %}</h4>{% endif %}
-		<div class="col-md-9 col-xs-12">
-			<table class="table table-hover">
+		<div class="col-12">
+			<table class="table table-hover" id="songbook">
 			<thead>
 			  <tr>
 				 <th class="d-none d-sd-block">No.</th>
@@ -83,21 +126,6 @@
 			</table>
 		{% include "misc/pagination.html" %}
 		</div>
-		<div class="col-md-3 col-xs-12">
-		<div class="row"><table class="table table-responsive-sm table-hover">
-			<thead>
-			  <tr>
-				 <th class="th-lg" scope="col">Tag list</th>
-			  </tr>
-			</thead>
-			<tbody>
-			{% for t in tags %}
-				<tr valign="top">
-					<td><a href="{% url 'tag_songlist' tag_id=t.id %}">{{ t.name }}</a></td>
-				</tr>
-			{% endfor %}
-			</tbody>
-			</table></div>
-	</div>
+		
 {% endblock %}
 
