@@ -6,10 +6,10 @@
 	{{ tags_form.errors }}
 	{% for tag in tags %}
 		
-			<div class="form-check form-switch">
-			  <input type="checkbox" class="form-check-input" name="name" value="{{ tag.id }}" {% if tag_states|get_item:tag.id %} checked{% endif %}>
-			  <label class="form-check-label">{{ tag.name }}</label>
-			</div>
+		<div class="form-check form-switch">
+            <input type="checkbox" class="form-check-input" name="name" value="{{ tag.id }}" id="switch-{{ tag.id }}" {% if tag_states|get_item:tag.id %} checked{% endif %}>
+            <label class="form-check-label" for="switch-{{ tag.id }}">{{ tag.name }}</label>
+        </div>
 
 	{% endfor %}
 	<input type="submit" class='btn btn-success' value='{% translate "Tag" %}'/>

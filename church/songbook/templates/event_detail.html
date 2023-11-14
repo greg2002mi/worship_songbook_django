@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block head_js %}
-<script src="{% static '/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static '/js/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static '/js/jquery-ui.min.js' %}"></script>
 {% csrf_token %}
 <style>
@@ -27,12 +27,11 @@
     }
   </style>
   <script>
-    
+    var state = 1;
 	$(function() {
       $("#sortable").sortable({
         update: function(event, ui) {
           var order = [];
-		  var state = 1;
           $("#sortable li").each(function(index) {
             order.push($(this).data("item-id"));
           });
@@ -56,7 +55,7 @@
 	
 	function changeDesiredKey(itemId, newDesiredKey) {
 	  // Send the updated desired key to the backend using AJAX
-	  var state = 1;	  
+
 	  $.ajax({
 		url: "{% url 'cart_update_desired_key' %}",
 		type: "POST",
@@ -71,7 +70,6 @@
 	  });
 	}
 	function updateNotes(itemId, event) {
-	  var state = 1;
 	  if (event.key === 'Enter') {
 		var notes = $("#notes_" + itemId).val();
 		// Send the updated notes to the backend using AJAX
@@ -91,7 +89,6 @@
 	  }
 	}
 	function assignUser(itemId) {
-	  var state = 1;
 	  var userId = $("#user_" + itemId).val();
 	  // Send the updated assigned user to the backend using AJAX
 
@@ -151,10 +148,10 @@
 			<ul>
 			<li>
 				<div class="row border-bottom border-3 bg-light text-dark" style="width: 1200px;">
-						<div class="col-auto d-none d-sd-block"><strong>{% translate "No." %}</strong></div>
+						<div class="col-auto"><strong>{% translate "order" %}</strong></div>
 						<div class="col-3"><strong>{% translate "Title" %}</strong></div>
 						<div class="col-auto"><strong>&nbsp;&nbsp;&nbsp;{% translate "Key" %}&nbsp;&nbsp;&nbsp;</strong></div>
-						<div class="col-auto"><strong>{% translate "order" %}</strong></div>
+						
 						<div class="col-3"><strong>{% translate "Comments" %}</strong></div>
 						<div class="col-1"><strong>{% translate "Assigned" %}</strong></div>
 						<div class="col-1"><strong>{% translate "Assigned User" %}</strong></div>
@@ -164,7 +161,7 @@
 			{% for s in songlist %}
 				<li data-item-id="{{ s.id }}">	
 					<div class="row bg-light text-dark " style="width: 1200px;">
-						<div class="col-auto d-none d-sd-block">{{ s.id }}</div>
+						<div class="col-auto">&nbsp;&nbsp;&nbsp;{{ s.listorder }}&nbsp;&nbsp;&nbsp;</div>
 						<div class="col-3">
 						{% for song in s.song.all %}
 						<a href="{% url 'view_song' song_id=song.id key=song.key %}">{{ s.title }}</a>
@@ -177,7 +174,7 @@
 							  {% endfor %}
 							</select>
 						</div>
-						<div class="col-auto">&nbsp;&nbsp;&nbsp;{{ s.listorder }}&nbsp;&nbsp;&nbsp;</div>
+						
 						<div class="col-3"><input type="text" class="form-control form-control-sm" placeholder="Specific notes" id="notes_{{ s.id }}" value="{{ s.notes }}" onkeypress="updateNotes('{{ s.id }}', event)">
 						</div>
 						<div class="col-1">{% if s.assigned %}
@@ -193,13 +190,12 @@
 						{% endfor %}
 						{% endif %}</div>
 						<div class="col-1">
-							<select class="form-select form-select-sm" id="user_{{ s.id }}" onchange="assignUser('{{ s.id }}')">
-							  <option value="">{% translate "None" %}</option>
-							  {% for user in users %}
-								<option value="{{ user.id }}" {% if user.id == s.assigned_user_id %}selected{% endif %}>{{ user.username }}</option>
-							  {% endfor %}
-							</select>
-						</div>
+						<select class="form-select form-select-sm" id="user_{{ s.id }}" onchange="assignUser('{{ s.id }}')">
+						  <option value="">{% translate "None" %}</option>
+						  {% for user in users %}
+							<option value="{{ user.id }}" {% if user.id == s.assigned_user_id %}selected{% endif %}>{{ user.username }}</option>
+						  {% endfor %}
+						</select></div>
 						<div class="col-1">
 							<form class="needs-validation" action="{% url 'list_delete_item' item=s.id listid=event.id %}" method="post">
 								{% csrf_token %}
@@ -220,6 +216,32 @@
 		<div class="col-2 text-end">
 		<a class="btn btn-success" href="{% url 'create_presentation' list_id=event.id %}">{% translate "Build a presentation" %}</a>
 		</div>
+	</div>
+	<div class="row">
+		<div class="col"><p class="h4">Media</p></div>
+			{% for s in songlist %}
+				{% for song in s.song.all %}
+					{% if song.media %}
+						{% for l in song.media.all %}
+				<div class="col-sm-6">
+					<div class="card text-center">
+					  <div class="card-header">
+						Videos
+					  </div>
+					  <div class="card-body">
+						<h5 class="card-title">{{ song.title }}</h5>
+						{{ l.murl|safe }}
+					  </div>
+					  <div class="card-footer text-muted">
+						Order: {{s.listorder}}
+					  </div>
+					</div>	
+				</div>	
+						{% endfor %}
+					{% endif %}
+				{% endfor %}
+			{% endfor %}
+		
 	</div>
 {% endblock %}
 

@@ -166,6 +166,7 @@ class AddSongForm(forms.ModelForm):
         self.fields['info'].widget.attrs['style'] = 'min-width: 100%'
         self.fields['info'].widget.attrs['rows'] = '5'
         self.fields['lyrics'].widget.attrs['style'] = 'min-width: 100%, height: 400px;'
+        self.fields['lyrics'].widget.attrs['id'] = 'lyrics-editor'
         self.fields['minor'].widget.attrs['type'] = 'checkbox'
         self.fields['minor'].widget.attrs['class'] = 'form-check-input'
         self.fields['singer'].widget.attrs['placeholder'] = _('Write singer or music group here')
@@ -201,6 +202,7 @@ class EditSongForm(forms.ModelForm):
         self.fields['info'].widget.attrs['style'] = 'min-width: 100%'
         self.fields['info'].widget.attrs['rows'] = '5'
         self.fields['lyrics'].widget.attrs['style'] = 'min-width: 100%, height: 400px;'
+        self.fields['lyrics'].widget.attrs['id'] = 'lyrics-editor'
         self.fields['minor'].widget.attrs['type'] = 'checkbox'
         self.fields['minor'].widget.attrs['class'] = 'form-check-input'
         self.fields['singer'].widget.attrs['placeholder'] = _('Write singer or music group here')
@@ -230,7 +232,11 @@ class UploadFileForm(forms.Form):
 #     tr_song_id = forms.ModelChoiceField(queryset=Song.objects.exclude(language=F('song__language')).exclude(translation__id=F('id')), label='Translated Song')
 
 class TagsForm(forms.Form):
-    name = forms.MultipleChoiceField(label='Tags', widget=forms.CheckboxSelectMultiple(attrs={'name': 'tags'}))
+    name = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.all(),
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        required=False,)
+    # name = forms.MultipleChoiceField(label='Tags', widget=forms.CheckboxSelectMultiple(attrs={'name': 'tags'}))
     # name = forms.MultipleChoiceField(label='Tags', choices=[(tag.id, tag.name) for tag in Tag.objects.all()], widget=forms.CheckboxSelectMultiple(attrs={'name': 'tags'}))
     
     def __init__(self, *args, **kwargs):
@@ -286,14 +292,22 @@ class AddMediaForm(forms.ModelForm):
 
         
 class SongsForm(forms.Form):
-    class Meta:
-        fields = ('title',)
+    title = forms.ChoiceField(choices=[])
         
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, current_song=None, **kwargs):
         super().__init__(*args, **kwargs)
-        # Make the query here
-        MYQUERY = Song.objects.values_list('id', 'title')
-        self.fields['title'] = forms.ChoiceField(choices=(*MYQUERY,))
+
+        if current_song:
+            print(current_song.title)
+            # Filter songs based on language and exclude the current song
+            MYQUERY = Song.objects.exclude(
+                language=current_song.language
+            ).values_list('id', 'title')
+        else:
+            # Default query when no current_song is provided
+            MYQUERY = Song.objects.values_list('id', 'title')
+
+        self.fields['title'] = forms.ChoiceField(choices=MYQUERY)
         self.fields['title'].widget.attrs['style'] = 'min-width: 100%'
         self.fields['title'].widget.attrs['class'] = 'form-control'
     # to make a dropdown list choices populated from model 

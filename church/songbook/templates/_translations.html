@@ -33,7 +33,7 @@
 		<tbody>
 		{% for tr in t_songlist %}
 			<tr valign="top">
-				<td><a href="{% url 'view_song' song_id=tr.id %}">{{ tr.title }}</a></td>
+				<td><a href="{% url 'view_song' song_id=tr.id key=tr.key %}">{{ tr.title }}</a></td>
 				<td>
 					{% if tr.language %}
 						{% for index, l in lang %} 

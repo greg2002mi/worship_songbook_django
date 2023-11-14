@@ -349,9 +349,9 @@ def view_song(request, song_id, key):
     tag_states = {tag.id: tag in song.tags.all() for tag in Tag.objects.all()}
     images = song.image.all()
     media = song.media.all()
-    tagged_list = ()
-    # if song.tags:
-    #     tagged_list = ([tagged.name for tagged in song.tags])
+    tagged_list = []
+    if song.tags.exists():
+        tagged_list = [tagged.name for tagged in song.tags.all()]
     # ori_key = ''
     ori_key_int = song.key
     lyrics = song.lyrics
@@ -361,7 +361,6 @@ def view_song(request, song_id, key):
     files = os.listdir(media_root)
     audio = song.audio.all()
     form = Transpose()
-    transl_form = SongsForm()
     remove_transl_form = EmptyForm()
     untagall_form = EmptyForm()
     #to get a list of songs with condition, other language, and not already linked ones
@@ -432,7 +431,7 @@ def view_song(request, song_id, key):
             'lang': LANG,
             'tags': tags,
             'html': html, 
-            'transl_form': transl_form, 
+            'transl_form': SongsForm(current_song=song), 
             'remove_transl_form': remove_transl_form,  
             'tagged_list': tagged_list, 
             'tag_states': tag_states, 
@@ -619,10 +618,13 @@ def delete_video(request, song_id, mlink_id):
 def add_transl(request, song_id):
     current_song = get_object_or_404(Song, pk=song_id)
     if request.method == 'POST':
-        transl_form = SongsForm(request.POST)
+        transl_form = SongsForm(request.POST, current_song=current_song)
         if transl_form.is_valid():
             oth_song_id = transl_form.cleaned_data['title']
             other_song = get_object_or_404(Song, pk=oth_song_id)
+            if current_song.language == other_song.language:
+                messages.error(request, _('Only same songs in different languages can be bind.'))
+                return redirect('view_song', song_id=current_song.id, key=current_song.key)
             current_song.translated.add(other_song)
             messages.success(request, _('Translation has been successfully linked.'))
             return redirect('view_song', song_id=current_song.id, key=current_song.key)
@@ -710,25 +712,26 @@ def delete_tag(request, tag_id):
 def tagging(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     # tag_states = {tag.id: tag in song.tags.all() for tag in Tag.objects.all()}
+    tags_form = TagsForm(request.POST)
     
     if request.method == "POST":
-        tags_form = TagsForm(request.POST)
+        print(tags_form)
         if tags_form.is_valid():
-            tagged = tags_form.cleaned_data['name']
+            selected_tags = tags_form.cleaned_data['name'] 
             tagged_list = song.tags.all()
-            if not tagged_list:
-                for dt in tagged_list:
-                    song.tags.remove(dt)
+            # if not tagged_list:
+            #     for dt in tagged_list:
+            #         song.tags.remove(dt)
             
             #first check if unchecked
-            else:
-                for tg in tagged_list:
-                    if tg.id not in tagged:
-                        song.tags.remove(tg)
-            
+            for tg in tagged_list:
+                if tg not in selected_tags:
+                    song.tags.remove(tg)
+        
             # add new tags
-            for t in tagged:
-                song.tags.add(t)
+            for t in selected_tags:
+                if t not in tagged_list:
+                    song.tags.add(t)
             return redirect('view_song', song_id=song.id, key=song.key) 
         else:
             messages.error(request, _('Error, failed to validate.'))
@@ -887,11 +890,11 @@ def cart_update_list_order(request):
             listitem.listorder = index
             listitem.save()
         # return JsonResponse({'message': 'List order updated successfully.'})
-        if state == '1':
-            lists = listitem.lists.first()
-            return redirect('lists', list_id = lists.id)
-        if state == '2':
-            return redirect('cart')
+        # if state == 1:
+        lists = listitem.lists.first()
+        return redirect('lists', list_id = lists.id)
+        # if state == 2:
+        #    return redirect('cart')
 
 @login_required
 def cart_update_desired_key(request):
@@ -903,11 +906,11 @@ def cart_update_desired_key(request):
         list_item.desired_key = desired_key
         list_item.save()
         # return JsonResponse({'message': 'Desired key updated successfully.'})
-        if state == '1':
-            lists = list_item.lists.first()
-            return redirect('lists', list_id = lists.id)
-        if state == '2':
-            return redirect('cart')
+        # if state == 1:
+        lists = list_item.lists.first()
+        return redirect('lists', list_id = lists.id)
+        # if state == 2:
+        #    return redirect('cart')
 
 @login_required
 def cart_update_notes(request):
@@ -919,11 +922,11 @@ def cart_update_notes(request):
         list_item.notes = notes
         list_item.save()
         # return JsonResponse({'message': 'Notes updated successfully.'})
-        if state == '1':
-            lists = list_item.lists.first()
-            return redirect('lists', list_id = lists.id)
-        if state == '2':
-            return redirect('cart')
+        # if state == 1:
+        lists = list_item.lists.first()
+        return redirect('lists', list_id = lists.id)
+        # if state == 2:
+        #     return redirect('cart')
 
 @login_required
 def cart_assign_user(request):
@@ -936,11 +939,11 @@ def cart_assign_user(request):
         if user:
             listitem.assigned.add(user)
             listitem.save()
-        if state == '1':
-            lists = listitem.lists.first()
-            return redirect('lists', list_id = lists.id)
-        if state == '2':
-            return redirect('cart')
+        # if state == 1:
+        lists = listitem.lists.first()
+        return redirect('lists', list_id = lists.id)
+        # if state == 2:
+        #     return redirect('cart')
 
 
 

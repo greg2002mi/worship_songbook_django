@@ -41,7 +41,7 @@
 					<td style="width: 17.5%">
 					<div class="row">
 						<div class="col-7">
-							<form action="{% url 'add_to_cart' song_id=song.id %}" method="post">
+							<form action="{% url 'add_to_cart' songid=song.id c=2 keyword='None' %}" method="post">
 								{% csrf_token %}
 								<button class="btn btn-primary" type="submit">{% translate "Add to folder" %}</button>
 							</form>
