@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" class="h-100" data-bs-theme="dark">
+<html lang="en" class="h-100">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	{% load i18n %}
 	<title>
 	{% if title %}
-	{{ title }} - Global Victory Church
+	{{ title }} - John4-24
 	{% else %}
-	Welcome to GBL's Portal
+	Welcome to Portal for Christian Worshippers
 	{% endif %}
 	</title>
   	{% load static %}
@@ -75,7 +75,7 @@
 			<div class="container-fluid">
 				 <a class="navbar-brand" href="{% url 'index' %}">
 				 <img src="{% static 'logo.png' %}" alt="" width="30" height="30" class="d-inline-block align-text-top">
-				 Global Victory Church</a>
+				 John4-24</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
@@ -98,12 +98,14 @@
 								{% get_current_language as LANGUAGE_CODE %}
 								{% get_available_languages as LANGUAGES %}
 								{% get_language_info_list for LANGUAGES as languages %}
-								{% for language in languages %}
-								  <button type="submit" name="language" value="{{ language.code }}"
-									class="btn btn-dark">
-									{{ language.code }}
-								  </button>|&nbsp;
-								{% endfor %}
+								<select class="form-select" name="language" onchange="this.form.submit()">
+									{% for language in languages %}
+									  <option value="{{ language.code }}"
+										{% if language.code == LANGUAGE_CODE %}selected{% endif %}>
+										{{ language.code }}
+									  </option>
+									{% endfor %}
+								</select>
 							</form>
 						  </div>
 						

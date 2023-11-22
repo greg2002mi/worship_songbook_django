@@ -328,6 +328,8 @@ class AddEventForm(forms.ModelForm):
         self.fields['mlink'].widget.attrs['placeholder'] = _('Link from Youtube. Embed links only')
         self.fields['date_time'].widget.attrs['class'] = 'datetimepicker'
         self.fields['date_end'].widget.attrs['class'] = 'datetimepicker'
+        self.fields['date_time'].required = True
+        self.fields['date_end'].required = True
         self.fields['passage'].widget.attrs['style'] = 'min-width: 100%'
         self.fields['passage'].widget.attrs['placeholder'] = _('Slogans, Theme of service, Bible verse, etc.')
         self.fields['passage'].widget.attrs['rows'] = '15'

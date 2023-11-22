@@ -807,6 +807,17 @@ def add2event(request):
         if addform.is_valid():
             event = addform.save(commit=False)
             event.user = current_user
+            if not event.date_time:
+                messages.error(request, _('Start date must be set!'))
+                return redirect('cart')
+            if not event.date_end:
+                messages.error(request, _('End date must be set!'))
+                return redirect('cart')
+            if event.date_time > event.date_end:
+                messages.error(request, _('Starting date must be earlier than ending date!'))
+                return redirect('cart')
+            # add here a check up if start date is empty - false
+            # add here: if end date < start date - false
             event.save()
             for item in current_user.cart.all():
                 event.items.add(item)
@@ -1000,6 +1011,17 @@ def add_event(request):
         if form.is_valid():
             event = form.save(commit=False)
             event.user = request.user
+            if not event.date_time:
+                messages.error(request, _('Start date must be set!'))
+                return redirect('cart')
+            if not event.date_end:
+                messages.error(request, _('End date must be set!'))
+                return redirect('cart')
+            if event.date_time > event.date_end:
+                messages.error(request, _('Starting date must be earlier than ending date!'))
+                return redirect('cart')
+            # add here a check up if start date is empty - false
+            # add here: if end date < start date - false
             event.save()
             messages.success(request, _('Success! Event is set.'))
             return redirect('calendar')
